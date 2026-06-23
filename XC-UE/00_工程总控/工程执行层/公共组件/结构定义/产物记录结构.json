@@ -1,0 +1,41 @@
+﻿{
+    "additionalProperties":  false,
+    "$id":  "xcue.schema/artifact-record/1.0",
+    "properties":  {
+                       "producer_run_id":  {
+                                               "minLength":  1,
+                                               "type":  "string"
+                                           },
+                       "path":  {
+                                    "minLength":  1,
+                                    "type":  "string"
+                                },
+                       "sha256":  {
+                                      "type":  "string",
+                                      "pattern":  "^[a-fA-F0-9]{64}$"
+                                  },
+                       "producer_stage":  {
+                                              "type":  "string",
+                                              "enum":  [
+                                                           "INPUT",
+                                                           "L1",
+                                                           "L2",
+                                                           "L3",
+                                                           "PIPELINE"
+                                                       ]
+                                          },
+                       "kind":  {
+                                    "minLength":  1,
+                                    "type":  "string"
+                                }
+                   },
+    "type":  "object",
+    "required":  [
+                     "kind",
+                     "path",
+                     "sha256",
+                     "producer_stage",
+                     "producer_run_id"
+                 ],
+    "$schema":  "https://json-schema.org/draft/2020-12/schema"
+}

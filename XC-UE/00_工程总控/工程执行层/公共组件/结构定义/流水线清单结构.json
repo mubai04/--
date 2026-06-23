@@ -1,0 +1,75 @@
+﻿{
+    "additionalProperties":  false,
+    "$id":  "xcue.schema/pipeline-manifest/1.0",
+    "properties":  {
+                       "input":  {
+                                     "type":  "object"
+                                 },
+                       "schema_version":  {
+                                              "type":  "string"
+                                          },
+                       "stages":  {
+                                      "items":  {
+                                                    "type":  "object"
+                                                },
+                                      "type":  "array"
+                                  },
+                       "final_exit_code":  {
+                                               "type":  [
+                                                            "integer",
+                                                            "null"
+                                                        ]
+                                           },
+                       "standards":  {
+                                         "type":  "object"
+                                     },
+                       "created_at":  {
+                                          "type":  "string"
+                                      },
+                       "final_status":  {
+                                            "type":  [
+                                                         "string",
+                                                         "null"
+                                                     ]
+                                        },
+                       "status":  {
+                                      "type":  "string",
+                                      "enum":  [
+                                                   "RUNNING",
+                                                   "COMPLETED",
+                                                   "COMPLETED_WITH_BUSINESS_FAILURE",
+                                                   "FAILED",
+                                                   "FAILED_INTERNAL",
+                                                   "FAILED_SCHEMA",
+                                                   "FAILED_HASH",
+                                                   "FAILED_LINEAGE",
+                                                   "BLOCKED",
+                                                   "GATE_REJECTED",
+                                                   "REVIEW_REQUIRED",
+                                                   "L1_OUTPUT_MISSING",
+                                                   "L2_OUTPUT_MISSING",
+                                                   "L3_OUTPUT_MISSING",
+                                                   "L1_STAGE_FAILED",
+                                                   "L2_STAGE_FAILED",
+                                                   "L3_STAGE_FAILED"
+                                               ]
+                                  },
+                       "pipeline_run_id":  {
+                                               "minLength":  1,
+                                               "type":  "string"
+                                           }
+                   },
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "pipeline_run_id",
+                     "created_at",
+                     "status",
+                     "input",
+                     "standards",
+                     "stages",
+                     "final_status",
+                     "final_exit_code"
+                 ],
+    "$schema":  "https://json-schema.org/draft/2020-12/schema"
+}

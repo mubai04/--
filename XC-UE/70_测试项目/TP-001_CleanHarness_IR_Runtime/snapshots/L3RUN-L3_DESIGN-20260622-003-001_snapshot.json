@@ -1,0 +1,24 @@
+{
+  "执行编号": "L3RUN-L3_DESIGN-20260622-003-001",
+  "目标文件": "70_测试项目/TP-001_CleanHarness_IR_Runtime/chapters/_candidates/L3_DESIGN-20260622-003_TASK-001.md",
+  "备份文件": "70_测试项目/TP-001_CleanHarness_IR_Runtime/chapters/_candidates/L3_DESIGN-20260622-003_TASK-001.md.bak_20260622_085037",
+  "diff摘要文件": "70_测试项目/TP-001_CleanHarness_IR_Runtime/chapters/_candidates/DIFF-20260622_085037_L3_DESIGN-20260622-003_TASK-001.md",
+  "IR输入": [
+    "70_测试项目/TP-001_CleanHarness_IR_Runtime/IR/IR-06_读者预期表.md",
+    "70_测试项目/TP-001_CleanHarness_IR_Runtime/IR/IR-05_章节目标表.md"
+  ],
+  "回流验收位置": "L1-02",
+  "状态历史": [
+    "待执行",
+    "输入校验通过",
+    "目标文件确认",
+    "权限校验通过",
+    "备份完成",
+    "执行中",
+    "候选产物已生成",
+    "diff / 变更摘要已生成",
+    "日志已记录",
+    "回填完成",
+    "待 L1 / L1.5 复验"
+  ]
+}

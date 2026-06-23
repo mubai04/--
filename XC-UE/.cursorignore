@@ -1,0 +1,20 @@
+﻿# XC-UE — Cursor 索引排除 v0.1
+# 首读：README_XC-UE_当前结构与真源边界.md
+# 目的：阻止默认索引归档、图片、旧输入、候选正文、压缩包
+
+99_归档_不要索引/
+99_归档_禁止索引/
+运行记录/
+90_日志/
+**/reports/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/_images/
+**/_legacy_root_inputs/
+**/chapters/_candidates/
+*.zip
+*.png
+*.docx
+**/__pycache__/
+*.pyc

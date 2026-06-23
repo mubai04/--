@@ -1,0 +1,74 @@
+{
+  "version": "tp001-rules-v0.1",
+  "description": "TP-001 candidate chapter gate rules. This file is project-level rule configuration, not XC-UE system truth.",
+  "candidate_length": {
+    "gate": "L1-03",
+    "name": "candidate_length",
+    "min_nonspace_chars": 1800,
+    "max_nonspace_chars": 3000
+  },
+  "ir_terms": [
+    "修士死后",
+    "遗境",
+    "陆沉舟",
+    "韩照骨",
+    "第三扇门",
+    "青岚宗"
+  ],
+  "text_gates": [
+    {
+      "gate": "L1-01",
+      "name": "收尸/停尸院开场",
+      "mode": "all",
+      "terms": ["停尸院", "尸簿", "周不问"]
+    },
+    {
+      "gate": "L1-01",
+      "name": "成境事件",
+      "mode": "any",
+      "terms": ["遗境", "成境", "药园正在向内塌陷"]
+    },
+    {
+      "gate": "L1-01",
+      "name": "主角主动选择",
+      "mode": "any",
+      "terms": ["没有再等", "朝药园奔去", "撞进"]
+    },
+    {
+      "gate": "L1-01",
+      "name": "遗言能力和代价",
+      "mode": "all",
+      "terms": ["第三扇门不能开", "剧痛", "听见"]
+    },
+    {
+      "gate": "L1-01",
+      "name": "章末钩子",
+      "mode": "any",
+      "terms": ["第一次灭门", "尸山", "韩照骨"]
+    },
+    {
+      "gate": "L1-02",
+      "name": "开头异常对象",
+      "mode": "any",
+      "terms": ["钥匙", "无修为", "寿尽"]
+    },
+    {
+      "gate": "L1-02",
+      "name": "连续问题",
+      "mode": "any",
+      "terms": ["死过一次", "掌境堂", "钥匙"]
+    },
+    {
+      "gate": "L1-02",
+      "name": "情绪抬升",
+      "mode": "any",
+      "terms": ["封山", "拿下", "剧痛"]
+    },
+    {
+      "gate": "L1-02",
+      "name": "追读理由",
+      "mode": "any",
+      "terms": ["第三扇门后", "青岚宗第一次灭门"]
+    }
+  ]
+}

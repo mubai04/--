@@ -1,0 +1,4018 @@
+﻿{
+    "schema_version":  "xcue.remediation-ledger/1.1",
+    "document_version":  "v1.1",
+    "status":  "PENDING_ACCEPTANCE",
+    "generated_at":  "2026-06-23",
+    "canonical_source":  true,
+    "allowed_statuses":  [
+                             "TODO",
+                             "IN_PROGRESS",
+                             "BLOCKED",
+                             "READY_FOR_REVIEW",
+                             "ACCEPTED",
+                             "REJECTED",
+                             "DEFERRED"
+                         ],
+    "dependency_rule":  "A task may enter IN_PROGRESS only when all depends_on tasks are ACCEPTED.",
+    "epic_rule":  "An EPIC may become ACCEPTED only when all child tasks are ACCEPTED.",
+    "maturity_target":  "TECHNICAL_PRODUCTION_CANDIDATE",
+    "publication_authority":  "NONE",
+    "tasks":  [
+                  {
+                      "task_id":  "M0-01",
+                      "title":  "建立整改前基线清单",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M0",
+                      "severity":  "P0",
+                      "sequence":  1,
+                      "status":  "READY_FOR_REVIEW",
+                      "status_change_reason":  "已生成可重复静态基线、字段说明、排除规则说明和独立 pytest 证据；等待独立验收，未标记 ACCEPTED。",
+                      "ready_for_review_at":  "2026-06-23",
+                      "review_evidence":  [
+                                              "00_工程总控/整改基线/M0_READY_FOR_REVIEW_验收材料_2026-06-23.md",
+                                              "00_工程总控/整改基线/BASELINE_2026-06-23.json",
+                                              "00_工程总控/整改基线/PYTEST_EVIDENCE_2026-06-23.json"
+                                          ],
+                      "depends_on":  [
+
+                                     ],
+                      "source_issues":  [
+                                            "GOV-M0-01"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "保证后续修改可比较，不因目录迁移或测试变化丢失原始证据。",
+                      "modules":  [
+                                      "00_工程总控/整改基线",
+                                      "tests/regression"
+                                  ],
+                      "deliverables":  [
+                                           "M0-01 修改产物",
+                                           "M0-01 自动化验收证据",
+                                           "M0-01 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M0-01-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  false,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M0-02",
+                      "title":  "固化故障复现样本",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M0",
+                      "severity":  "P0",
+                      "sequence":  2,
+                      "status":  "READY_FOR_REVIEW",
+                      "status_change_reason":  "已将 10 个已确认故障固化为 strict xfail 回归样本，并补充 node ID、来源问题、当前错误行为、修复后预期行为和 runxfail 探针；等待独立验收，未标记 ACCEPTED。",
+                      "ready_for_review_at":  "2026-06-23",
+                      "review_evidence":  [
+                                              "00_工程总控/整改基线/M0_READY_FOR_REVIEW_验收材料_2026-06-23.md",
+                                              "00_工程总控/整改基线/BASELINE_2026-06-23.json",
+                                              "00_工程总控/整改基线/PYTEST_EVIDENCE_2026-06-23.json",
+                                              "测试/回归样本/test_confirmed_failures.py"
+                                          ],
+                      "regression_test_created_by":  "M0-02",
+                      "depends_on":  [
+                                         "M0-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-01"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "把两轮盘查中的口头/报告问题变成自动化回归样本。",
+                      "modules":  [
+                                      "00_工程总控/整改基线",
+                                      "tests/regression"
+                                  ],
+                      "deliverables":  [
+                                           "M0-02 修改产物",
+                                           "M0-02 自动化验收证据",
+                                           "M0-02 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M0-02-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  false,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "SCOPE-01",
+                      "title":  "区分测试 Fixture 与真实创作项目边界",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "SCOPE",
+                      "severity":  "P0",
+                      "sequence":  3,
+                      "status":  "READY_FOR_REVIEW",
+                      "status_change_reason":  "BATCH-1A：已新增公共输入校验并接入 L2/L3 入口，L2/L3 空对象输入在业务执行和报告生成前返回 INPUT_INVALID；等待独立验收，未标记 ACCEPTED。",
+                      "ready_for_review_at":  "2026-06-23",
+                      "review_evidence":  [
+                                              "00_工程总控/工程执行层/公共组件/输入校验.py",
+                                              "00_工程总控/工程执行层/L2工程/L2运行入口.py",
+                                              "00_工程总控/工程执行层/L3工程/L3运行入口.py",
+                                              "测试/回归样本/test_confirmed_failures.py"
+                                          ],
+                      "depends_on":  [
+                                         "M0-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P1-08"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "防止占位正文和测试项目被误判为真实项目已经具备生产正文。",
+                      "modules":  [
+                                      "Project Manifest",
+                                      "fixtures",
+                                      "项目状态文档"
+                                  ],
+                      "deliverables":  [
+                                           "SCOPE-01 修改产物",
+                                           "SCOPE-01 自动化验收证据",
+                                           "SCOPE-01 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "SCOPE-01-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M1-01",
+                      "title":  "建立统一输入校验服务",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M1",
+                      "severity":  "P0",
+                      "sequence":  4,
+                      "status":  "READY_FOR_REVIEW",
+                      "depends_on":  [
+                                         "M0-02"
+                                     ],
+                      "source_issues":  [
+                                            "R2-P0-01"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "L1/L2/L3/PIPELINE 通过同一个校验入口处理输入。",
+                      "modules":  [
+                                      "公共组件",
+                                      "schemas",
+                                      "CLI",
+                                      "L1/L2/L3/PIPELINE 入口"
+                                  ],
+                      "deliverables":  [
+                                           "M1-01 修改产物",
+                                           "M1-01 自动化验收证据",
+                                           "M1-01 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M1-01-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT",
+                      "status_change_reason":  "BATCH-1A：已新增公共输入校验并接入 L2/L3 入口，L2/L3 空对象输入在业务执行和报告生成前返回 INPUT_INVALID；等待独立验收，未标记 ACCEPTED。",
+                      "ready_for_review_at":  "2026-06-23",
+                      "review_evidence":  [
+                                              "00_工程总控/工程执行层/公共组件/输入校验.py",
+                                              "00_工程总控/工程执行层/L2工程/L2运行入口.py",
+                                              "00_工程总控/工程执行层/L3工程/L3运行入口.py",
+                                              "测试/回归样本/test_confirmed_failures.py"
+                                          ]
+                  },
+                  {
+                      "task_id":  "M1-02",
+                      "title":  "收紧六份核心 JSON Schema",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M1",
+                      "severity":  "P0",
+                      "sequence":  5,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-01"
+                                     ],
+                      "source_issues":  [
+                                            "R2-C-02",
+                                            "R2-P0-01"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "Schema 能真实拦截结构畸形，而不是只检查顶层字段存在。",
+                      "modules":  [
+                                      "公共组件",
+                                      "schemas",
+                                      "CLI",
+                                      "L1/L2/L3/PIPELINE 入口"
+                                  ],
+                      "deliverables":  [
+                                           "M1-02 修改产物",
+                                           "M1-02 自动化验收证据",
+                                           "M1-02 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M1-02-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT",
+                      "status_note":  "BATCH-1A 未修改 Schema；现有 Schema 接入口后已覆盖 L2/L3 空对象输入案例，但六份核心 JSON Schema 的内部约束仍需按 M1-02 任务正文另行检查。"
+                  },
+                  {
+                      "task_id":  "M1-03",
+                      "title":  "建立统一错误信封与退出码映射",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M1",
+                      "severity":  "P0",
+                      "sequence":  6,
+                      "status":  "READY_FOR_REVIEW",
+                      "depends_on":  [
+                                         "M1-01"
+                                     ],
+                      "source_issues":  [
+                                            "R2-C-01",
+                                            "R2-P0-01"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "用户输入错误不再输出裸 traceback，不再由不同 argparse/异常类型随机决定格式。",
+                      "modules":  [
+                                      "公共组件",
+                                      "schemas",
+                                      "CLI",
+                                      "L1/L2/L3/PIPELINE 入口"
+                                  ],
+                      "deliverables":  [
+                                           "M1-03 修改产物",
+                                           "M1-03 自动化验收证据",
+                                           "M1-03 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M1-03-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT",
+                      "status_change_reason":  "BATCH-1A：已新增结构化错误信封，损坏 JSON 返回 INPUT_INVALID JSON 错误输出且不含 Traceback；等待独立验收，未标记 ACCEPTED。",
+                      "ready_for_review_at":  "2026-06-23",
+                      "review_evidence":  [
+                                              "00_工程总控/工程执行层/公共组件/错误信封.py",
+                                              "00_工程总控/工程执行层/公共组件/输入校验.py",
+                                              "00_工程总控/工程执行层/L2工程/L2运行入口.py",
+                                              "00_工程总控/工程执行层/L3工程/L3运行入口.py",
+                                              "测试/回归样本/test_confirmed_failures.py"
+                                          ]
+                  },
+                  {
+                      "task_id":  "M1-04",
+                      "title":  "重构统一入口为子命令 CLI",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M1",
+                      "severity":  "P0",
+                      "sequence":  7,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-03"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-01",
+                                            "R2-C-03"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "消除 `parse_known_args` 和跨 target 参数透传。",
+                      "modules":  [
+                                      "公共组件",
+                                      "schemas",
+                                      "CLI",
+                                      "L1/L2/L3/PIPELINE 入口"
+                                  ],
+                      "deliverables":  [
+                                           "M1-04 修改产物",
+                                           "M1-04 自动化验收证据",
+                                           "M1-04 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M1-04-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M1-05",
+                      "title":  "修正状态模型，消除假通过",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M1",
+                      "severity":  "P0",
+                      "sequence":  8,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-01",
+                                         "M1-02",
+                                         "M1-03"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-05",
+                                            "R1-P2-04",
+                                            "R2-A-03",
+                                            "R2-P-05"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "状态可被机器准确解释，外部调用者读取单一字段时不会误判发布或质量结论。",
+                      "modules":  [
+                                      "公共组件",
+                                      "schemas",
+                                      "CLI",
+                                      "L1/L2/L3/PIPELINE 入口"
+                                  ],
+                      "deliverables":  [
+                                           "M1-05 修改产物",
+                                           "M1-05 自动化验收证据",
+                                           "M1-05 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M1-05-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M2-01",
+                      "title":  "建立完整 Preflight，任何副作用前完成检查",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M2",
+                      "severity":  "P0",
+                      "sequence":  9,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-01",
+                                         "M1-02",
+                                         "M1-05"
+                                     ],
+                      "source_issues":  [
+                                            "R2-P-01",
+                                            "R2-P0-03"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "避免先创建运行目录、复制正文、写 `RUNNING` 后才发现 ID 或规则不合法。",
+                      "modules":  [
+                                      "pipeline",
+                                      "运行记录",
+                                      "Artifact Registry",
+                                      "logs",
+                                      "recovery"
+                                  ],
+                      "deliverables":  [
+                                           "M2-01 修改产物",
+                                           "M2-01 自动化验收证据",
+                                           "M2-01 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M2-01-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M2-02",
+                      "title":  "建立不可变 Run/Stage/Attempt 身份",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M2",
+                      "severity":  "P0",
+                      "sequence":  10,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P2-04",
+                                            "R2-P0-03",
+                                            "R2-P0-04"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "禁止独立 L1/L2/L3 静默覆盖历史。",
+                      "modules":  [
+                                      "pipeline",
+                                      "运行记录",
+                                      "Artifact Registry",
+                                      "logs",
+                                      "recovery"
+                                  ],
+                      "deliverables":  [
+                                           "M2-02 修改产物",
+                                           "M2-02 自动化验收证据",
+                                           "M2-02 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M2-02-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M2-03",
+                      "title":  "增加运行锁和并发安全",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M2",
+                      "severity":  "P1",
+                      "sequence":  11,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-02"
+                                     ],
+                      "source_issues":  [
+                                            "R2-C-06"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "两个进程不能同时写同一 run root。",
+                      "modules":  [
+                                      "pipeline",
+                                      "运行记录",
+                                      "Artifact Registry",
+                                      "logs",
+                                      "recovery"
+                                  ],
+                      "deliverables":  [
+                                           "M2-03 修改产物",
+                                           "M2-03 自动化验收证据",
+                                           "M2-03 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M2-03-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M2-04",
+                      "title":  "建立中断、失败和恢复状态",
+                      "task_type":  "EPIC",
+                      "parent_task":  null,
+                      "milestone":  "M2",
+                      "severity":  "P0",
+                      "sequence":  12,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-02"
+                                     ],
+                      "source_issues":  [
+                                            "R2-P-02",
+                                            "R2-P0-03"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "不再留下永久 `RUNNING` 残骸。",
+                      "modules":  [
+                                      "pipeline",
+                                      "运行记录",
+                                      "Artifact Registry",
+                                      "logs",
+                                      "recovery"
+                                  ],
+                      "deliverables":  [
+                                           "M2-04 修改产物",
+                                           "M2-04 自动化验收证据",
+                                           "M2-04 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M2-04-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得直接领取 Epic；只能领取其子任务",
+                                           "不得绕过子任务验收关闭 Epic"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "CHILD_TASKS_ONLY"
+                  },
+                  {
+                      "task_id":  "M2-04A",
+                      "title":  "建立中断状态与阶段 Checkpoint",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M2-04",
+                      "milestone":  "M2",
+                      "severity":  "P0",
+                      "sequence":  13,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-02"
+                                     ],
+                      "source_issues":  [
+                                            "R2-P-02",
+                                            "R2-P0-03"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "保证进程中断或超时后，运行状态可被确定识别。",
+                      "modules":  [
+                                      "pipeline",
+                                      "运行记录",
+                                      "Artifact Registry",
+                                      "logs",
+                                      "recovery"
+                                  ],
+                      "deliverables":  [
+                                           "M2-04A 修改产物",
+                                           "M2-04A 自动化验收证据",
+                                           "M2-04A 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M2-04A-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M2-04B",
+                      "title":  "实现 Run Inspect 与 Stale 状态检测",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M2-04",
+                      "milestone":  "M2",
+                      "severity":  "P0",
+                      "sequence":  14,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-04A"
+                                     ],
+                      "source_issues":  [
+                                            "R2-P-02",
+                                            "R2-P0-03"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "提供只读诊断入口，判断运行最后完整阶段和是否需要恢复。",
+                      "modules":  [
+                                      "pipeline",
+                                      "运行记录",
+                                      "Artifact Registry",
+                                      "logs",
+                                      "recovery"
+                                  ],
+                      "deliverables":  [
+                                           "M2-04B 修改产物",
+                                           "M2-04B 自动化验收证据",
+                                           "M2-04B 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M2-04B-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M2-04C",
+                      "title":  "实现 Retry 与 Recover 新 Attempt 机制",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M2-04",
+                      "milestone":  "M2",
+                      "severity":  "P0",
+                      "sequence":  15,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-04A",
+                                         "M2-04B"
+                                     ],
+                      "source_issues":  [
+                                            "R2-P-02",
+                                            "R2-P0-03"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "恢复和重试不得覆盖旧 attempt 或在半成品目录继续写入。",
+                      "modules":  [
+                                      "pipeline",
+                                      "运行记录",
+                                      "Artifact Registry",
+                                      "logs",
+                                      "recovery"
+                                  ],
+                      "deliverables":  [
+                                           "M2-04C 修改产物",
+                                           "M2-04C 自动化验收证据",
+                                           "M2-04C 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M2-04C-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M2-05",
+                      "title":  "建立 Artifact Registry，覆盖全部产物",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M2",
+                      "severity":  "P0",
+                      "sequence":  16,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-02"
+                                     ],
+                      "source_issues":  [
+                                            "R2-P-03"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "顶层清单能够发现分项 Markdown 任务被删除或修改。",
+                      "modules":  [
+                                      "pipeline",
+                                      "运行记录",
+                                      "Artifact Registry",
+                                      "logs",
+                                      "recovery"
+                                  ],
+                      "deliverables":  [
+                                           "M2-05 修改产物",
+                                           "M2-05 自动化验收证据",
+                                           "M2-05 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M2-05-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M2-06",
+                      "title":  "日志与清单分离",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M2",
+                      "severity":  "P1",
+                      "sequence":  17,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-05"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P2-05",
+                                            "R2-C-07",
+                                            "R2-P-04"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "避免完整 stdout/stderr 无上限嵌入清单。",
+                      "modules":  [
+                                      "pipeline",
+                                      "运行记录",
+                                      "Artifact Registry",
+                                      "logs",
+                                      "recovery"
+                                  ],
+                      "deliverables":  [
+                                           "M2-06 修改产物",
+                                           "M2-06 自动化验收证据",
+                                           "M2-06 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M2-06-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M2-07",
+                      "title":  "将整批状态改为 item-level 状态",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M2",
+                      "severity":  "P0",
+                      "sequence":  18,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-02",
+                                         "M1-05"
+                                     ],
+                      "source_issues":  [
+                                            "R2-P-05",
+                                            "R2-P0-05"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "合法任务、待重路由项、外部阻断项分离。",
+                      "modules":  [
+                                      "pipeline",
+                                      "运行记录",
+                                      "Artifact Registry",
+                                      "logs",
+                                      "recovery"
+                                  ],
+                      "deliverables":  [
+                                           "M2-07 修改产物",
+                                           "M2-07 自动化验收证据",
+                                           "M2-07 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M2-07-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M2-08",
+                      "title":  "建立运行记录保留、归档与安全清理策略",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M2",
+                      "severity":  "P1",
+                      "sequence":  19,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-05",
+                                         "M2-06"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P2-05",
+                                            "R2-P-08"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "让运行记录可控增长，同时保证审计证据不会被误删。",
+                      "modules":  [
+                                      "pipeline",
+                                      "运行记录",
+                                      "Artifact Registry",
+                                      "logs",
+                                      "recovery"
+                                  ],
+                      "deliverables":  [
+                                           "M2-08 修改产物",
+                                           "M2-08 自动化验收证据",
+                                           "M2-08 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M2-08-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M2-09",
+                      "title":  "取消全局未归属目录并建立检疫隔离机制",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M2",
+                      "severity":  "P0",
+                      "sequence":  20,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-02"
+                                     ],
+                      "source_issues":  [
+                                            "R2-A-07"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "禁止缺少运行归属的任务进入正式流水线或被其他运行误消费。",
+                      "modules":  [
+                                      "pipeline",
+                                      "运行记录",
+                                      "Artifact Registry",
+                                      "logs",
+                                      "recovery"
+                                  ],
+                      "deliverables":  [
+                                           "M2-09 修改产物",
+                                           "M2-09 自动化验收证据",
+                                           "M2-09 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M2-09-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M3-01",
+                      "title":  "明确规则真源战略并修改声明",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M3",
+                      "severity":  "P0",
+                      "sequence":  21,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-01",
+                                         "M1-02",
+                                         "M1-03",
+                                         "M1-05",
+                                         "M2-01",
+                                         "M2-02",
+                                         "M2-05",
+                                         "M2-07"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-03",
+                                            "R2-D-02",
+                                            "R2-D-06"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "终止“Markdown 宣称真源、Python 决定行为”的双真源。",
+                      "modules":  [
+                                      "rules",
+                                      "rule loader",
+                                      "rule executor",
+                                      "rule evidence"
+                                  ],
+                      "deliverables":  [
+                                           "M3-01 修改产物",
+                                           "M3-01 自动化验收证据",
+                                           "M3-01 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M3-01-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M3-02",
+                      "title":  "先迁移 L1 阈值、正则和状态映射",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M3",
+                      "severity":  "P0",
+                      "sequence":  22,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-03"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "选择最小范围验证规则控制面，不一次迁移全部规则。",
+                      "modules":  [
+                                      "rules",
+                                      "rule loader",
+                                      "rule executor",
+                                      "rule evidence"
+                                  ],
+                      "deliverables":  [
+                                           "M3-02 修改产物",
+                                           "M3-02 自动化验收证据",
+                                           "M3-02 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M3-02-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M3-03",
+                      "title":  "迁移 L1.5/L2 路由并删除 fallback 优先覆盖",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M3",
+                      "severity":  "P0",
+                      "sequence":  23,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-03",
+                                            "R2-P0-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "文档/结构化路由真正决定 L2 模块归属。",
+                      "modules":  [
+                                      "rules",
+                                      "rule loader",
+                                      "rule executor",
+                                      "rule evidence"
+                                  ],
+                      "deliverables":  [
+                                           "M3-03 修改产物",
+                                           "M3-03 自动化验收证据",
+                                           "M3-03 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M3-03-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M3-04",
+                      "title":  "结构化 L2 禁止项",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M3",
+                      "severity":  "P0",
+                      "sequence":  24,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-03",
+                                            "R2-P0-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "修复六个能力禁止项解析为零的问题。",
+                      "modules":  [
+                                      "rules",
+                                      "rule loader",
+                                      "rule executor",
+                                      "rule evidence"
+                                  ],
+                      "deliverables":  [
+                                           "M3-04 修改产物",
+                                           "M3-04 自动化验收证据",
+                                           "M3-04 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M3-04-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M3-05",
+                      "title":  "让 L3 权限、执行顺序和禁止项真实控制执行",
+                      "task_type":  "EPIC",
+                      "parent_task":  null,
+                      "milestone":  "M3",
+                      "severity":  "P0",
+                      "sequence":  25,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-03",
+                                            "R2-A-06",
+                                            "R2-P0-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "解析对象从报告装饰升级为执行控制面。",
+                      "modules":  [
+                                      "rules",
+                                      "rule loader",
+                                      "rule executor",
+                                      "rule evidence"
+                                  ],
+                      "deliverables":  [
+                                           "M3-05 修改产物",
+                                           "M3-05 自动化验收证据",
+                                           "M3-05 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M3-05-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得直接领取 Epic；只能领取其子任务",
+                                           "不得绕过子任务验收关闭 Epic"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "CHILD_TASKS_ONLY"
+                  },
+                  {
+                      "task_id":  "M3-05A",
+                      "title":  "让 L3 权限规则控制可读写边界",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M3-05",
+                      "milestone":  "M3",
+                      "severity":  "P0",
+                      "sequence":  26,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-01"
+                                     ],
+                      "source_issues":  [
+                                            "R2-A-06",
+                                            "R2-P0-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "权限规则不再只是报告摘要，而是所有 handler 的强制前置条件。",
+                      "modules":  [
+                                      "rules",
+                                      "rule loader",
+                                      "rule executor",
+                                      "rule evidence"
+                                  ],
+                      "deliverables":  [
+                                           "M3-05A 修改产物",
+                                           "M3-05A 自动化验收证据",
+                                           "M3-05A 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M3-05A-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M3-05B",
+                      "title":  "让 L3 执行顺序规则控制校验器调用",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M3-05",
+                      "milestone":  "M3",
+                      "severity":  "P0",
+                      "sequence":  27,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-01"
+                                     ],
+                      "source_issues":  [
+                                            "R2-A-06",
+                                            "R2-P0-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "执行顺序由规则集决定，注册表不再暗含业务顺序。",
+                      "modules":  [
+                                      "rules",
+                                      "rule loader",
+                                      "rule executor",
+                                      "rule evidence"
+                                  ],
+                      "deliverables":  [
+                                           "M3-05B 修改产物",
+                                           "M3-05B 自动化验收证据",
+                                           "M3-05B 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M3-05B-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M3-05C",
+                      "title":  "让 L3 禁止项控制阻断与路由",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M3-05",
+                      "milestone":  "M3",
+                      "severity":  "P0",
+                      "sequence":  28,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-01"
+                                     ],
+                      "source_issues":  [
+                                            "R2-A-06",
+                                            "R2-P0-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "禁止项必须在操作执行前产生可追溯的阻断决定。",
+                      "modules":  [
+                                      "rules",
+                                      "rule loader",
+                                      "rule executor",
+                                      "rule evidence"
+                                  ],
+                      "deliverables":  [
+                                           "M3-05C 修改产物",
+                                           "M3-05C 自动化验收证据",
+                                           "M3-05C 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M3-05C-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M3-06",
+                      "title":  "增加 parsed/enforced/observed 三层规则证据",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M3",
+                      "severity":  "P1",
+                      "sequence":  29,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-02",
+                                         "M3-03",
+                                         "M3-04",
+                                         "M3-05A",
+                                         "M3-05B",
+                                         "M3-05C"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-03",
+                                            "R2-A-01",
+                                            "R2-P0-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "避免“解析到了”被误认为“执行了”。",
+                      "modules":  [
+                                      "rules",
+                                      "rule loader",
+                                      "rule executor",
+                                      "rule evidence"
+                                  ],
+                      "deliverables":  [
+                                           "M3-06 修改产物",
+                                           "M3-06 自动化验收证据",
+                                           "M3-06 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M3-06-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M3-07",
+                      "title":  "建立规则晋升、冻结和回退流程",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M3",
+                      "severity":  "P1",
+                      "sequence":  30,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-06"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-06",
+                                            "R2-P-07"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "生产模式不再靠批量改状态获得正式规则。",
+                      "modules":  [
+                                      "rules",
+                                      "rule loader",
+                                      "rule executor",
+                                      "rule evidence"
+                                  ],
+                      "deliverables":  [
+                                           "M3-07 修改产物",
+                                           "M3-07 自动化验收证据",
+                                           "M3-07 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M3-07-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M4-01",
+                      "title":  "定义 Project Manifest Schema",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M4",
+                      "severity":  "P0",
+                      "sequence":  31,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-02",
+                                         "SCOPE-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-02",
+                                            "R1-P1-08",
+                                            "R2-A-04"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "项目通过清单接入，而不是通过引擎硬编码路径。",
+                      "modules":  [
+                                      "projects",
+                                      "Project Manifest",
+                                      "Harness",
+                                      "70_测试项目"
+                                  ],
+                      "deliverables":  [
+                                           "M4-01 修改产物",
+                                           "M4-01 自动化验收证据",
+                                           "M4-01 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M4-01-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M4-02",
+                      "title":  "建立 Project Loader 与 Harness Validator",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M4",
+                      "severity":  "P0",
+                      "sequence":  32,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M4-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-02",
+                                            "R2-A-04"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "替代当前只检查三个目录存在的弱 Harness。",
+                      "modules":  [
+                                      "projects",
+                                      "Project Manifest",
+                                      "Harness",
+                                      "70_测试项目"
+                                  ],
+                      "deliverables":  [
+                                           "M4-02 修改产物",
+                                           "M4-02 自动化验收证据",
+                                           "M4-02 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M4-02-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M4-03",
+                      "title":  "移除引擎中的 TP-001 固定路径和默认内容",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M4",
+                      "severity":  "P0",
+                      "sequence":  33,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M4-02"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "引擎本体与测试项目彻底分离。",
+                      "modules":  [
+                                      "projects",
+                                      "Project Manifest",
+                                      "Harness",
+                                      "70_测试项目"
+                                  ],
+                      "deliverables":  [
+                                           "M4-03 修改产物",
+                                           "M4-03 自动化验收证据",
+                                           "M4-03 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M4-03-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M4-04",
+                      "title":  "建立第二个最小测试项目",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M4",
+                      "severity":  "P0",
+                      "sequence":  34,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M4-03"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "证明项目中立性，而不是仅声明中立。",
+                      "modules":  [
+                                      "projects",
+                                      "Project Manifest",
+                                      "Harness",
+                                      "70_测试项目"
+                                  ],
+                      "deliverables":  [
+                                           "M4-04 修改产物",
+                                           "M4-04 自动化验收证据",
+                                           "M4-04 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M4-04-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M4-05",
+                      "title":  "收缩/隔离旧正文检测与 TP-001 内置 engine",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M4",
+                      "severity":  "P1",
+                      "sequence":  35,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M4-04"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P1-02",
+                                            "R2-C-09"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "建立唯一主链，避免三套实现继续漂移。",
+                      "modules":  [
+                                      "projects",
+                                      "Project Manifest",
+                                      "Harness",
+                                      "70_测试项目"
+                                  ],
+                      "deliverables":  [
+                                           "M4-05 修改产物",
+                                           "M4-05 自动化验收证据",
+                                           "M4-05 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M4-05-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M5-01",
+                      "title":  "建立真实 Python 包",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M5",
+                      "severity":  "P1",
+                      "sequence":  36,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-04",
+                                         "M1-05",
+                                         "M2-02",
+                                         "M3-01",
+                                         "M4-05"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P1-01",
+                                            "R2-C-04"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "消除 15 处 `sys.path.insert()` 和空 wheel。",
+                      "modules":  [
+                                      "src/xcue",
+                                      "pyproject.toml",
+                                      "tests",
+                                      "build/release"
+                                  ],
+                      "deliverables":  [
+                                           "M5-01 修改产物",
+                                           "M5-01 自动化验收证据",
+                                           "M5-01 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M5-01-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M5-02",
+                      "title":  "拆分 248 行流水线函数",
+                      "task_type":  "EPIC",
+                      "parent_task":  null,
+                      "milestone":  "M5",
+                      "severity":  "P1",
+                      "sequence":  37,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M5-01",
+                                         "M2-01",
+                                         "M2-02",
+                                         "M2-05",
+                                         "M2-07"
+                                     ],
+                      "source_issues":  [
+                                            "R2-C-05"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "分离编排、IO、阶段执行、状态归并和恢复。",
+                      "modules":  [
+                                      "src/xcue",
+                                      "pyproject.toml",
+                                      "tests",
+                                      "build/release"
+                                  ],
+                      "deliverables":  [
+                                           "M5-02 修改产物",
+                                           "M5-02 自动化验收证据",
+                                           "M5-02 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M5-02-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得直接领取 Epic；只能领取其子任务",
+                                           "不得绕过子任务验收关闭 Epic"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "CHILD_TASKS_ONLY"
+                  },
+                  {
+                      "task_id":  "M5-02A",
+                      "title":  "抽取 PreflightService 与 RunRepository",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M5-02",
+                      "milestone":  "M5",
+                      "severity":  "P1",
+                      "sequence":  38,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M5-01",
+                                         "M2-01",
+                                         "M2-02",
+                                         "M2-05"
+                                     ],
+                      "source_issues":  [
+                                            "R2-C-05"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "先从主流水线移出预检、运行身份和持久化职责。",
+                      "modules":  [
+                                      "src/xcue",
+                                      "pyproject.toml",
+                                      "tests",
+                                      "build/release"
+                                  ],
+                      "deliverables":  [
+                                           "M5-02A 修改产物",
+                                           "M5-02A 自动化验收证据",
+                                           "M5-02A 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M5-02A-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M5-02B",
+                      "title":  "抽取 StageExecutor、ArtifactRegistry 与 StatusReducer",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M5-02",
+                      "milestone":  "M5",
+                      "severity":  "P1",
+                      "sequence":  39,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M5-01",
+                                         "M2-05",
+                                         "M2-07"
+                                     ],
+                      "source_issues":  [
+                                            "R2-C-05"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "分离阶段执行、产物登记和状态归并。",
+                      "modules":  [
+                                      "src/xcue",
+                                      "pyproject.toml",
+                                      "tests",
+                                      "build/release"
+                                  ],
+                      "deliverables":  [
+                                           "M5-02B 修改产物",
+                                           "M5-02B 自动化验收证据",
+                                           "M5-02B 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M5-02B-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M5-02C",
+                      "title":  "重建瘦编排器并接入 RecoveryManager",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M5-02",
+                      "milestone":  "M5",
+                      "severity":  "P1",
+                      "sequence":  40,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M5-02A",
+                                         "M5-02B",
+                                         "M2-04C"
+                                     ],
+                      "source_issues":  [
+                                            "R2-C-05"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "主编排器只表达执行顺序和服务协作。",
+                      "modules":  [
+                                      "src/xcue",
+                                      "pyproject.toml",
+                                      "tests",
+                                      "build/release"
+                                  ],
+                      "deliverables":  [
+                                           "M5-02C 修改产物",
+                                           "M5-02C 自动化验收证据",
+                                           "M5-02C 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M5-02C-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M5-03",
+                      "title":  "统一阶段接口，不再默认使用子进程耦合内部模块",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M5",
+                      "severity":  "P1",
+                      "sequence":  41,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M5-01",
+                                         "M5-02C"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P1-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "内部调用使用 Python API，外部 CLI 仅作适配器。",
+                      "modules":  [
+                                      "src/xcue",
+                                      "pyproject.toml",
+                                      "tests",
+                                      "build/release"
+                                  ],
+                      "deliverables":  [
+                                           "M5-03 修改产物",
+                                           "M5-03 自动化验收证据",
+                                           "M5-03 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M5-03-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M5-04",
+                      "title":  "建立资源限制",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M5",
+                      "severity":  "P1",
+                      "sequence":  42,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-01",
+                                         "M5-01"
+                                     ],
+                      "source_issues":  [
+                                            "R2-C-07",
+                                            "R2-C-08"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "避免大文件、大 JSON 和无限日志造成不稳定。",
+                      "modules":  [
+                                      "src/xcue",
+                                      "pyproject.toml",
+                                      "tests",
+                                      "build/release"
+                                  ],
+                      "deliverables":  [
+                                           "M5-04 修改产物",
+                                           "M5-04 自动化验收证据",
+                                           "M5-04 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M5-04-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M5-05",
+                      "title":  "建立真实打包和 console script",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M5",
+                      "severity":  "P1",
+                      "sequence":  43,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M5-01",
+                                         "M5-03"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P1-01"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "终止“pip install 成功但空包”的假安装。",
+                      "modules":  [
+                                      "src/xcue",
+                                      "pyproject.toml",
+                                      "tests",
+                                      "build/release"
+                                  ],
+                      "deliverables":  [
+                                           "M5-05 修改产物",
+                                           "M5-05 自动化验收证据",
+                                           "M5-05 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M5-05-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M5-06",
+                      "title":  "清理重复、未使用和遗留模块",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M5",
+                      "severity":  "P2",
+                      "sequence":  44,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M4-05",
+                                         "M5-01",
+                                         "M5-03"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P1-02",
+                                            "R1-P2-03",
+                                            "R2-A-06",
+                                            "R2-C-09"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "降低维护分叉。",
+                      "modules":  [
+                                      "src/xcue",
+                                      "pyproject.toml",
+                                      "tests",
+                                      "build/release"
+                                  ],
+                      "deliverables":  [
+                                           "M5-06 修改产物",
+                                           "M5-06 自动化验收证据",
+                                           "M5-06 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M5-06-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M5-07",
+                      "title":  "建立 Python 版本、依赖锁定与可复现构建",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M5",
+                      "severity":  "P1",
+                      "sequence":  45,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M5-01",
+                                         "M5-05"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P1-01",
+                                            "R1-P2-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "使开发、测试和发布环境具有明确版本边界与可重复安装结果。",
+                      "modules":  [
+                                      "src/xcue",
+                                      "pyproject.toml",
+                                      "tests",
+                                      "build/release"
+                                  ],
+                      "deliverables":  [
+                                           "M5-07 修改产物",
+                                           "M5-07 自动化验收证据",
+                                           "M5-07 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M5-07-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M6-01",
+                      "title":  "重新定义 L3 当前能力边界",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M6",
+                      "severity":  "P0",
+                      "sequence":  46,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-05"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-04",
+                                            "R1-P0-05",
+                                            "R2-A-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "在真实执行器完成前，停止把任务规划称为执行完成。",
+                      "modules":  [
+                                      "L3 task planning",
+                                      "executor",
+                                      "diff/apply",
+                                      "rollback"
+                                  ],
+                      "deliverables":  [
+                                           "M6-01 修改产物",
+                                           "M6-01 自动化验收证据",
+                                           "M6-01 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M6-01-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M6-02",
+                      "title":  "定义可执行任务 Schema",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M6",
+                      "severity":  "P1",
+                      "sequence":  47,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-05",
+                                         "M3-05A",
+                                         "M3-05B",
+                                         "M3-05C",
+                                         "M4-02",
+                                         "M6-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-04"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "让任务从自然语言建议变成可验证执行请求。",
+                      "modules":  [
+                                      "L3 task planning",
+                                      "executor",
+                                      "diff/apply",
+                                      "rollback"
+                                  ],
+                      "deliverables":  [
+                                           "M6-02 修改产物",
+                                           "M6-02 自动化验收证据",
+                                           "M6-02 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M6-02-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M6-03",
+                      "title":  "先实现确定性工程执行器",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M6",
+                      "severity":  "P1",
+                      "sequence":  48,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-02",
+                                         "M2-05",
+                                         "M2-07",
+                                         "M3-05A",
+                                         "M3-05B",
+                                         "M3-05C",
+                                         "M4-02",
+                                         "M5-03",
+                                         "M6-02"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-04"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "先闭合低风险任务，不直接自动改写小说正文。",
+                      "modules":  [
+                                      "L3 task planning",
+                                      "executor",
+                                      "diff/apply",
+                                      "rollback"
+                                  ],
+                      "deliverables":  [
+                                           "M6-03 修改产物",
+                                           "M6-03 自动化验收证据",
+                                           "M6-03 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M6-03-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M6-04",
+                      "title":  "建立 diff、审批和应用机制",
+                      "task_type":  "EPIC",
+                      "parent_task":  null,
+                      "milestone":  "M6",
+                      "severity":  "P1",
+                      "sequence":  49,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M6-03"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-04"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "任务执行不直接覆盖真源。",
+                      "modules":  [
+                                      "L3 task planning",
+                                      "executor",
+                                      "diff/apply",
+                                      "rollback"
+                                  ],
+                      "deliverables":  [
+                                           "M6-04 修改产物",
+                                           "M6-04 自动化验收证据",
+                                           "M6-04 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M6-04-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得直接领取 Epic；只能领取其子任务",
+                                           "不得绕过子任务验收关闭 Epic"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "CHILD_TASKS_ONLY"
+                  },
+                  {
+                      "task_id":  "M6-04A",
+                      "title":  "建立授权沙箱执行",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M6-04",
+                      "milestone":  "M6",
+                      "severity":  "P1",
+                      "sequence":  50,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-04C",
+                                         "M2-05",
+                                         "M3-05A",
+                                         "M4-02",
+                                         "M6-03"
+                                     ],
+                      "source_issues":  [
+                                            "GOV-M6-04A"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "执行器只在隔离副本中产生候选结果。",
+                      "modules":  [
+                                      "L3 task planning",
+                                      "executor",
+                                      "diff/apply",
+                                      "rollback"
+                                  ],
+                      "deliverables":  [
+                                           "M6-04A 修改产物",
+                                           "M6-04A 自动化验收证据",
+                                           "M6-04A 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M6-04A-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M6-04B",
+                      "title":  "生成确定性 Diff 与后置校验",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M6-04",
+                      "milestone":  "M6",
+                      "severity":  "P1",
+                      "sequence":  51,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M6-04A"
+                                     ],
+                      "source_issues":  [
+                                            "GOV-M6-04B"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "同一输入和任务生成可重复 diff，并验证预期后置条件。",
+                      "modules":  [
+                                      "L3 task planning",
+                                      "executor",
+                                      "diff/apply",
+                                      "rollback"
+                                  ],
+                      "deliverables":  [
+                                           "M6-04B 修改产物",
+                                           "M6-04B 自动化验收证据",
+                                           "M6-04B 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M6-04B-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M6-04C",
+                      "title":  "建立审批记录与拒绝路径",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M6-04",
+                      "milestone":  "M6",
+                      "severity":  "P1",
+                      "sequence":  52,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M6-04B",
+                                         "M3-05A",
+                                         "M3-05C"
+                                     ],
+                      "source_issues":  [
+                                            "GOV-M6-04C"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "应用动作必须引用不可变审批记录。",
+                      "modules":  [
+                                      "L3 task planning",
+                                      "executor",
+                                      "diff/apply",
+                                      "rollback"
+                                  ],
+                      "deliverables":  [
+                                           "M6-04C 修改产物",
+                                           "M6-04C 自动化验收证据",
+                                           "M6-04C 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M6-04C-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M6-04D",
+                      "title":  "实现多文件原子应用",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M6-04",
+                      "milestone":  "M6",
+                      "severity":  "P1",
+                      "sequence":  53,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M6-04C",
+                                         "M2-05"
+                                     ],
+                      "source_issues":  [
+                                            "GOV-M6-04D"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "全部文件校验通过后才提交，否则完整回退。",
+                      "modules":  [
+                                      "L3 task planning",
+                                      "executor",
+                                      "diff/apply",
+                                      "rollback"
+                                  ],
+                      "deliverables":  [
+                                           "M6-04D 修改产物",
+                                           "M6-04D 自动化验收证据",
+                                           "M6-04D 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M6-04D-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M6-05",
+                      "title":  "建立原闸门回流复验",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M6",
+                      "severity":  "P1",
+                      "sequence":  54,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-01",
+                                         "M2-02",
+                                         "M2-05",
+                                         "M3-06",
+                                         "M6-04D"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-04"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "闭合“修复后是否真的解决原问题”。",
+                      "modules":  [
+                                      "L3 task planning",
+                                      "executor",
+                                      "diff/apply",
+                                      "rollback"
+                                  ],
+                      "deliverables":  [
+                                           "M6-05 修改产物",
+                                           "M6-05 自动化验收证据",
+                                           "M6-05 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M6-05-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M6-06",
+                      "title":  "建立回滚和失败隔离",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M6",
+                      "severity":  "P1",
+                      "sequence":  55,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-04C",
+                                         "M2-05",
+                                         "M6-04D"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-04",
+                                            "R2-P-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "应用失败时恢复，不依赖手工复制。",
+                      "modules":  [
+                                      "L3 task planning",
+                                      "executor",
+                                      "diff/apply",
+                                      "rollback"
+                                  ],
+                      "deliverables":  [
+                                           "M6-06 修改产物",
+                                           "M6-06 自动化验收证据",
+                                           "M6-06 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M6-06-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M7-01",
+                      "title":  "重写根级当前状态页",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M7",
+                      "severity":  "P0",
+                      "sequence":  56,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-05"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-07",
+                                            "R1-P1-07",
+                                            "R2-D-03"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "README、INDEX、AGENTS 不再描述失真。",
+                      "modules":  [
+                                      "README",
+                                      "INDEX",
+                                      "AGENTS",
+                                      "Markdown 控制文档"
+                                  ],
+                      "deliverables":  [
+                                           "M7-01 修改产物",
+                                           "M7-01 自动化验收证据",
+                                           "M7-01 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M7-01-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M7-02",
+                      "title":  "补全 Front Matter 依赖图",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M7",
+                      "severity":  "P1",
+                      "sequence":  57,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P1-06",
+                                            "R2-D-01"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "上游依赖、下游引用、替代关系不再全部为空。",
+                      "modules":  [
+                                      "README",
+                                      "INDEX",
+                                      "AGENTS",
+                                      "Markdown 控制文档"
+                                  ],
+                      "deliverables":  [
+                                           "M7-02 修改产物",
+                                           "M7-02 自动化验收证据",
+                                           "M7-02 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M7-02-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M7-03",
+                      "title":  "将裸文件名引用改为可校验链接",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M7",
+                      "severity":  "P1",
+                      "sequence":  58,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M7-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-07",
+                                            "R2-D-03",
+                                            "R2-D-04"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "普通链接检查器能发现失效路径。",
+                      "modules":  [
+                                      "README",
+                                      "INDEX",
+                                      "AGENTS",
+                                      "Markdown 控制文档"
+                                  ],
+                      "deliverables":  [
+                                           "M7-03 修改产物",
+                                           "M7-03 自动化验收证据",
+                                           "M7-03 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M7-03-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M7-04",
+                      "title":  "统一文档编码、行尾和章节编号",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M7",
+                      "severity":  "P2",
+                      "sequence":  59,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M0-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P2-04",
+                                            "R2-D-06",
+                                            "R2-D-07",
+                                            "R2-D-08"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "降低解析器和跨平台差异。",
+                      "modules":  [
+                                      "README",
+                                      "INDEX",
+                                      "AGENTS",
+                                      "Markdown 控制文档"
+                                  ],
+                      "deliverables":  [
+                                           "M7-04 修改产物",
+                                           "M7-04 自动化验收证据",
+                                           "M7-04 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M7-04-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M7-05",
+                      "title":  "让文档命令成为可执行测试",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M7",
+                      "severity":  "P1",
+                      "sequence":  60,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-04",
+                                         "M7-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-07",
+                                            "R1-P1-07",
+                                            "R2-D-05"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "README 不再存在缺参数、按原文必然失败的命令。",
+                      "modules":  [
+                                      "README",
+                                      "INDEX",
+                                      "AGENTS",
+                                      "Markdown 控制文档"
+                                  ],
+                      "deliverables":  [
+                                           "M7-05 修改产物",
+                                           "M7-05 自动化验收证据",
+                                           "M7-05 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M7-05-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M7-06",
+                      "title":  "建立文档—规则—测试映射表",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M7",
+                      "severity":  "P1",
+                      "sequence":  61,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-06",
+                                         "M7-02"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-03",
+                                            "R1-P1-06",
+                                            "R2-D-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "每条正式规则能找到设计依据和验证证据。",
+                      "modules":  [
+                                      "README",
+                                      "INDEX",
+                                      "AGENTS",
+                                      "Markdown 控制文档"
+                                  ],
+                      "deliverables":  [
+                                           "M7-06 修改产物",
+                                           "M7-06 自动化验收证据",
+                                           "M7-06 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M7-06-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M8-01",
+                      "title":  "建立测试金字塔",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M8",
+                      "severity":  "P0",
+                      "sequence":  62,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M5-03"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P1-05",
+                                            "R2-C-10"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "解决 37 个测试主要是子进程集成测试、unit 为 0 的问题。",
+                      "modules":  [
+                                      "tests",
+                                      "CI",
+                                      "release scripts",
+                                      "Windows regression"
+                                  ],
+                      "deliverables":  [
+                                           "M8-01 修改产物",
+                                           "M8-01 自动化验收证据",
+                                           "M8-01 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M8-01-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M8-02",
+                      "title":  "增加公开 CLI 合同测试",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M8",
+                      "severity":  "P0",
+                      "sequence":  63,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-03",
+                                         "M1-04"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-01",
+                                            "R1-P1-05",
+                                            "R2-C-03"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "所有公开命令都被自动执行。",
+                      "modules":  [
+                                      "tests",
+                                      "CI",
+                                      "release scripts",
+                                      "Windows regression"
+                                  ],
+                      "deliverables":  [
+                                           "M8-02 修改产物",
+                                           "M8-02 自动化验收证据",
+                                           "M8-02 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M8-02-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M8-03",
+                      "title":  "增加规则行为突变测试",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M8",
+                      "severity":  "P0",
+                      "sequence":  64,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-02",
+                                         "M3-03",
+                                         "M3-04",
+                                         "M3-05A",
+                                         "M3-05B",
+                                         "M3-05C"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-03",
+                                            "R2-A-01"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "证明结构化规则不是装饰。",
+                      "modules":  [
+                                      "tests",
+                                      "CI",
+                                      "release scripts",
+                                      "Windows regression"
+                                  ],
+                      "deliverables":  [
+                                           "M8-03 修改产物",
+                                           "M8-03 自动化验收证据",
+                                           "M8-03 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M8-03-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M8-04",
+                      "title":  "增加并发、中断和恢复测试",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M8",
+                      "severity":  "P1",
+                      "sequence":  65,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M2-03",
+                                         "M2-04C"
+                                     ],
+                      "source_issues":  [
+                                            "GOV-M8-04"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "证明运行事务有效。",
+                      "modules":  [
+                                      "tests",
+                                      "CI",
+                                      "release scripts",
+                                      "Windows regression"
+                                  ],
+                      "deliverables":  [
+                                           "M8-04 修改产物",
+                                           "M8-04 自动化验收证据",
+                                           "M8-04 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M8-04-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M8-05",
+                      "title":  "增加双项目隔离验收",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M8",
+                      "severity":  "P0",
+                      "sequence":  66,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M4-02",
+                                         "M4-04"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-02"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "证明项目中立性。",
+                      "modules":  [
+                                      "tests",
+                                      "CI",
+                                      "release scripts",
+                                      "Windows regression"
+                                  ],
+                      "deliverables":  [
+                                           "M8-05 修改产物",
+                                           "M8-05 自动化验收证据",
+                                           "M8-05 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M8-05-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M8-06",
+                      "title":  "建立 CI 与质量门禁",
+                      "task_type":  "EPIC",
+                      "parent_task":  null,
+                      "milestone":  "M8",
+                      "severity":  "P1",
+                      "sequence":  67,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M5-07",
+                                         "M7-06",
+                                         "M8-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P1-01",
+                                            "R2-C-11",
+                                            "R2-P-06"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "本地测试不再完全依赖维护者自觉。",
+                      "modules":  [
+                                      "tests",
+                                      "CI",
+                                      "release scripts",
+                                      "Windows regression"
+                                  ],
+                      "deliverables":  [
+                                           "M8-06 修改产物",
+                                           "M8-06 自动化验收证据",
+                                           "M8-06 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M8-06-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得直接领取 Epic；只能领取其子任务",
+                                           "不得绕过子任务验收关闭 Epic"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "CHILD_TASKS_ONLY"
+                  },
+                  {
+                      "task_id":  "M8-06A",
+                      "title":  "建立编译、格式、Lint 与类型门禁",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M8-06",
+                      "milestone":  "M8",
+                      "severity":  "P1",
+                      "sequence":  68,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M5-01"
+                                     ],
+                      "source_issues":  [
+                                            "R2-C-11",
+                                            "R2-P-06"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "建立快速静态质量门禁。",
+                      "modules":  [
+                                      "tests",
+                                      "CI",
+                                      "release scripts",
+                                      "Windows regression"
+                                  ],
+                      "deliverables":  [
+                                           "M8-06A 修改产物",
+                                           "M8-06A 自动化验收证据",
+                                           "M8-06A 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M8-06A-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M8-06B",
+                      "title":  "建立 Unit、Integration、CLI 与 Acceptance 门禁",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M8-06",
+                      "milestone":  "M8",
+                      "severity":  "P1",
+                      "sequence":  69,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M8-01",
+                                         "M8-02",
+                                         "M8-03",
+                                         "M8-04",
+                                         "M8-05"
+                                     ],
+                      "source_issues":  [
+                                            "R2-C-11",
+                                            "R2-P-06"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "按层运行测试并阻断 P0 回归。",
+                      "modules":  [
+                                      "tests",
+                                      "CI",
+                                      "release scripts",
+                                      "Windows regression"
+                                  ],
+                      "deliverables":  [
+                                           "M8-06B 修改产物",
+                                           "M8-06B 自动化验收证据",
+                                           "M8-06B 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M8-06B-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M8-06C",
+                      "title":  "建立文档、Schema 与规则一致性门禁",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M8-06",
+                      "milestone":  "M8",
+                      "severity":  "P1",
+                      "sequence":  70,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-07",
+                                         "M7-05",
+                                         "M7-06"
+                                     ],
+                      "source_issues":  [
+                                            "R2-C-11",
+                                            "R2-P-06"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "文档链接、规则依赖和正式规则测试映射自动校验。",
+                      "modules":  [
+                                      "tests",
+                                      "CI",
+                                      "release scripts",
+                                      "Windows regression"
+                                  ],
+                      "deliverables":  [
+                                           "M8-06C 修改产物",
+                                           "M8-06C 自动化验收证据",
+                                           "M8-06C 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M8-06C-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M8-06D",
+                      "title":  "建立 Wheel 安装、干净归档与 Windows 回归门禁",
+                      "task_type":  "SUBTASK",
+                      "parent_task":  "M8-06",
+                      "milestone":  "M8",
+                      "severity":  "P1",
+                      "sequence":  71,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M5-05",
+                                         "M5-07",
+                                         "M8-06A",
+                                         "M8-06B",
+                                         "M8-06C"
+                                     ],
+                      "source_issues":  [
+                                            "R2-C-11",
+                                            "R2-P-06"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "验证发布产物在干净环境可安装、导入和运行。",
+                      "modules":  [
+                                      "tests",
+                                      "CI",
+                                      "release scripts",
+                                      "Windows regression"
+                                  ],
+                      "deliverables":  [
+                                           "M8-06D 修改产物",
+                                           "M8-06D 自动化验收证据",
+                                           "M8-06D 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M8-06D-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M8-07",
+                      "title":  "建立干净发布包",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M8",
+                      "severity":  "P1",
+                      "sequence":  72,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M5-05",
+                                         "M8-06D"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P1-01",
+                                            "R1-P2-01",
+                                            "R2-P-06"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "发布归档不再包含缓存和历史污染。",
+                      "modules":  [
+                                      "tests",
+                                      "CI",
+                                      "release scripts",
+                                      "Windows regression"
+                                  ],
+                      "deliverables":  [
+                                           "M8-07 修改产物",
+                                           "M8-07 自动化验收证据",
+                                           "M8-07 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M8-07-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "M8-08",
+                      "title":  "冻结最小生产候选规则集",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "M8",
+                      "severity":  "P1",
+                      "sequence":  73,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-07",
+                                         "M4-04",
+                                         "M7-06",
+                                         "M8-03",
+                                         "M8-05",
+                                         "M8-06D"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P0-05",
+                                            "R1-P0-06"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "让生产模式首次具备可信的最小规则，而不是批量宣布全部规则正式。",
+                      "modules":  [
+                                      "tests",
+                                      "CI",
+                                      "release scripts",
+                                      "Windows regression"
+                                  ],
+                      "deliverables":  [
+                                           "M8-08 修改产物",
+                                           "M8-08 自动化验收证据",
+                                           "M8-08 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "M8-08-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  true,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "BIZ-01",
+                      "title":  "收缩 E/V/C/I 的业务命名",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "BIZ",
+                      "severity":  "P1",
+                      "sequence":  74,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M1-05"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P1-04",
+                                            "R2-A-05"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "防止启发式关键词和段落密度被描述为真实读者行为预测。",
+                      "modules":  [
+                                      "L1 指标",
+                                      "L2 能力定义",
+                                      "人工标注集"
+                                  ],
+                      "deliverables":  [
+                                           "BIZ-01 修改产物",
+                                           "BIZ-01 自动化验收证据",
+                                           "BIZ-01 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "BIZ-01-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "BIZ-02",
+                      "title":  "建立小型人工标注验证集",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "BIZ",
+                      "severity":  "P2",
+                      "sequence":  75,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-02",
+                                         "BIZ-01"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P1-04",
+                                            "R2-A-05"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "判断 L1 指标是否具有最低限度的区分能力。",
+                      "modules":  [
+                                      "L1 指标",
+                                      "L2 能力定义",
+                                      "人工标注集"
+                                  ],
+                      "deliverables":  [
+                                           "BIZ-02 修改产物",
+                                           "BIZ-02 自动化验收证据",
+                                           "BIZ-02 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "BIZ-02-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  },
+                  {
+                      "task_id":  "BIZ-03",
+                      "title":  "决定 L2 六能力是真能力还是路由模板",
+                      "task_type":  "TASK",
+                      "parent_task":  null,
+                      "milestone":  "BIZ",
+                      "severity":  "P1",
+                      "sequence":  76,
+                      "status":  "TODO",
+                      "depends_on":  [
+                                         "M3-04",
+                                         "M3-05A",
+                                         "M3-05B",
+                                         "M3-05C"
+                                     ],
+                      "source_issues":  [
+                                            "R1-P1-03"
+                                        ],
+                      "owner":  "UNASSIGNED",
+                      "goal":  "解决九千余行文档与六个七行包装器之间的能力错位。",
+                      "modules":  [
+                                      "L1 指标",
+                                      "L2 能力定义",
+                                      "人工标注集"
+                                  ],
+                      "deliverables":  [
+                                           "BIZ-03 修改产物",
+                                           "BIZ-03 自动化验收证据",
+                                           "BIZ-03 变更与回滚说明"
+                                       ],
+                      "acceptance_tests":  [
+                                               "BIZ-03-AT-01"
+                                           ],
+                      "prohibitions":  [
+                                           "不得扩大到未列入本任务的业务能力",
+                                           "不得删除既有失败样本规避验收"
+                                       ],
+                      "rollback_required":  true,
+                      "blocks_release":  false,
+                      "execution_policy":  "DIRECT"
+                  }
+              ],
+    "issues":  [
+                   {
+                       "issue_id":  "R1-P0-01",
+                       "description":  "统一入口公开 TP-001 必然失败路径",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M0-02",
+                                        "M1-04",
+                                        "M8-02"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M0-02-AT-01",
+                                                "M1-04-AT-01",
+                                                "M8-02-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P0-02",
+                       "description":  "缺少外部项目注册、装载与运行机制",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M4-01",
+                                        "M4-02",
+                                        "M4-03",
+                                        "M4-04",
+                                        "M8-05"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M4-01-AT-01",
+                                                "M4-02-AT-01",
+                                                "M4-03-AT-01",
+                                                "M4-04-AT-01",
+                                                "M8-05-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P0-03",
+                       "description":  "Markdown 真源声明与运行控制源不一致",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M3-01",
+                                        "M3-02",
+                                        "M3-03",
+                                        "M3-04",
+                                        "M3-05",
+                                        "M3-06",
+                                        "M7-06",
+                                        "M8-03"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M3-01-AT-01",
+                                                "M3-02-AT-01",
+                                                "M3-03-AT-01",
+                                                "M3-04-AT-01",
+                                                "M3-05-AT-01",
+                                                "M3-06-AT-01",
+                                                "M7-06-AT-01",
+                                                "M8-03-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P0-04",
+                       "description":  "完整闭环在 L3 任务规划处中止",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M6-01",
+                                        "M6-02",
+                                        "M6-03",
+                                        "M6-04",
+                                        "M6-05",
+                                        "M6-06"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M6-01-AT-01",
+                                                "M6-02-AT-01",
+                                                "M6-03-AT-01",
+                                                "M6-04-AT-01",
+                                                "M6-05-AT-01",
+                                                "M6-06-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P0-05",
+                       "description":  "顶层成功状态掩盖候选、未验证和无发布权",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M1-05",
+                                        "M6-01",
+                                        "M8-08"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M1-05-AT-01",
+                                                "M6-01-AT-01",
+                                                "M8-08-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P0-06",
+                       "description":  "正式规则集不存在，生产模式不可运行",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M3-07",
+                                        "M8-08"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M3-07-AT-01",
+                                                "M8-08-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P0-07",
+                       "description":  "根级控制文档引用不存在文件",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M7-01",
+                                        "M7-03",
+                                        "M7-05"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M7-01-AT-01",
+                                                "M7-03-AT-01",
+                                                "M7-05-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P1-01",
+                       "description":  "Python 打包表面成功但实际空包",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M5-01",
+                                        "M5-05",
+                                        "M5-07",
+                                        "M8-06",
+                                        "M8-07"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M5-01-AT-01",
+                                                "M5-05-AT-01",
+                                                "M5-07-AT-01",
+                                                "M8-06-AT-01",
+                                                "M8-07-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P1-02",
+                       "description":  "存在三条重叠执行路径",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M4-05",
+                                        "M5-03",
+                                        "M5-06"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M4-05-AT-01",
+                                                "M5-03-AT-01",
+                                                "M5-06-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P1-03",
+                       "description":  "L2 六项能力未形成六种代码能力",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "BIZ-03"
+                                    ],
+                       "acceptance_tests":  [
+                                                "BIZ-03-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P1-04",
+                       "description":  "L1 指标名称超过实际测量能力",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "BIZ-01",
+                                        "BIZ-02"
+                                    ],
+                       "acceptance_tests":  [
+                                                "BIZ-01-AT-01",
+                                                "BIZ-02-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P1-05",
+                       "description":  "测试覆盖偏向集成链",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M8-01",
+                                        "M8-02"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M8-01-AT-01",
+                                                "M8-02-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P1-06",
+                       "description":  "规则依赖元数据空置",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M7-02",
+                                        "M7-06"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M7-02-AT-01",
+                                                "M7-06-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P1-07",
+                       "description":  "README 当前状态失真",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M7-01",
+                                        "M7-05"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M7-01-AT-01",
+                                                "M7-05-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P1-08",
+                       "description":  "正式正文仍为占位文件",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "SCOPE-01",
+                                        "M4-01"
+                                    ],
+                       "acceptance_tests":  [
+                                                "SCOPE-01-AT-01",
+                                                "M4-01-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P2-01",
+                       "description":  "发布包包含缓存与构建污染",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M8-07"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M8-07-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P2-02",
+                       "description":  "版本与依赖治理未成立",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M5-07"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M5-07-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P2-03",
+                       "description":  "存在疑似未使用模块和重复代码",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M5-06"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M5-06-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P2-04",
+                       "description":  "标识与状态命名不一致",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M1-05",
+                                        "M2-02",
+                                        "M7-04"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M1-05-AT-01",
+                                                "M2-02-AT-01",
+                                                "M7-04-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R1-P2-05",
+                       "description":  "日志目录和运行记录治理不完整",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M2-06",
+                                        "M2-08"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M2-06-AT-01",
+                                                "M2-08-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-P0-01",
+                       "description":  "L2/L3 公开入口未执行 Schema 校验",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M1-01",
+                                        "M1-02",
+                                        "M1-03"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M1-01-AT-01",
+                                                "M1-02-AT-01",
+                                                "M1-03-AT-01"
+                                            ],
+                       "batch_1a_traceability":  {
+                                                     "regression_test_created_by":  "M0-02",
+                                                     "fixed_by":  [
+                                                                      "M1-01",
+                                                                      "M1-03"
+                                                                  ],
+                                                     "m1_02_note":  "本次未改 Schema；现有失败包/第二层报告 Schema 接入口后已能拦截 L2/L3 空对象输入，六份核心 Schema 内部约束仍保留在 M1-02 后续验收范围。",
+                                                     "regression_nodes":  [
+                                                                              "测试/回归样本/test_confirmed_failures.py::test_l2_empty_json_input_should_be_rejected",
+                                                                              "测试/回归样本/test_confirmed_failures.py::test_l3_empty_json_input_should_be_rejected"
+                                                                          ]
+                                                 }
+                   },
+                   {
+                       "issue_id":  "R2-P0-02",
+                       "description":  "规则解析后关键规则未参与执行",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M3-03",
+                                        "M3-04",
+                                        "M3-05A",
+                                        "M3-05B",
+                                        "M3-05C",
+                                        "M3-06"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M3-03-AT-01",
+                                                "M3-04-AT-01",
+                                                "M3-05A-AT-01",
+                                                "M3-05B-AT-01",
+                                                "M3-05C-AT-01",
+                                                "M3-06-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-P0-03",
+                       "description":  "运行编号在产生副作用后冲突并遗留 RUNNING",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M2-01",
+                                        "M2-02",
+                                        "M2-04A",
+                                        "M2-04B",
+                                        "M2-04C"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M2-01-AT-01",
+                                                "M2-02-AT-01",
+                                                "M2-04A-AT-01",
+                                                "M2-04B-AT-01",
+                                                "M2-04C-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-P0-04",
+                       "description":  "独立阶段入口允许覆盖历史报告",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M2-02"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M2-02-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-P0-05",
+                       "description":  "混合批次整批阻断导致合法任务丢失",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M2-07"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M2-07-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-C-01",
+                       "description":  "异常处理不统一并泄漏裸 traceback",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M1-03"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M1-03-AT-01"
+                                            ],
+                       "batch_1a_traceability":  {
+                                                     "regression_test_created_by":  "M0-02",
+                                                     "fixed_by":  [
+                                                                      "M1-03"
+                                                                  ],
+                                                     "regression_nodes":  [
+                                                                              "测试/回归样本/test_confirmed_failures.py::test_corrupt_json_input_should_return_structured_error_without_traceback"
+                                                                          ]
+                                                 }
+                   },
+                   {
+                       "issue_id":  "R2-C-02",
+                       "description":  "JSON Schema 约束过弱",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M1-02"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M1-02-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-C-03",
+                       "description":  "统一入口缺少 target 专属参数契约",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M1-04",
+                                        "M8-02"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M1-04-AT-01",
+                                                "M8-02-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-C-04",
+                       "description":  "通过修改 sys.path 维持导入",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M5-01"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M5-01-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-C-05",
+                       "description":  "主流程函数职责高度耦合",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M5-02A",
+                                        "M5-02B",
+                                        "M5-02C"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M5-02A-AT-01",
+                                                "M5-02B-AT-01",
+                                                "M5-02C-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-C-06",
+                       "description":  "运行根目录创建存在并发竞态",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M2-03"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M2-03-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-C-07",
+                       "description":  "子进程输出无上限写入清单",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M2-06",
+                                        "M5-04"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M2-06-AT-01",
+                                                "M5-04-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-C-08",
+                       "description":  "输入与输出缺少资源上限",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M5-04"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M5-04-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-C-09",
+                       "description":  "旧正文检测与新 L1 重复",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M4-05",
+                                        "M5-06"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M4-05-AT-01",
+                                                "M5-06-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-C-10",
+                       "description":  "测试体系没有真实单元层",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M8-01"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M8-01-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-C-11",
+                       "description":  "没有自动质量门禁",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M8-06A",
+                                        "M8-06B",
+                                        "M8-06C",
+                                        "M8-06D"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M8-06A-AT-01",
+                                                "M8-06B-AT-01",
+                                                "M8-06C-AT-01",
+                                                "M8-06D-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-D-01",
+                       "description":  "Front Matter 依赖图为空壳",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M7-02"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M7-02-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-D-02",
+                       "description":  "规则文档全部声明不允许作为真源",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M3-01",
+                                        "M7-06"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M3-01-AT-01",
+                                                "M7-06-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-D-03",
+                       "description":  "核心索引引用不存在基线",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M7-01",
+                                        "M7-03"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M7-01-AT-01",
+                                                "M7-03-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-D-04",
+                       "description":  "文档引用主要为不可校验裸文件名",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M7-03"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M7-03-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-D-05",
+                       "description":  "README 存在不可直接执行命令",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M7-05"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M7-05-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-D-06",
+                       "description":  "规则解析依赖章节编号和标题",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M3-01",
+                                        "M7-04"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M3-01-AT-01",
+                                                "M7-04-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-D-07",
+                       "description":  "文档章节编号冲突",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M7-04"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M7-04-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-D-08",
+                       "description":  "文本编码、行尾和空白不统一",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M7-04"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M7-04-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-A-01",
+                       "description":  "系统把解析规则误当执行规则",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M3-06",
+                                        "M8-03"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M3-06-AT-01",
+                                                "M8-03-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-A-02",
+                       "description":  "L3 状态机包含未实现未来阶段",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M6-01"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M6-01-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-A-03",
+                       "description":  "技术、业务、人工与发布状态混合",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M1-05"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M1-05-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-A-04",
+                       "description":  "Project Harness 缺少身份与能力契约",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M4-01",
+                                        "M4-02"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M4-01-AT-01",
+                                                "M4-02-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-A-05",
+                       "description":  "L1 指标对段落与关键词高度敏感",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "BIZ-01",
+                                        "BIZ-02"
+                                    ],
+                       "acceptance_tests":  [
+                                                "BIZ-01-AT-01",
+                                                "BIZ-02-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-A-06",
+                       "description":  "L3 多个校验器职责重复",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M3-05A",
+                                        "M3-05B",
+                                        "M3-05C",
+                                        "M5-06"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M3-05A-AT-01",
+                                                "M3-05B-AT-01",
+                                                "M3-05C-AT-01",
+                                                "M5-06-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-A-07",
+                       "description":  "未归属任务写入全局共享目录",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M2-09"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M2-09-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-P-01",
+                       "description":  "没有完整 Preflight",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M2-01"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M2-01-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-P-02",
+                       "description":  "没有事务、补偿和恢复",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M2-04A",
+                                        "M2-04B",
+                                        "M2-04C",
+                                        "M6-06"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M2-04A-AT-01",
+                                                "M2-04B-AT-01",
+                                                "M2-04C-AT-01",
+                                                "M6-06-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-P-03",
+                       "description":  "运行清单未登记全部实际产物",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M2-05"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M2-05-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-P-04",
+                       "description":  "有日志协议但没有真实日志系统",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M2-06"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M2-06-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-P-05",
+                       "description":  "业务阻断与技术失败均归并 FAILED",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M1-05",
+                                        "M2-07"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M1-05-AT-01",
+                                                "M2-07-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-P-06",
+                       "description":  "没有持续集成与发布验收",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M8-06A",
+                                        "M8-06B",
+                                        "M8-06C",
+                                        "M8-06D",
+                                        "M8-07"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M8-06A-AT-01",
+                                                "M8-06B-AT-01",
+                                                "M8-06C-AT-01",
+                                                "M8-06D-AT-01",
+                                                "M8-07-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-P-07",
+                       "description":  "没有规则晋升与回退流程",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M3-07"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M3-07-AT-01"
+                                            ]
+                   },
+                   {
+                       "issue_id":  "R2-P-08",
+                       "description":  "没有运行记录保留和清理策略",
+                       "coverage_status":  "COVERED",
+                       "task_ids":  [
+                                        "M2-08"
+                                    ],
+                       "acceptance_tests":  [
+                                                "M2-08-AT-01"
+                                            ]
+                   }
+               ]
+}

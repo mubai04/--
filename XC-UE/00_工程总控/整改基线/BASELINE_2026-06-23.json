@@ -1,0 +1,101 @@
+{
+  "schema_version": "xcue.m0.static-baseline/1.0",
+  "baseline_id": "M0-01-BASELINE-2026-06-23",
+  "created_date": "2026-06-23",
+  "timezone": "Asia/Shanghai",
+  "generation_policy": {
+    "deterministic": true,
+    "does_not_run_pytest": true,
+    "runtime_test_results_are_external_evidence": "00_工程总控/整改基线/PYTEST_EVIDENCE_2026-06-23.json",
+    "excluded_from_effective_project_inventory": [
+      ".git",
+      ".pytest_cache",
+      "00_工程总控/整改基线/",
+      "90_日志/",
+      "99_归档_不要索引/",
+      "__pycache__",
+      "测试/回归样本/"
+    ]
+  },
+  "file_counts": {
+    "python": 80,
+    "markdown": 82,
+    "json": 14
+  },
+  "effective_project_file_count": 193,
+  "effective_project_manifest_sha256": "52baee17108c978c178f289369e5ae66f4613755d45282e7b659156a38b73795",
+  "key_entry_paths": {
+    "unified_entry": "00_工程总控/工程执行层/统一运行入口.py",
+    "pipeline_entry": "00_工程总控/工程执行层/流水线运行.py",
+    "l1_entry": "00_工程总控/工程执行层/L1工程/L1运行入口.py",
+    "l2_entry": "00_工程总控/工程执行层/L2工程/L2运行入口.py",
+    "l3_entry": "00_工程总控/工程执行层/L3工程/L3运行入口.py",
+    "tp001_entry": "70_测试项目/TP-001_CleanHarness_IR_Runtime/engine/TP001运行入口.py"
+  },
+  "tests_static_inventory": {
+    "pytest_testpaths": [
+      "测试",
+      "00_工程总控/工程执行层/测试"
+    ],
+    "test_file_count": 7,
+    "test_files": [
+      "00_工程总控/工程执行层/测试/测试第二轮B.py",
+      "00_工程总控/工程执行层/测试/测试第二轮C_L1对抗.py",
+      "00_工程总控/工程执行层/测试/测试第二轮C_L2能力.py",
+      "00_工程总控/工程执行层/测试/测试第二轮C_L3任务包.py",
+      "00_工程总控/工程执行层/测试/测试第二轮C_L3规则解析.py",
+      "00_工程总控/工程执行层/测试/测试第二轮C_流水线与安全.py",
+      "00_工程总控/工程执行层/测试/测试第六批测试环境.py"
+    ],
+    "standard_command": "python -m pytest -q",
+    "m0_regression_command": "python -m pytest -q 测试/回归样本/test_confirmed_failures.py",
+    "runtime_result_excluded_from_static_baseline": true
+  },
+  "known_failure_facts": [
+    {
+      "id": "R1-P0-01",
+      "source": "XC-UE_全量整改计划书_v1.1_2026-06-23.md",
+      "description": "统一入口公开 TP-001 必然失败路径；M0-02 固化为 strict xfail 回归样本。"
+    }
+  ],
+  "reported_historical_pass_command": {
+    "source": "XC-UE_深度盘查报告_2026-06-23.md",
+    "command": "python -m pytest -q",
+    "result_not_embedded": true
+  },
+  "rule_file_hashes": {
+    "10_L0_总图层/L0_XC-UE_终极工程总图.md": "5dcdd70dc715ac8066393c73690b80e6c8c63744f795b5761eeb5637afcbc454",
+    "20_L1_闸门层/L1-00_闸门接口表.md": "1c5405992e307f34378d38d24f08bbb67ef4a0e46aaff1dbb21ec835b5f72a76",
+    "20_L1_闸门层/L1-01_五大创作问题_技术护栏闭环图.md": "a32a974a6336806dfec14129668e5859e6c48bd9ad66eb90c04ade2fd6a466b8",
+    "20_L1_闸门层/L1-02_读者投入意愿工程图.md": "9970eac223e1d3d565dfe99ceb40c0baf833955f8d4ef7c2c32e5f8010938433",
+    "20_L1_闸门层/L1-03_发布锁验收工程图.md": "af46a4e7864efe1ead01f60961916657496bc3823d59b9afbe8f531421fe8839",
+    "30_L1.5_路由矩阵层/L1.5_Routing_Matrix.md": "b6d4e8ac12e25910d4f7f021def24d0f94af48356eba61fd53d3437d511b875c",
+    "40_L2_正式能力层/L2-00_正式能力层定义_v0.2.md": "de7469df273b085c66adfc92d73cd53912da7b2de91c89d83f2a369fcf369d82",
+    "40_L2_正式能力层/L2-01_叙事结构能力_v0.3.1_边界修正版.md": "257063ab3d42eb8319800d7fd30f0c11a92d5e0eaac1c5bec2e5da4baf5bd949",
+    "40_L2_正式能力层/L2-02_文风语言能力_v0.3_真源绑定版.md": "ffa41180f53a9eba7994fcf950c311a8924f73487e98bba68a7d64ec54f019f2",
+    "40_L2_正式能力层/L2-03_角色心理能力_v0.1.1_自检修正版.md": "267bbd42d3e7593754dd5aef473a835cc2e1034372ee7e7bad9b57020ea4e173",
+    "40_L2_正式能力层/L2-04_创意设定能力_v0.2_根部结构图绑定版.md": "f36b3d89125ee0543004cd045a8fc5fabbe9a14dddeb8e0c7c736479e350ecd8",
+    "40_L2_正式能力层/L2-05_市场体验能力_v0.1.1_自检修正版.md": "83941d91d3de99f5bfa22902820a9d0f2ac92667c3dfc67ff9876b712f2271ac",
+    "40_L2_正式能力层/L2-06_系统一致性与状态管理能力_v0.3.1_技术根修正版.md": "ef271400ac9dca11b41ef65d94fa9d3d3dafb8806c0be0a1c90542f023a65d70",
+    "40_L2_正式能力层/L2-99_能力层接口总表_v0.1.1_自检修正版.md": "6d79eb7c2795746db4ef24ddb118e75b589daa26d012e2d0ce48e14304757803",
+    "50_L3_执行协议层/L3-00_执行协议总表_v0.1.2.md": "72cbfe20dfe7ab0a5d6f9d4a8870af182553904c1d8dac8e1cde227ede14f252",
+    "50_L3_执行协议层/L3-01_Cursor文件操作协议_v0.1.2.md": "23e487b8bc2e701e12c5516ae418921a3de2e3d7e50d18d90aedac91db7eac52",
+    "50_L3_执行协议层/L3-02_正文生成与改写任务协议_v0.1.2.md": "392f703e2c042bf60fcc6e5b2bd743854d50d6772c5bde475d8d898fa014a1dd",
+    "50_L3_执行协议层/L3-03_验收回填协议_v0.1.2.md": "c7e0511e0ed6dd6bf4fbe29efec55d1dc357404523526d4cbe6bba0b6071e9f4",
+    "50_L3_执行协议层/L3-04_版本与回滚协议_v0.1.2.md": "6a60fdd7ba636aed9c1a8458a97db60007adb7bde78c3d4645f231f3608e65b8",
+    "50_L3_执行协议层/L3-05_日志记录协议_v0.1.2.md": "e3c0a783e755a7640f03140c802b1e5b27ade7dd7bdb4e21aa7a8c84bf017cd9",
+    "50_L3_执行协议层/L3-06_IR输入映射协议_v0.1.2.md": "8a46b3f745330434321a9fcc2072539f30f8f8ef16d18bc32056dd7772daeaca",
+    "50_L3_执行协议层/L3-07_ProjectHarness运行协议_v0.1.2.md": "80d0c328df3f3cd2dc6c111a19c8be3fb02b20741f2947ec846a468c5ff9aa5f",
+    "50_L3_执行协议层/L3-99_执行禁止项_v0.1.2.md": "3850eef357943950ac523f3d4ccc0dfd0881ac4546f6d0ac9282f7d023e8d54b",
+    "50_L3_执行协议层/README_L3_v0.1.2_修正说明.md": "fd3e7a048e9b6309eb4fdd7e07cc4939195a187e7dfe6cd347cf4c4d779898b8"
+  },
+  "version_control": {
+    "git_commit": null,
+    "fallback_archive_sha256": "52baee17108c978c178f289369e5ae66f4613755d45282e7b659156a38b73795",
+    "note": "当前目录不是 git 仓库时使用有效工程文件清单哈希作为归档指纹。"
+  },
+  "unconfirmed_environment_items": [
+    "无 git 仓库元数据，无法确认 commit。",
+    "运行耗时与通过数不写入静态基线，仅保存在独立 pytest 证据文件。"
+  ]
+}

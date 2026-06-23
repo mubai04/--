@@ -1,0 +1,186 @@
+﻿#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+import tempfile
+from datetime import datetime
+from pathlib import Path
+
+sys.dont_write_bytecode = True
+
+公共组件 = Path(__file__).resolve().parents[1] / "公共组件"
+if str(公共组件) not in sys.path:
+    sys.path.insert(0, str(公共组件))
+
+from L2报告 import 写报告
+from L2模型 import L2报告
+from L2读取 import 读L2标准, 读失败包
+from L2_99_接口判断 import 判断
+from 修复单生成 import 生成
+from L2禁止项检查 import 检查
+from 能力标准解析 import 标准完整性, 解析规则
+from 回流校验 import 校验
+from 退出码 import ExitCode
+from 运行状态 import 状态说明, 已完成, 已阻断, 结构无效
+from 文件哈希 import 计算文件哈希
+from 标准加载器 import 候选试验模式, 生产模式
+from 工程异常 import 工程错误
+from 安全路径 import resolve_inside_root, safe_id
+from 输入校验 import 校验JSON输入, 血缘期望
+from 错误信封 import 打印错误信封
+
+
+ROOT = Path(__file__).resolve().parents[3]
+SCHEMA_DIR = ROOT / "00_工程总控" / "工程执行层" / "公共组件" / "结构定义"
+测试IO令牌内容 = "XCUE_TEST_EXTERNAL_IO_TOKEN_V1"
+
+
+def _允许测试外部IO() -> bool:
+    if os.environ.get("XCUE_TEST_ALLOW_EXTERNAL_IO") != "1":
+        return False
+    token_path = os.environ.get("XCUE_TEST_IO_TOKEN_FILE", "")
+    if not token_path:
+        return False
+    resolved = Path(token_path).resolve()
+    try:
+        resolved.relative_to(Path(tempfile.gettempdir()).resolve())
+    except ValueError:
+        return False
+    try:
+        return resolved.read_text(encoding="utf-8") == 测试IO令牌内容
+    except OSError:
+        return False
+
+
+def _解析输入输出路径(value: str | Path, label: str) -> Path:
+    if _允许测试外部IO():
+        resolved = Path(value).resolve()
+        try:
+            resolved.relative_to(Path(tempfile.gettempdir()).resolve())
+        except ValueError:
+            return resolve_inside_root(ROOT, value)
+        return resolved
+    return resolve_inside_root(ROOT, value)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="XC-UE L2工程：接收 L1 failure packet，按 L2-99 接口判断并生成 L2 修复单。")
+    parser.add_argument("--failure-packet", default=None, help="L1 failure packet JSON 路径。")
+    parser.add_argument("--run-id", default=None, help="报告编号。")
+    parser.add_argument("--out-dir", default=None, help="输出目录。")
+    parser.add_argument("--pipeline-run-id", default="", help="流水线编号。")
+    parser.add_argument("--stage-run-id", default="", help="阶段运行编号。")
+    parser.add_argument("--expected-input-sha256", default="", help="期望输入哈希。")
+    parser.add_argument("--standard-mode", default=候选试验模式, choices=[生产模式, 候选试验模式], help="标准加载模式。")
+    args = parser.parse_args()
+    if not args.failure_packet:
+        print(json.dumps({"error": "P0 后 L2 必须显式提供 --failure-packet"}, ensure_ascii=False), file=sys.stderr)
+        return int(ExitCode.INPUT_INVALID)
+
+    try:
+        run_id = safe_id(args.run_id or "L2_RUN-" + datetime.now().strftime("%Y%m%d-%H%M%S"), "run_id")
+        pipeline_run_id = safe_id(args.pipeline_run_id, "pipeline_run_id") if args.pipeline_run_id else ""
+        stage_run_id = safe_id(args.stage_run_id, "stage_run_id") if args.stage_run_id else ""
+        packet_path = _解析输入输出路径(args.failure_packet, "failure_packet")
+        out_dir = _解析输入输出路径(args.out_dir, "out_dir") if args.out_dir else Path(__file__).resolve().parent / "reports"
+    except 工程错误 as exc:
+        print(json.dumps({"error": str(exc), "exit_code": int(exc.exit_code)}, ensure_ascii=False), file=sys.stderr)
+        return int(exc.exit_code)
+    try:
+        validated_packet = 校验JSON输入(
+            packet_path,
+            schema_path=SCHEMA_DIR / "失败包结构.json",
+            label="L2 失败包",
+            expected_schema_version="xcue.failure-packet/1.0",
+            lineage=血缘期望(pipeline_run_id=pipeline_run_id) if pipeline_run_id else None,
+        )
+    except 工程错误 as exc:
+        打印错误信封(exc, stage="L2", run_id=run_id, path=packet_path)
+        return int(exc.exit_code)
+    if args.expected_input_sha256:
+        actual_hash = 计算文件哈希(packet_path)
+        if actual_hash != args.expected_input_sha256:
+            from 工程异常 import 哈希错误
+
+            exc = 哈希错误("输入哈希不一致")
+            打印错误信封(
+                exc,
+                stage="L2",
+                run_id=run_id,
+                path=packet_path,
+                details={"expected": args.expected_input_sha256, "actual": actual_hash},
+            )
+            return int(exc.exit_code)
+
+    try:
+        standards = 读L2标准(ROOT, args.standard_mode)
+        rules = 解析规则(standards)
+    except 工程错误 as exc:
+        print(json.dumps({"error": str(exc), "exit_code": int(exc.exit_code)}, ensure_ascii=False), file=sys.stderr)
+        return int(exc.exit_code)
+    items = 读失败包(packet_path)
+    judgements = [判断(item, rules) for item in items]
+    forms = 生成(items, judgements, rules)
+    blocked = 检查(judgements)
+    recheck_targets = [item for item in judgements if item.最终状态 == "派生复验"]
+    missing = 标准完整性(standards)
+    standard_errors = [f"{name} 缺少：{'、'.join(sections)}" for name, sections in missing.items()]
+    return_errors = 校验(forms)
+    if blocked:
+        status = 已阻断
+        exit_code = ExitCode.BLOCKED
+    elif standard_errors or return_errors:
+        status = 结构无效
+        exit_code = ExitCode.SCHEMA_INVALID
+    else:
+        status = 已完成
+        exit_code = ExitCode.OK
+
+    result = L2报告(
+        run_id=run_id,
+        输入文件=str(packet_path),
+        输入数量=len(items),
+        方法声明="L2工程只做接口判断与修复单生成，不写正文、不替 L1.5 裁决、不覆盖 Markdown 真源。",
+        标准校验问题=standard_errors,
+        回流校验问题=return_errors,
+        接口判断=judgements,
+        修复单=forms,
+        阻断项=blocked,
+        复验目标=recheck_targets,
+        pipeline_run_id=pipeline_run_id,
+        stage_run_id=stage_run_id or f"{pipeline_run_id}-L2" if pipeline_run_id else run_id,
+        status=status,
+        状态说明=状态说明[status],
+    )
+    md_path, json_path = 写报告(result, out_dir)
+    print(
+        json.dumps(
+            {
+                "run_id": run_id,
+                "failure_packet": str(packet_path),
+                "input_count": len(items),
+                "fix_count": len(forms),
+                "blocked_count": len(blocked),
+                "recheck_target_count": len(recheck_targets),
+                "standard_error_count": len(standard_errors),
+                "return_error_count": len(return_errors),
+                "report_md": str(md_path),
+                "report_json": str(json_path),
+                "standards_loaded": sorted(standards),
+                "standard_mode": args.standard_mode,
+                "experimental_standard": args.standard_mode == 候选试验模式,
+                "status": status,
+                "exit_code": int(exit_code),
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
+    return int(exit_code)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

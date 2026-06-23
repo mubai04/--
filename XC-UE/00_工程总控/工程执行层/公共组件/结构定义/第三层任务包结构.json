@@ -1,0 +1,102 @@
+﻿{
+    "additionalProperties":  true,
+    "$id":  "xcue.schema/l3-task-bundle/1.0",
+    "properties":  {
+                       "schema_version":  {
+                                              "type":  "string"
+                                          },
+                       "awaiting_executor":  {
+                                                 "type":  "boolean"
+                                             },
+                       "execution_mode":  {
+                                              "type":  "string",
+                                              "enum":  [
+                                                           "TASK_PLANNING_ONLY"
+                                                       ]
+                                          },
+                       "prose_modified":  {
+                                              "const":  false,
+                                              "type":  "boolean"
+                                          },
+                       "status":  {
+                                      "type":  "string"
+                                  },
+                       "stage_run_id":  {
+                                            "type":  "string"
+                                        },
+                       "task_package_created":  {
+                                                    "type":  "boolean"
+                                                },
+                       "pipeline_run_id":  {
+                                               "type":  "string"
+                                           },
+                       "执行输出":  {
+                                      "type":  "array",
+                                      "items":  {
+                                                    "type":  "object",
+                                                    "properties":  {
+                                                                       "任务包文件":  {
+                                                                                      "type":  "string"
+                                                                                  },
+                                                                       "分项任务文件":  {
+                                                                                        "type":  "string"
+                                                                                    },
+                                                                       "任务依赖":  {
+                                                                                      "type":  "array"
+                                                                                  },
+                                                                       "约束":  {
+                                                                                  "type":  "array"
+                                                                              },
+                                                                       "目标文件引用":  {
+                                                                                          "type":  "string"
+                                                                                      },
+                                                                       "复验入口":  {
+                                                                                      "type":  "string"
+                                                                                  },
+                                                                       "prose_modified":  {
+                                                                                              "const":  false,
+                                                                                              "type":  "boolean"
+                                                                                          },
+                                                                       "execution_mode":  {
+                                                                                              "type":  "string",
+                                                                                              "enum":  [
+                                                                                                           "TASK_PLANNING_ONLY"
+                                                                                                       ]
+                                                                                          }
+                                                                   },
+                                                    "required":  [
+                                                                     "任务包文件",
+                                                                     "分项任务文件",
+                                                                     "任务依赖",
+                                                                     "约束",
+                                                                     "目标文件引用",
+                                                                     "复验入口",
+                                                                     "execution_mode",
+                                                                     "prose_modified"
+                                                                 ],
+                                                    "not":  {
+                                                                "anyOf":  [
+                                                                              {"required":  ["实际修改文件"]},
+                                                                              {"required":  ["候选产物"]},
+                                                                              {"required":  ["备份文件"]},
+                                                                              {"required":  ["diff摘要文件"]},
+                                                                              {"required":  ["回填位置"]},
+                                                                              {"required":  ["待复验闸门"]}
+                                                                          ]
+                                                            }
+                                                }
+                                           }
+                   },
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "pipeline_run_id",
+                     "stage_run_id",
+                     "status",
+                     "execution_mode",
+                     "prose_modified",
+                     "task_package_created",
+                     "awaiting_executor"
+                 ],
+    "$schema":  "https://json-schema.org/draft/2020-12/schema"
+}

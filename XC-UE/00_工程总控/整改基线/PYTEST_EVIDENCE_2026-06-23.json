@@ -1,0 +1,27 @@
+{
+  "schema_version": "xcue.m0.pytest-evidence/1.0",
+  "evidence_id": "M0-PYTEST-2026-06-23",
+  "command": "python -m pytest -q",
+  "cwd": "C:\\Users\\慕白\\OneDrive\\桌面\\小说\\XC-UE",
+  "started_at": "2026-06-23T13:08:37+08:00",
+  "finished_at": "2026-06-23T13:08:50+08:00",
+  "duration_seconds": 12.649,
+  "returncode": 0,
+  "stdout": "xxxxxxxxxx.........................s...........                          [100%]\n36 passed, 1 skipped, 10 xfailed in 11.65s\n",
+  "stderr": "",
+  "static_baseline_policy": "not embedded in BASELINE_2026-06-23.json",
+  "skip_details": [
+    {
+      "node_id": "00_工程总控/工程执行层/测试/测试第二轮C_流水线与安全.py::测试符号链接逃逸被拒绝",
+      "location": "00_工程总控/工程执行层/测试/测试第二轮C_流水线与安全.py:161",
+      "reason": "当前权限不允许创建符号链接"
+    }
+  ],
+  "strict_xfail_summary": {
+    "command": "python -m pytest -q 测试/回归样本/test_confirmed_failures.py",
+    "result": "10 xfailed in 3.47s",
+    "runxfail_probe_command": "python -m pytest -q --runxfail 测试/回归样本/test_confirmed_failures.py",
+    "runxfail_probe_result": "10 failed in 3.43s",
+    "purpose": "证明 10 个 strict xfail 均可收集且均由显式失败断言触发。"
+  }
+}

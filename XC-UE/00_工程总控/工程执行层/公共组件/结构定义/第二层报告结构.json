@@ -1,0 +1,47 @@
+﻿{
+    "additionalProperties":  true,
+    "$id":  "xcue.schema/l2-report/1.0",
+    "properties":  {
+                       "修复单":  {
+                                   "type":  "array"
+                               },
+                       "schema_version":  {
+                                              "type":  "string"
+                                          },
+                       "输入数量":  {
+                                    "type":  "integer",
+                                    "minimum":  0
+                                },
+                       "输入文件":  {
+                                    "type":  "string"
+                                },
+                       "阻断项":  {
+                                   "type":  "array"
+                               },
+                       "stage_run_id":  {
+                                            "type":  "string"
+                                        },
+                       "run_id":  {
+                                      "type":  "string"
+                                  },
+                       "status":  {
+                                      "type":  "string"
+                                  },
+                       "pipeline_run_id":  {
+                                               "type":  "string"
+                                           }
+                   },
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "pipeline_run_id",
+                     "stage_run_id",
+                     "status",
+                     "run_id",
+                     "输入文件",
+                     "输入数量",
+                     "修复单",
+                     "阻断项"
+                 ],
+    "$schema":  "https://json-schema.org/draft/2020-12/schema"
+}

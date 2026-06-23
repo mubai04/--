@@ -1,0 +1,38 @@
+﻿{
+    "additionalProperties":  true,
+    "$id":  "xcue.schema/failure-packet/1.0",
+    "properties":  {
+                       "pipeline_run_id":  {
+                                               "type":  "string"
+                                           },
+                       "failure_count":  {
+                                             "type":  "integer",
+                                             "minimum":  0
+                                         },
+                       "schema_version":  {
+                                              "type":  "string"
+                                          },
+                       "items":  {
+                                     "items":  {
+                                                   "type":  "object"
+                                               },
+                                     "type":  "array"
+                                 },
+                       "status":  {
+                                      "type":  "string"
+                                  },
+                       "stage_run_id":  {
+                                            "type":  "string"
+                                        }
+                   },
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "pipeline_run_id",
+                     "stage_run_id",
+                     "status",
+                     "failure_count",
+                     "items"
+                 ],
+    "$schema":  "https://json-schema.org/draft/2020-12/schema"
+}

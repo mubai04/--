@@ -1,0 +1,23 @@
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environments
+.venv/
+venv/
+
+# Runtime and generated evidence
+运行记录/
+90_日志/
+**/reports/
+00_工程总控/Markdown真源治理/Markdown治理检查报告.md
+
+# Archives and heavy transfer artifacts
+99_归档_不要索引/
+99_归档_禁止索引/
+*.zip
+*.png
+*.docx

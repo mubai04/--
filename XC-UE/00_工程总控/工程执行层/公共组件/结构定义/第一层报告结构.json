@@ -1,0 +1,46 @@
+﻿{
+    "additionalProperties":  true,
+    "$id":  "xcue.schema/l1-report/1.0",
+    "properties":  {
+                       "schema_version":  {
+                                              "type":  "string"
+                                          },
+                       "publish_authority":  {
+                                                 "type":  "boolean"
+                                             },
+                       "decision_scope":  {
+                                              "type":  "string"
+                                          },
+                       "闸门结果":  {
+                                    "type":  "array"
+                                },
+                       "stage_run_id":  {
+                                            "type":  "string"
+                                        },
+                       "run_id":  {
+                                      "type":  "string"
+                                  },
+                       "status":  {
+                                      "type":  "string"
+                                  },
+                       "pipeline_run_id":  {
+                                               "type":  "string"
+                                           },
+                       "失败包":  {
+                                   "type":  "array"
+                               }
+                   },
+    "type":  "object",
+    "required":  [
+                     "schema_version",
+                     "pipeline_run_id",
+                     "stage_run_id",
+                     "status",
+                     "publish_authority",
+                     "decision_scope",
+                     "run_id",
+                     "闸门结果",
+                     "失败包"
+                 ],
+    "$schema":  "https://json-schema.org/draft/2020-12/schema"
+}
