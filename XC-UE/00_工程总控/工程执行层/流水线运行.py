@@ -200,6 +200,10 @@ def 运行流水线(chapter: Path, project: str, pipeline_run_id: str | None = N
     try:
         chapter = resolve_inside_root(ROOT, chapter)
         pipeline_id = safe_id(pipeline_run_id, "pipeline_run_id") if pipeline_run_id else safe_id(新流水线编号(), "pipeline_run_id")
+        input_stage = safe_id(f"{pipeline_id}-INPUT", "stage_run_id")
+        l1_stage = safe_id(f"{pipeline_id}-L1", "stage_run_id")
+        l2_stage = safe_id(f"{pipeline_id}-L2", "stage_run_id")
+        l3_stage = safe_id(f"{pipeline_id}-L3", "stage_run_id")
     except 工程错误 as exc:
         print(json.dumps({"error": str(exc)}, ensure_ascii=False), file=sys.stderr)
         return int(exc.exit_code)
@@ -241,7 +245,7 @@ def 运行流水线(chapter: Path, project: str, pipeline_run_id: str | None = N
 
     snapshot = input_dir / "章节正文.md"
     shutil.copy2(chapter, snapshot)
-    input_artifact = _产物("chapter_snapshot", snapshot, "INPUT", f"{pipeline_id}-INPUT")
+    input_artifact = _产物("chapter_snapshot", snapshot, "INPUT", input_stage)
     manifest_path = run_root / "流水线清单.json"
     manifest: dict[str, Any] = {
         "schema_version": "xcue.pipeline-manifest/1.0",
@@ -275,7 +279,6 @@ def 运行流水线(chapter: Path, project: str, pipeline_run_id: str | None = N
         print(json.dumps(manifest, ensure_ascii=False, indent=2))
         return int(exc.exit_code)
 
-    l1_stage = safe_id(f"{pipeline_id}-L1", "stage_run_id")
     l1_cmd = [
         sys.executable,
         str(ROOT / "00_工程总控" / "工程执行层" / "L1工程" / "L1运行入口.py"),
@@ -326,7 +329,6 @@ def 运行流水线(chapter: Path, project: str, pipeline_run_id: str | None = N
     manifest["stages"].append(_阶段记录("L1", l1_stage, l1_result, [input_artifact], l1_outputs))
     _写清单(manifest_path, manifest)
 
-    l2_stage = safe_id(f"{pipeline_id}-L2", "stage_run_id")
     l2_cmd = [
         sys.executable,
         str(ROOT / "00_工程总控" / "工程执行层" / "L2工程" / "L2运行入口.py"),
@@ -372,7 +374,6 @@ def 运行流水线(chapter: Path, project: str, pipeline_run_id: str | None = N
     l3_outputs: list[dict[str, Any]] = []
     l3_result: subprocess.CompletedProcess[str] | None = None
     if l2_result.returncode == int(ExitCode.BLOCKED):
-        l3_stage = safe_id(f"{pipeline_id}-L3", "stage_run_id")
         manifest["stages"].append(
             {
                 "stage": "L3",
@@ -385,7 +386,6 @@ def 运行流水线(chapter: Path, project: str, pipeline_run_id: str | None = N
             }
         )
     elif l2_report.exists():
-        l3_stage = safe_id(f"{pipeline_id}-L3", "stage_run_id")
         l3_cmd = [
             sys.executable,
             str(ROOT / "00_工程总控" / "工程执行层" / "L3工程" / "L3运行入口.py"),

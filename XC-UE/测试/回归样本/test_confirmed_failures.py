@@ -201,7 +201,6 @@ def test_corrupt_json_input_should_return_structured_error_without_traceback(tmp
     assert not any(out_dir.glob("*.json")) if out_dir.exists() else True
 
 
-@pytest.mark.xfail(strict=True, reason="M0-02 固化：64 字符 pipeline ID 不应留下 RUNNING 残骸。")
 def test_sixty_four_character_pipeline_id_should_not_leave_running_manifest():
     run_id = "P" * 64
     running_dir = ROOT / "运行记录" / run_id
