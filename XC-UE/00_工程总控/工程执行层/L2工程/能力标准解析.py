@@ -66,6 +66,12 @@ def _章节(text: str, title: str) -> str:
     return match.group(0) if match else ""
 
 
+def _任意级标题章节(text: str, title_keyword: str) -> str:
+    pattern = rf"(?ms)^#+\s+[^\n]*{re.escape(title_keyword)}[^\n]*\n.*?(?=^#+\s+|\Z)"
+    match = re.search(pattern, text)
+    return match.group(0) if match else ""
+
+
 def _代码块列表(text: str) -> list[str]:
     match = re.search(r"```(?:text)?\s*(.*?)```", text, re.S)
     if not match:
@@ -82,6 +88,37 @@ def _列表行(text: str) -> list[str]:
         elif stripped.startswith(("- ", "* ")):
             items.append(stripped[2:].strip())
     return items
+
+
+def _禁止边界句(text: str) -> list[str]:
+    items: list[str] = []
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith(("#", "|", "```")):
+            continue
+        if any(word in stripped for word in ("不得", "不能", "禁止")):
+            items.append(stripped)
+    return items
+
+
+def _解析禁止项(text: str) -> list[str]:
+    sections = [
+        _任意级标题章节(text, "禁止输入"),
+        _任意级标题章节(text, "禁止项"),
+    ]
+    items: list[str] = []
+    for section in sections:
+        items.extend(_代码块列表(section))
+        items.extend(_列表行(section))
+    if not items:
+        items = _禁止边界句(text)
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for item in items:
+        if item and item not in seen:
+            seen.add(item)
+            deduped.append(item)
+    return deduped
 
 
 def _表格(text: str) -> list[list[str]]:
@@ -226,7 +263,7 @@ def _解析能力(module: str, text: str, interface: 能力规则 | None = None)
     if "验收问题：" in acceptance_section:
         acceptance_source = acceptance_section[acceptance_section.find("验收问题：") :]
     base.回流验收问题 = _代码块列表(acceptance_source) or _列表行(acceptance_source)
-    base.禁止项 = _列表行(_章节(text, "16. 禁止项")) or _列表行(_章节(text, "15. 禁止项"))
+    base.禁止项 = _解析禁止项(text)
     return base
 
 

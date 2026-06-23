@@ -320,14 +320,23 @@ def test_l2_structured_route_rules_control_interface_decision():
     assert len(judgement.route_rule_hash) == 64
 
 
-@pytest.mark.xfail(strict=True, reason="M0-02 固化：L2 六能力禁止项解析为零。")
-def test_l2_six_ability_forbidden_items_should_be_parsed_from_markdown():
+def test_l2_six_ability_forbidden_items_should_enter_runtime(tmp_path: Path):
     from L2读取 import 读L2标准
 
     standards = 读L2标准(ROOT, 候选试验模式)
     rules = 解析规则(standards)
     counts = {module: len(rule.禁止项) for module, rule in rules.能力规则.items()}
     assert all(count > 0 for count in counts.values()), counts
+
+    packet = tmp_path / "禁止输入失败包.json"
+    out_dir = tmp_path / "第二层"
+    _失败包(packet, [_失败项("正文全文", "叙事失败", "L2-01")])
+    result = _运行L2(packet, out_dir, tmp_path)
+    assert result.returncode == int(ExitCode.BLOCKED), result.stderr
+    report = json.loads((out_dir / "修复报告.json").read_text(encoding="utf-8"))
+    assert report["修复单"] == []
+    assert report["阻断项"][0]["接口失败类型"] == "L2_FORBIDDEN"
+    assert "正文全文" in report["阻断项"][0]["判断依据"]
 
 
 @pytest.mark.xfail(strict=True, reason="M0-02 固化：wheel 构建成功但无法导入实际包。")

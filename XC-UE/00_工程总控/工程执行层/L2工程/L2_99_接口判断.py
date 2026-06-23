@@ -29,6 +29,19 @@ def _标准归属(item: 失败输入, rules: L2规则 | None) -> tuple[str, str,
     return "", "", "", ""
 
 
+def _命中禁止项(item: 失败输入, rules: L2规则 | None, module: str) -> str:
+    if not rules:
+        return ""
+    ability = rules.能力规则.get(module)
+    if not ability:
+        return ""
+    haystack = " ".join([item.失败类型, item.名称, item.说明, item.修复方向])
+    for forbidden in ability.禁止项:
+        if forbidden and forbidden in haystack:
+            return forbidden
+    return ""
+
+
 def 判断(item: 失败输入, rules: L2规则 | None = None) -> 接口判断:
     candidate = item.候选模块
     if candidate in DERIVED_RECHECK:
@@ -91,6 +104,26 @@ def 判断(item: 失败输入, rules: L2规则 | None = None) -> 接口判断:
             接口失败类型="IF-P3",
             判断依据=f"结构化路由规则 {route_rule_id} 映射为 {expected}，但输入候选模块为 {candidate}。",
             是否混合问题="是",
+            建议动作=["回 L1.5 重路由"],
+            回流验收位置=item.回流验收位置 or item.来源闸门,
+            最终状态="回L1.5",
+            route_rule_id=route_rule_id,
+            route_rule_version=route_rule_version,
+            route_rule_hash=route_rule_hash,
+        )
+
+    forbidden = _命中禁止项(item, rules, module)
+    if forbidden:
+        return 接口判断(
+            来源闸门=item.来源闸门,
+            输入来源模式="直接闸门输入",
+            输入问题=item.说明,
+            初步归属=module,
+            主候选模块="回L1.5",
+            次候选模块=module,
+            接口失败类型="L2_FORBIDDEN",
+            判断依据=f"{module} 禁止项命中：{forbidden}",
+            是否越界="是",
             建议动作=["回 L1.5 重路由"],
             回流验收位置=item.回流验收位置 or item.来源闸门,
             最终状态="回L1.5",
