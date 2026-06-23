@@ -105,7 +105,6 @@ def _运行L2(
     )
 
 
-@pytest.mark.xfail(strict=True, reason="M0-02 固化：统一入口 TP-001 参数透传失败。")
 def test_unified_entry_tp001_default_invocation_should_succeed_without_unrecognized_standard_mode():
     result = subprocess.run(
         [

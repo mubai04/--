@@ -29,26 +29,31 @@ TARGETS = {
         "cwd": ROOT,
         "entry": ROOT / "00_工程总控" / "工程执行层" / "L1工程" / "L1运行入口.py",
         "default_run_id": "L1_RUN-UNIFIED",
+        "forward_args": {"chapter", "project", "standard_mode"},
     },
     "正文检测": {
         "cwd": ROOT,
         "entry": ROOT / "00_工程总控" / "工程执行层" / "正文检测" / "正文检测运行入口.py",
         "default_run_id": "正文检测_COMPAT-RUN-UNIFIED",
+        "forward_args": {"chapter", "project", "standard_mode"},
     },
     "TP-001": {
         "cwd": ROOT / "70_测试项目" / "TP-001_CleanHarness_IR_Runtime",
         "entry": ROOT / "70_测试项目" / "TP-001_CleanHarness_IR_Runtime" / "engine" / "TP001运行入口.py",
         "default_run_id": "ENGINE-RUN-UNIFIED-TP001",
+        "forward_args": set(),
     },
     "L2": {
         "cwd": ROOT,
         "entry": ROOT / "00_工程总控" / "工程执行层" / "L2工程" / "L2运行入口.py",
         "default_run_id": "L2_RUN-UNIFIED",
+        "forward_args": {"standard_mode"},
     },
     "L3": {
         "cwd": ROOT,
         "entry": ROOT / "00_工程总控" / "工程执行层" / "L3工程" / "L3运行入口.py",
         "default_run_id": "L3_RUN-UNIFIED",
+        "forward_args": {"standard_mode"},
     },
 }
 
@@ -77,13 +82,16 @@ def main() -> int:
             return 20
         return 运行流水线(Path(chapter_arg), args.project, run_id_arg, args.standard_mode)
 
-    if chapter_arg:
-        extra = ["--chapter", chapter_arg, *extra]
-    if args.project != "未命名项目":
-        extra = ["--project", args.project, *extra]
-    extra = ["--standard-mode", args.standard_mode, *extra]
-
     target = TARGETS[args.target]
+    forward_args = target["forward_args"]
+
+    if chapter_arg and "chapter" in forward_args:
+        extra = ["--chapter", chapter_arg, *extra]
+    if args.project != "未命名项目" and "project" in forward_args:
+        extra = ["--project", args.project, *extra]
+    if "standard_mode" in forward_args:
+        extra = ["--standard-mode", args.standard_mode, *extra]
+
     entry = target["entry"]
     cwd = target["cwd"]
     run_id = run_id_arg or target["default_run_id"]
