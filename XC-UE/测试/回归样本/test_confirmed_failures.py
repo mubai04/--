@@ -6,6 +6,8 @@ import shutil
 import subprocess
 import sys
 import uuid
+import venv
+import zipfile
 from pathlib import Path
 
 import pytest
@@ -337,7 +339,82 @@ def test_l2_six_ability_forbidden_items_should_enter_runtime(tmp_path: Path):
     assert "正文全文" in report["阻断项"][0]["判断依据"]
 
 
-@pytest.mark.xfail(strict=True, reason="M0-02 固化：wheel 构建成功但无法导入实际包。")
-def test_built_wheel_should_import_xc_ue_package():
-    spec = __import__("importlib.util").util.find_spec("xc_ue")
-    assert spec is not None
+def test_built_wheel_should_import_xc_ue_package(tmp_path: Path):
+    wheelhouse = tmp_path / "wheelhouse"
+    build = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "pip",
+            "wheel",
+            str(ROOT),
+            "--no-deps",
+            "--no-build-isolation",
+            "-w",
+            str(wheelhouse),
+        ],
+        cwd=str(ROOT),
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        timeout=120,
+    )
+    assert build.returncode == 0, build.stdout + build.stderr
+    wheels = sorted(wheelhouse.glob("xc_ue-*.whl"))
+    assert len(wheels) == 1
+
+    with zipfile.ZipFile(wheels[0]) as wheel:
+        names = set(wheel.namelist())
+    assert "xc_ue/__init__.py" in names
+    assert "xc_ue/cli.py" in names
+    assert any(name.endswith(".dist-info/METADATA") for name in names)
+
+    venv_dir = tmp_path / "clean-venv"
+    venv.EnvBuilder(with_pip=True).create(venv_dir)
+    venv_python = venv_dir / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+    install = subprocess.run(
+        [str(venv_python), "-m", "pip", "install", "--no-deps", str(wheels[0])],
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        timeout=120,
+    )
+    assert install.returncode == 0, install.stdout + install.stderr
+
+    imported = subprocess.run(
+        [str(venv_python), "-c", "import xc_ue; print(xc_ue.__version__)"],
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        timeout=30,
+    )
+    assert imported.returncode == 0, imported.stdout + imported.stderr
+    assert imported.stdout.strip() == "0.0.0"
+
+    module_help = subprocess.run(
+        [str(venv_python), "-m", "xc_ue", "--help"],
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        timeout=30,
+    )
+    assert module_help.returncode == 0, module_help.stdout + module_help.stderr
+    assert "XC-UE" in module_help.stdout
+
+    console_script = venv_dir / ("Scripts/xcue.exe" if os.name == "nt" else "bin/xcue")
+    cli = subprocess.run(
+        [str(console_script), "--health"],
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        timeout=30,
+    )
+    assert cli.returncode == 0, cli.stdout + cli.stderr
+    payload = json.loads(cli.stdout)
+    assert payload["ok"] is True
+    assert payload["package"] == "xc_ue"

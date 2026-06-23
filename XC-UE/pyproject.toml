@@ -9,6 +9,20 @@ dependencies = [
   "jsonschema",
 ]
 
+[project.scripts]
+xcue = "xc_ue.cli:main"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["xc_ue*"]
+
 [tool.pytest.ini_options]
 python_files = ["测试*.py", "test_*.py", "*_test.py"]
 python_functions = ["测试*", "test_*"]
