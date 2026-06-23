@@ -16,7 +16,7 @@ if str(公共组件) not in sys.path:
     sys.path.insert(0, str(公共组件))
 
 from 正文切分 import 切段, 正文字数, 清理正文
-from L1报告 import 写报告
+from L1报告 import 写报告, 拒绝覆盖既有报告
 from L1模型 import 正文检测结果
 from L1读取 import 读文本, 读标准
 from 闸门标准解析 import 解析规则
@@ -32,6 +32,7 @@ from 工程异常 import 工程错误
 from 运行状态 import 状态说明, 机器初筛通过, 机器初筛退回, 需要人工复核
 from 标准加载器 import 候选试验模式, 生产模式
 from 安全路径 import resolve_inside_root, safe_id
+from 错误信封 import 打印错误信封
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -84,8 +85,9 @@ def main() -> int:
         stage_run_id = safe_id(args.stage_run_id, "stage_run_id") if args.stage_run_id else ""
         chapter_path = _解析输入输出路径(args.chapter, "chapter")
         out_dir = _解析输入输出路径(args.out_dir, "out_dir") if args.out_dir else Path(__file__).resolve().parent / "reports"
+        拒绝覆盖既有报告(run_id, out_dir)
     except 工程错误 as exc:
-        print(json.dumps({"error": str(exc), "exit_code": int(exc.exit_code)}, ensure_ascii=False), file=sys.stderr)
+        打印错误信封(exc, stage="L1", run_id=locals().get("run_id", ""), path=locals().get("out_dir", ""))
         return int(exc.exit_code)
     if not chapter_path.exists():
         raise SystemExit(ExitCode.INPUT_INVALID)
@@ -157,7 +159,11 @@ def main() -> int:
         状态说明=状态说明[status],
     )
 
-    md_path, json_path, packet_path = 写报告(result, out_dir)
+    try:
+        md_path, json_path, packet_path = 写报告(result, out_dir)
+    except 工程错误 as exc:
+        打印错误信封(exc, stage="L1", run_id=run_id, path=out_dir)
+        return int(exc.exit_code)
     print(
         json.dumps(
             {

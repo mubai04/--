@@ -235,7 +235,6 @@ def test_sixty_four_character_pipeline_id_should_not_leave_running_manifest():
             shutil.rmtree(running_dir)
 
 
-@pytest.mark.xfail(strict=True, reason="M0-02 固化：同一 L1 run-id 不得覆盖旧报告。")
 def test_reusing_same_l1_run_id_should_preserve_previous_report_attempt(tmp_path: Path):
     out_dir = tmp_path / "L1报告"
     run_id = "pytest-M0-L1-" + uuid.uuid4().hex[:8]

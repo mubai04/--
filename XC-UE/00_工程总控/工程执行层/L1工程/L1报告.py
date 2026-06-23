@@ -10,6 +10,7 @@ from L1模型 import 正文检测结果
 if str(公共组件) not in sys.path:
     sys.path.insert(0, str(公共组件))
 
+from 工程异常 import 输入错误
 from 原子写入 import 原子写文本
 
 
@@ -47,16 +48,29 @@ def _列表(value: list[str]) -> str:
     return "；".join(value) if value else "无"
 
 
-def 写报告(result: 正文检测结果, out_dir: Path) -> tuple[Path, Path, Path]:
-    out_dir.mkdir(parents=True, exist_ok=True)
+def 报告路径(run_id: str, out_dir: Path) -> tuple[Path, Path, Path]:
     if out_dir.name == "第一层":
         json_path = out_dir / "检测报告.json"
         md_path = out_dir / "检测报告.md"
         packet_path = out_dir / "失败包.json"
     else:
-        json_path = out_dir / f"{result.run_id}.json"
-        md_path = out_dir / f"{result.run_id}.md"
-        packet_path = out_dir / f"{result.run_id}_failure_packet.json"
+        json_path = out_dir / f"{run_id}.json"
+        md_path = out_dir / f"{run_id}.md"
+        packet_path = out_dir / f"{run_id}_failure_packet.json"
+    return md_path, json_path, packet_path
+
+
+def 拒绝覆盖既有报告(run_id: str, out_dir: Path) -> None:
+    existing = [path for path in 报告路径(run_id, out_dir) if path.exists()]
+    if existing:
+        joined = "；".join(str(path) for path in existing)
+        raise 输入错误(f"L1 输出已存在，拒绝覆盖：{joined}")
+
+
+def 写报告(result: 正文检测结果, out_dir: Path) -> tuple[Path, Path, Path]:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    md_path, json_path, packet_path = 报告路径(result.run_id, out_dir)
+    拒绝覆盖既有报告(result.run_id, out_dir)
 
     原子写文本(json_path, json.dumps(result.to_dict(), ensure_ascii=False, indent=2))
     packet_payload = {
