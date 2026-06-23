@@ -129,7 +129,7 @@ def main() -> int:
     missing = 标准完整性(standards)
     standard_errors = [f"{name} 缺少：{'、'.join(sections)}" for name, sections in missing.items()]
     return_errors = 校验(forms)
-    if blocked:
+    if blocked and not forms:
         status = 已阻断
         exit_code = ExitCode.BLOCKED
     elif standard_errors or return_errors:

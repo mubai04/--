@@ -278,7 +278,6 @@ def test_reusing_same_l1_run_id_should_preserve_previous_report_attempt(tmp_path
     assert retained["项目"] == "first-project"
 
 
-@pytest.mark.xfail(strict=True, reason="M0-02 固化：合法项与越界项混合时合法任务不应被跳过。")
 def test_mixed_valid_and_out_of_scope_l2_items_should_still_emit_valid_fix(tmp_path: Path):
     packet = tmp_path / "混合失败包.json"
     out_dir = tmp_path / "第二层"
