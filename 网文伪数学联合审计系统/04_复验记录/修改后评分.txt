@@ -1,0 +1,3 @@
+JSON 报告：/mnt/data/zh_pack_work/after_check.json
+Markdown 报告：/mnt/data/zh_pack_work/after_check.md
+本章追读执行强度：高；activation=0.9497（非概率）

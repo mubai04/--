@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "八维探针摘要.schema.json",
+  "title": "八维探针摘要 v1.0.1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "源文件名",
+    "源文件SHA256",
+    "脚本版本",
+    "规则版本",
+    "特征提取端",
+    "本章追读执行强度",
+    "线性激活值",
+    "特征覆盖率",
+    "权重覆盖率",
+    "八维向量",
+    "商业六门"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.1"
+    },
+    "源文件名": {
+      "type": "string",
+      "minLength": 1
+    },
+    "源文件SHA256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "线性激活值": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "本章追读执行强度": {
+      "enum": [
+        "高",
+        "中",
+        "低",
+        "证据不足"
+      ]
+    },
+    "八维向量": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8
+    },
+    "商业六门": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6
+    }
+  },
+  "additionalProperties": true
+}

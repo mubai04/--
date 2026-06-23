@@ -1,0 +1,3 @@
+JSON 报告：/mnt/data/zh_pack_work/before_check.json
+Markdown 报告：/mnt/data/zh_pack_work/before_check.md
+本章追读执行强度：低；activation=0.4409（非概率）

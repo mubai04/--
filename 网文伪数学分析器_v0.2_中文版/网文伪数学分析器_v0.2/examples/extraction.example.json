@@ -1,0 +1,234 @@
+{
+  "task_id": "DEMO-TASK",
+  "source_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "gates": {
+    "G_C": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "G_A": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "G_L": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "G_P": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    }
+  },
+  "chapter_profile": {
+    "U_ch": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "C_ch": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "A_ch": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "E_ch": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "R_ch": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "F_ch": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    }
+  },
+  "facts": {},
+  "manual_scores": {
+    "Ca_causal": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "Cg_goal": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "Cs_state": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "Ve_salience": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "Vu_reframe": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "Vb_branch": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "Vr_rhythm": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "ES_same": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "EI_lowvar": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "ER_repeat": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "EA_mismatch": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "Sh_syntax": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "Lv_voice": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "Li_sensory": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "Lm_layers": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "Lr_rhythm": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "Lp_pov": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "Lo_original": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "U_ch": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "C_ch": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "A_ch": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "E_ch": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "R_ch": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "F_ch": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "H_long": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "H_voice": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "H_asym": {
+      "status": "INSUFFICIENT_DATA",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    }
+  },
+  "findings": [],
+  "anti_gaming": {
+    "AG_SENSORY_STUFFING": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "AG_RANDOM_REVERSAL": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "AG_MEANINGLESS_CHOICE": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "AG_SYMBOL_SPAM": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "AG_RANDOM_RHYTHM": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    },
+    "AG_HARMFUL_OMISSION": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "示例材料不足"
+    }
+  },
+  "context": {
+    "rater_disagreement": 0.0,
+    "baseline_missing": 1,
+    "mixed_edit": 0
+  }
+}

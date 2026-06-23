@@ -1,0 +1,324 @@
+﻿{
+    "task_id":  "Mushenji-range-256eac9328dc",
+    "source_sha256":  "256eac9328dc59841279a891ac92c60643be6b96a7c59ad295292ad371cb7bbf",
+    "gates":  {
+                  "G_C":  {
+                              "status":  "UNKNOWN",
+                              "evidence":  [
+
+                                           ],
+                              "judgment":  "烟测提取：未进行人工编码，保守标记为 UNKNOWN"
+                          },
+                  "G_A":  {
+                              "status":  "UNKNOWN",
+                              "evidence":  [
+
+                                           ],
+                              "judgment":  "烟测提取：未进行人工编码，保守标记为 UNKNOWN"
+                          },
+                  "G_L":  {
+                              "status":  "UNKNOWN",
+                              "evidence":  [
+
+                                           ],
+                              "judgment":  "烟测提取：未进行人工编码，保守标记为 UNKNOWN"
+                          },
+                  "G_P":  {
+                              "status":  "UNKNOWN",
+                              "evidence":  [
+
+                                           ],
+                              "judgment":  "烟测提取：未进行人工编码，保守标记为 UNKNOWN"
+                          }
+              },
+    "chapter_profile":  {
+                            "U_ch":  {
+                                         "status":  "INSUFFICIENT_DATA",
+                                         "evidence":  [
+
+                                                      ],
+                                         "judgment":  "烟测提取：未进行人工编码"
+                                     },
+                            "C_ch":  {
+                                         "status":  "INSUFFICIENT_DATA",
+                                         "evidence":  [
+
+                                                      ],
+                                         "judgment":  "烟测提取：未进行人工编码"
+                                     },
+                            "A_ch":  {
+                                         "status":  "INSUFFICIENT_DATA",
+                                         "evidence":  [
+
+                                                      ],
+                                         "judgment":  "烟测提取：未进行人工编码"
+                                     },
+                            "E_ch":  {
+                                         "status":  "INSUFFICIENT_DATA",
+                                         "evidence":  [
+
+                                                      ],
+                                         "judgment":  "烟测提取：未进行人工编码"
+                                     },
+                            "R_ch":  {
+                                         "status":  "INSUFFICIENT_DATA",
+                                         "evidence":  [
+
+                                                      ],
+                                         "judgment":  "烟测提取：未进行人工编码"
+                                     },
+                            "F_ch":  {
+                                         "status":  "INSUFFICIENT_DATA",
+                                         "evidence":  [
+
+                                                      ],
+                                         "judgment":  "烟测提取：未进行人工编码"
+                                     }
+                        },
+    "facts":  {
+
+              },
+    "manual_scores":  {
+                          "Ca_causal":  {
+                                            "status":  "INSUFFICIENT_DATA",
+                                            "evidence":  [
+
+                                                         ],
+                                            "judgment":  "烟测提取：未进行人工编码"
+                                        },
+                          "Cg_goal":  {
+                                          "status":  "INSUFFICIENT_DATA",
+                                          "evidence":  [
+
+                                                       ],
+                                          "judgment":  "烟测提取：未进行人工编码"
+                                      },
+                          "Cs_state":  {
+                                           "status":  "INSUFFICIENT_DATA",
+                                           "evidence":  [
+
+                                                        ],
+                                           "judgment":  "烟测提取：未进行人工编码"
+                                       },
+                          "Ve_salience":  {
+                                              "status":  "INSUFFICIENT_DATA",
+                                              "evidence":  [
+
+                                                           ],
+                                              "judgment":  "烟测提取：未进行人工编码"
+                                          },
+                          "Vu_reframe":  {
+                                             "status":  "INSUFFICIENT_DATA",
+                                             "evidence":  [
+
+                                                          ],
+                                             "judgment":  "烟测提取：未进行人工编码"
+                                         },
+                          "Vb_branch":  {
+                                            "status":  "INSUFFICIENT_DATA",
+                                            "evidence":  [
+
+                                                         ],
+                                            "judgment":  "烟测提取：未进行人工编码"
+                                        },
+                          "Vr_rhythm":  {
+                                            "status":  "INSUFFICIENT_DATA",
+                                            "evidence":  [
+
+                                                         ],
+                                            "judgment":  "烟测提取：未进行人工编码"
+                                        },
+                          "ES_same":  {
+                                          "status":  "INSUFFICIENT_DATA",
+                                          "evidence":  [
+
+                                                       ],
+                                          "judgment":  "烟测提取：未进行人工编码"
+                                      },
+                          "EI_lowvar":  {
+                                            "status":  "INSUFFICIENT_DATA",
+                                            "evidence":  [
+
+                                                         ],
+                                            "judgment":  "烟测提取：未进行人工编码"
+                                        },
+                          "ER_repeat":  {
+                                            "status":  "INSUFFICIENT_DATA",
+                                            "evidence":  [
+
+                                                         ],
+                                            "judgment":  "烟测提取：未进行人工编码"
+                                        },
+                          "EA_mismatch":  {
+                                              "status":  "INSUFFICIENT_DATA",
+                                              "evidence":  [
+
+                                                           ],
+                                              "judgment":  "烟测提取：未进行人工编码"
+                                          },
+                          "Sh_syntax":  {
+                                            "status":  "INSUFFICIENT_DATA",
+                                            "evidence":  [
+
+                                                         ],
+                                            "judgment":  "烟测提取：未进行人工编码"
+                                        },
+                          "Lv_voice":  {
+                                           "status":  "INSUFFICIENT_DATA",
+                                           "evidence":  [
+
+                                                        ],
+                                           "judgment":  "烟测提取：未进行人工编码"
+                                       },
+                          "Li_sensory":  {
+                                             "status":  "INSUFFICIENT_DATA",
+                                             "evidence":  [
+
+                                                          ],
+                                             "judgment":  "烟测提取：未进行人工编码"
+                                         },
+                          "Lm_layers":  {
+                                            "status":  "INSUFFICIENT_DATA",
+                                            "evidence":  [
+
+                                                         ],
+                                            "judgment":  "烟测提取：未进行人工编码"
+                                        },
+                          "Lr_rhythm":  {
+                                            "status":  "INSUFFICIENT_DATA",
+                                            "evidence":  [
+
+                                                         ],
+                                            "judgment":  "烟测提取：未进行人工编码"
+                                        },
+                          "Lp_pov":  {
+                                         "status":  "INSUFFICIENT_DATA",
+                                         "evidence":  [
+
+                                                      ],
+                                         "judgment":  "烟测提取：未进行人工编码"
+                                     },
+                          "Lo_original":  {
+                                              "status":  "INSUFFICIENT_DATA",
+                                              "evidence":  [
+
+                                                           ],
+                                              "judgment":  "烟测提取：未进行人工编码"
+                                          },
+                          "U_ch":  {
+                                       "status":  "INSUFFICIENT_DATA",
+                                       "evidence":  [
+
+                                                    ],
+                                       "judgment":  "烟测提取：未进行人工编码"
+                                   },
+                          "C_ch":  {
+                                       "status":  "INSUFFICIENT_DATA",
+                                       "evidence":  [
+
+                                                    ],
+                                       "judgment":  "烟测提取：未进行人工编码"
+                                   },
+                          "A_ch":  {
+                                       "status":  "INSUFFICIENT_DATA",
+                                       "evidence":  [
+
+                                                    ],
+                                       "judgment":  "烟测提取：未进行人工编码"
+                                   },
+                          "E_ch":  {
+                                       "status":  "INSUFFICIENT_DATA",
+                                       "evidence":  [
+
+                                                    ],
+                                       "judgment":  "烟测提取：未进行人工编码"
+                                   },
+                          "R_ch":  {
+                                       "status":  "INSUFFICIENT_DATA",
+                                       "evidence":  [
+
+                                                    ],
+                                       "judgment":  "烟测提取：未进行人工编码"
+                                   },
+                          "F_ch":  {
+                                       "status":  "INSUFFICIENT_DATA",
+                                       "evidence":  [
+
+                                                    ],
+                                       "judgment":  "烟测提取：未进行人工编码"
+                                   },
+                          "H_long":  {
+                                         "status":  "INSUFFICIENT_DATA",
+                                         "evidence":  [
+
+                                                      ],
+                                         "judgment":  "烟测提取：未进行人工编码"
+                                     },
+                          "H_voice":  {
+                                          "status":  "INSUFFICIENT_DATA",
+                                          "evidence":  [
+
+                                                       ],
+                                          "judgment":  "烟测提取：未进行人工编码"
+                                      },
+                          "H_asym":  {
+                                         "status":  "INSUFFICIENT_DATA",
+                                         "evidence":  [
+
+                                                      ],
+                                         "judgment":  "烟测提取：未进行人工编码"
+                                     }
+                      },
+    "findings":  [
+
+                 ],
+    "anti_gaming":  {
+                        "AG_SENSORY_STUFFING":  {
+                                                    "status":  "UNKNOWN",
+                                                    "evidence":  [
+
+                                                                 ],
+                                                    "judgment":  "烟测提取：未进行人工编码"
+                                                },
+                        "AG_RANDOM_REVERSAL":  {
+                                                   "status":  "UNKNOWN",
+                                                   "evidence":  [
+
+                                                                ],
+                                                   "judgment":  "烟测提取：未进行人工编码"
+                                               },
+                        "AG_MEANINGLESS_CHOICE":  {
+                                                      "status":  "UNKNOWN",
+                                                      "evidence":  [
+
+                                                                   ],
+                                                      "judgment":  "烟测提取：未进行人工编码"
+                                                  },
+                        "AG_SYMBOL_SPAM":  {
+                                               "status":  "UNKNOWN",
+                                               "evidence":  [
+
+                                                            ],
+                                               "judgment":  "烟测提取：未进行人工编码"
+                                           },
+                        "AG_RANDOM_RHYTHM":  {
+                                                 "status":  "UNKNOWN",
+                                                 "evidence":  [
+
+                                                              ],
+                                                 "judgment":  "烟测提取：未进行人工编码"
+                                             },
+                        "AG_HARMFUL_OMISSION":  {
+                                                    "status":  "UNKNOWN",
+                                                    "evidence":  [
+
+                                                                 ],
+                                                    "judgment":  "烟测提取：未进行人工编码"
+                                                }
+                    },
+    "context":  {
+                    "rater_disagreement":  0,
+                    "baseline_missing":  1,
+                    "mixed_edit":  0
+                }
+}

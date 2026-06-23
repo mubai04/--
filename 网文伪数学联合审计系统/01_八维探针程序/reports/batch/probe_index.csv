@@ -1,0 +1,3 @@
+﻿source,task_dir,level,activation,coverage,report
+chapter_after.txt,after_task,高,0.949698,1.0,./reports/batch/after_task/probe.report.json
+chapter_before.txt,before_task,低,0.440903,1.0,./reports/batch/before_task/probe.report.json

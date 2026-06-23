@@ -1,0 +1,41 @@
+{
+  "version": "0.2.0",
+  "calibration_level": "C0",
+  "risk_actions": [
+    {
+      "min_inclusive": 0.0,
+      "max_exclusive": 1.0,
+      "status": "PASS",
+      "action": "保留"
+    },
+    {
+      "min_inclusive": 1.0,
+      "max_exclusive": 2.0,
+      "status": "OBSERVE",
+      "action": "继续取样"
+    },
+    {
+      "min_inclusive": 2.0,
+      "max_exclusive": 3.0,
+      "status": "TARGETED_REPAIR",
+      "action": "只修对应变量"
+    },
+    {
+      "min_inclusive": 3.0,
+      "max_exclusive": 4.0000001,
+      "status": "REWRITE",
+      "action": "重写场景或章节结构"
+    }
+  ],
+  "ai_style": {
+    "min_chars_observe": 1200,
+    "recommended_chars": 2500,
+    "center": 1.6,
+    "slope": 1.4
+  },
+  "stability": {
+    "weight_perturbation": 0.2,
+    "trials": 200,
+    "seed": 20260622
+  }
+}

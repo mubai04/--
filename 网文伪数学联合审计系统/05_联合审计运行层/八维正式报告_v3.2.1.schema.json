@@ -1,0 +1,595 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "八维正式报告_v3.2.1.schema.json",
+  "title": "八维正式报告 v3.2.1",
+  "type": "object",
+  "required": [
+    "run",
+    "extraction",
+    "linear_result"
+  ],
+  "properties": {
+    "run": {
+      "type": "object",
+      "required": [
+        "version",
+        "schema_version",
+        "rubric_version",
+        "created_at",
+        "task",
+        "extraction",
+        "source_name",
+        "source_sha256",
+        "input_type",
+        "truncated",
+        "metadata",
+        "api_called_by_script"
+      ],
+      "properties": {
+        "version": {
+          "const": "3.2.1"
+        },
+        "schema_version": {
+          "const": "3.2.1"
+        },
+        "rubric_version": {
+          "const": "八维伪线性探针-v3.2.1"
+        },
+        "created_at": {
+          "type": "string",
+          "minLength": 1
+        },
+        "task": {
+          "type": "string",
+          "minLength": 1
+        },
+        "extraction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "input_type": {
+          "enum": [
+            "fragment",
+            "single_chapter",
+            "first_three",
+            "online_full",
+            "unpublished_full"
+          ]
+        },
+        "truncated": {
+          "type": "boolean"
+        },
+        "metadata": {
+          "type": "object"
+        },
+        "api_called_by_script": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "extraction": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "rubric_version",
+        "task_id",
+        "source_sha256",
+        "input_type",
+        "extractor",
+        "mainline",
+        "axes",
+        "gates",
+        "top_issues",
+        "evidence_gaps",
+        "extraction_confidence"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "3.2.1"
+        },
+        "rubric_version": {
+          "const": "八维伪线性探针-v3.2.1"
+        },
+        "task_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "input_type": {
+          "enum": [
+            "fragment",
+            "single_chapter",
+            "first_three",
+            "online_full",
+            "unpublished_full"
+          ]
+        },
+        "extractor": {
+          "type": "object",
+          "required": [
+            "name",
+            "run_note"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "run_note": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "mainline": {
+          "type": "object",
+          "required": [
+            "core_viewpoint",
+            "current_goal",
+            "current_obstacle",
+            "gained_or_lost",
+            "situation_change",
+            "next_commitment",
+            "one_sentence_mainline",
+            "readability_risk",
+            "missing_items"
+          ],
+          "properties": {
+            "core_viewpoint": {
+              "type": "string"
+            },
+            "current_goal": {
+              "type": "string"
+            },
+            "current_obstacle": {
+              "type": "string"
+            },
+            "gained_or_lost": {
+              "type": "string"
+            },
+            "situation_change": {
+              "type": "string"
+            },
+            "next_commitment": {
+              "type": "string"
+            },
+            "one_sentence_mainline": {
+              "type": "string"
+            },
+            "readability_risk": {
+              "enum": [
+                "低",
+                "中",
+                "高",
+                "证据不足"
+              ]
+            },
+            "missing_items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "axes": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "required": [
+              "axis",
+              "evidence_sufficient",
+              "score",
+              "confidence",
+              "overload_risk",
+              "evidence",
+              "judgment",
+              "root_issue",
+              "related_axes",
+              "evidence_gap"
+            ],
+            "properties": {
+              "axis": {
+                "enum": [
+                  "因果代价轴",
+                  "期待违背轴",
+                  "极速流转轴",
+                  "章尾钩子轴",
+                  "活人冲突轴",
+                  "侧面烘托轴",
+                  "反差造梗轴",
+                  "设定动作化轴"
+                ]
+              },
+              "evidence_sufficient": {
+                "type": "boolean"
+              },
+              "score": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 4
+              },
+              "confidence": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "overload_risk": {
+                "enum": [
+                  "低",
+                  "中",
+                  "高"
+                ]
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "judgment": {
+                "type": "string"
+              },
+              "root_issue": {
+                "type": "string"
+              },
+              "related_axes": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "因果代价轴",
+                    "期待违背轴",
+                    "极速流转轴",
+                    "章尾钩子轴",
+                    "活人冲突轴",
+                    "侧面烘托轴",
+                    "反差造梗轴",
+                    "设定动作化轴"
+                  ]
+                },
+                "uniqueItems": true
+              },
+              "evidence_gap": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "gates": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "required": [
+              "gate",
+              "evidence_sufficient",
+              "score",
+              "confidence",
+              "evidence",
+              "judgment",
+              "evidence_gap"
+            ],
+            "properties": {
+              "gate": {
+                "enum": [
+                  "卖点识别门",
+                  "情绪承诺门",
+                  "开篇入口门",
+                  "主角发动机门",
+                  "最小兑现门",
+                  "连载扩展门"
+                ]
+              },
+              "evidence_sufficient": {
+                "type": "boolean"
+              },
+              "score": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 4
+              },
+              "confidence": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "judgment": {
+                "type": "string"
+              },
+              "evidence_gap": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "top_issues": {
+          "type": "array"
+        },
+        "evidence_gaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "extraction_confidence": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "additionalProperties": false
+    },
+    "linear_result": {
+      "type": "object",
+      "required": [
+        "judgment_name",
+        "judgment_boundary",
+        "raw_z",
+        "activation",
+        "activation_note",
+        "coverage",
+        "weighted_coverage",
+        "missing_axes",
+        "missing_critical_axes",
+        "raw_level",
+        "final_level",
+        "cap_reasons",
+        "features",
+        "overload_factors",
+        "high_overload_axes",
+        "weights",
+        "critical_axes",
+        "bias",
+        "thresholds",
+        "weight_source",
+        "weight_status",
+        "weight_config_sha256",
+        "commercial_gate_result",
+        "contributions",
+        "top_positive",
+        "top_negative"
+      ],
+      "properties": {
+        "judgment_name": {
+          "type": "string"
+        },
+        "judgment_boundary": {
+          "type": "object"
+        },
+        "raw_z": {
+          "type": "number"
+        },
+        "activation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "activation_note": {
+          "type": "string"
+        },
+        "coverage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "weighted_coverage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "missing_axes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "因果代价轴",
+              "期待违背轴",
+              "极速流转轴",
+              "章尾钩子轴",
+              "活人冲突轴",
+              "侧面烘托轴",
+              "反差造梗轴",
+              "设定动作化轴"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "missing_critical_axes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "因果代价轴",
+              "期待违背轴",
+              "极速流转轴",
+              "章尾钩子轴",
+              "活人冲突轴",
+              "侧面烘托轴",
+              "反差造梗轴",
+              "设定动作化轴"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "raw_level": {
+          "enum": [
+            "高",
+            "中",
+            "低",
+            "很低",
+            "证据不足"
+          ]
+        },
+        "final_level": {
+          "enum": [
+            "高",
+            "中",
+            "低",
+            "很低",
+            "证据不足"
+          ]
+        },
+        "cap_reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "features": {
+          "type": "object"
+        },
+        "overload_factors": {
+          "type": "object"
+        },
+        "high_overload_axes": {
+          "type": "array"
+        },
+        "weights": {
+          "type": "object"
+        },
+        "critical_axes": {
+          "type": "array"
+        },
+        "bias": {
+          "type": "number"
+        },
+        "thresholds": {
+          "type": "object"
+        },
+        "weight_source": {
+          "type": "string"
+        },
+        "weight_status": {
+          "type": "string"
+        },
+        "weight_config_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "commercial_gate_result": {
+          "type": "object",
+          "required": [
+            "status",
+            "required_gates",
+            "minimum_score",
+            "missing_gates",
+            "failed_gates",
+            "passed_gates"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "通过",
+                "未通过",
+                "证据不足"
+              ]
+            },
+            "required_gates": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "卖点识别门",
+                  "情绪承诺门",
+                  "开篇入口门",
+                  "主角发动机门",
+                  "最小兑现门",
+                  "连载扩展门"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "minimum_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 4
+            },
+            "missing_gates": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "卖点识别门",
+                  "情绪承诺门",
+                  "开篇入口门",
+                  "主角发动机门",
+                  "最小兑现门",
+                  "连载扩展门"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "failed_gates": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "卖点识别门",
+                  "情绪承诺门",
+                  "开篇入口门",
+                  "主角发动机门",
+                  "最小兑现门",
+                  "连载扩展门"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "passed_gates": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "卖点识别门",
+                  "情绪承诺门",
+                  "开篇入口门",
+                  "主角发动机门",
+                  "最小兑现门",
+                  "连载扩展门"
+                ]
+              },
+              "uniqueItems": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "contributions": {
+          "type": "object"
+        },
+        "top_positive": {
+          "type": "array"
+        },
+        "top_negative": {
+          "type": "array"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,345 @@
+{
+  "version": "0.2.0",
+  "calibration_level": "C0",
+  "scale": {
+    "min": 0,
+    "max": 4
+  },
+  "metrics": {
+    "J4": {
+      "source": "N-01",
+      "mapping": "Q",
+      "name": "逻辑跳跃风险",
+      "min_sample": 1
+    },
+    "T4": {
+      "source": "N-02",
+      "mapping": "Q",
+      "name": "时间冲突风险",
+      "min_sample": 1
+    },
+    "Mb4": {
+      "source": "N-06",
+      "mapping": "Q",
+      "name": "动机断裂风险",
+      "min_sample": 1
+    },
+    "Sr4": {
+      "source": "L-01",
+      "mapping": "Q",
+      "name": "语义复述风险",
+      "min_sample": 20
+    },
+    "Ex4": {
+      "source": "L-03",
+      "mapping": "Q",
+      "name": "冗余解释风险",
+      "min_sample": 20
+    },
+    "Ga4": {
+      "source": "L-04",
+      "mapping": "Q",
+      "name": "抽象表达风险",
+      "min_sample": 20
+    },
+    "Ct4": {
+      "source": "L-05",
+      "mapping": "Q",
+      "name": "模板过渡风险",
+      "min_sample": 5
+    },
+    "Tr4": {
+      "source": "L-06",
+      "mapping": "Q",
+      "name": "重复模板风险",
+      "min_sample": 5
+    },
+    "Rc4": {
+      "source": "C-01",
+      "mapping": "Q",
+      "name": "规则冲突风险",
+      "min_sample": 1
+    },
+    "Sd_symbol": {
+      "source": "C-02",
+      "mapping": "ONE_MINUS_Q",
+      "name": "符号装饰化风险",
+      "min_sample": 1
+    },
+    "Tc4": {
+      "source": "C-03",
+      "mapping": "Q",
+      "name": "路径模板化风险",
+      "min_sample": 3
+    },
+    "Vs_risk": {
+      "source": "CH-01",
+      "mapping": "N",
+      "name": "人物声音同质风险",
+      "a": null,
+      "b": null,
+      "requires": "C2",
+      "min_sample": 2
+    },
+    "Em4": {
+      "source": "CH-02",
+      "mapping": "Q",
+      "name": "情绪事件不匹配",
+      "min_sample": 1
+    },
+    "Dc4": {
+      "source": "CH-03",
+      "mapping": "Q",
+      "name": "对话过度干净",
+      "min_sample": 10
+    },
+    "Ch4": {
+      "source": "CH-04",
+      "mapping": "Q",
+      "name": "选择同质风险",
+      "min_sample": 5
+    },
+    "Sc4": {
+      "source": "T-01",
+      "mapping": "Q",
+      "name": "状态矛盾风险",
+      "min_sample": 1
+    },
+    "Fl4": {
+      "source": "T-02",
+      "mapping": "Q",
+      "name": "到期伏笔失联风险",
+      "min_sample": 3
+    },
+    "Rs4": {
+      "source": "T-03",
+      "mapping": "Q",
+      "name": "表面随机风险",
+      "min_sample": 1
+    },
+    "Lu_risk": {
+      "source": "R-02",
+      "mapping": "N",
+      "name": "散射负载风险",
+      "a": null,
+      "b": null,
+      "requires": "C2",
+      "min_sample": 1
+    },
+    "Rm_reward": {
+      "source": "R-03",
+      "mapping": "ONE_MINUS_Q",
+      "name": "到期期待回报缺失",
+      "min_sample": 1
+    },
+    "Mw_memory": {
+      "source": "R-04",
+      "mapping": "DIRECT",
+      "name": "记忆点弱化",
+      "min_sample": 1
+    },
+    "Hp4": {
+      "source": "P-01",
+      "mapping": "Q",
+      "name": "高频路径风险",
+      "min_sample": 3
+    },
+    "Ss4": {
+      "source": "P-02",
+      "mapping": "Q",
+      "name": "安全解法风险",
+      "min_sample": 1
+    },
+    "Us4": {
+      "source": "P-03",
+      "mapping": "ONE_MINUS_Q",
+      "name": "低频合理选项抑制",
+      "min_sample": 1
+    },
+    "Sm_sensory": {
+      "source": "B-01",
+      "mapping": "ONE_MINUS_Q",
+      "name": "适用感官缺失",
+      "min_sample": 1
+    },
+    "Bc4": {
+      "source": "B-02",
+      "mapping": "Q",
+      "name": "生理套语风险",
+      "min_sample": 1
+    },
+    "Be_interact": {
+      "source": "B-03",
+      "mapping": "ONE_MINUS_Q",
+      "name": "身体环境交互缺失",
+      "min_sample": 1
+    },
+    "Bl4": {
+      "source": "B-04",
+      "mapping": "Q",
+      "name": "身体后果断链",
+      "min_sample": 1
+    },
+    "Ie4": {
+      "source": "A-01",
+      "mapping": "Q",
+      "name": "即时解释风险",
+      "min_sample": 1
+    },
+    "Me4": {
+      "source": "A-02",
+      "mapping": "Q",
+      "name": "直接声明动机风险",
+      "min_sample": 1
+    },
+    "Ig_inference": {
+      "source": "A-03",
+      "mapping": "ONE_MINUS_Q",
+      "name": "读者推断空间不足",
+      "min_sample": 1
+    },
+    "Qc4": {
+      "source": "A-04",
+      "mapping": "Q",
+      "name": "过早关闭问题风险",
+      "min_sample": 1
+    }
+  },
+  "manual_scores": [
+    "Ca_causal",
+    "Cg_goal",
+    "Cs_state",
+    "Ve_salience",
+    "Vu_reframe",
+    "Vb_branch",
+    "Vr_rhythm",
+    "ES_same",
+    "EI_lowvar",
+    "ER_repeat",
+    "EA_mismatch",
+    "Sh_syntax",
+    "Lv_voice",
+    "Li_sensory",
+    "Lm_layers",
+    "Lr_rhythm",
+    "Lp_pov",
+    "Lo_original",
+    "U_ch",
+    "C_ch",
+    "A_ch",
+    "E_ch",
+    "R_ch",
+    "F_ch",
+    "H_long",
+    "H_voice",
+    "H_asym"
+  ],
+  "modules": {
+    "R_narrative": {
+      "inputs": [
+        "J4",
+        "T4",
+        "P_s",
+        "Mb4",
+        "E_flat"
+      ],
+      "weights": [
+        0.25,
+        0.15,
+        0.25,
+        0.2,
+        0.15
+      ]
+    },
+    "R_creative": {
+      "inputs": [
+        "Rc4",
+        "Sd_symbol",
+        "Tc4"
+      ],
+      "weights": [
+        0.4,
+        0.25,
+        0.35
+      ]
+    },
+    "R_character": {
+      "inputs": [
+        "Vs_risk",
+        "Em4",
+        "Dc4",
+        "Ch4"
+      ],
+      "weights": [
+        0.3,
+        0.25,
+        0.25,
+        0.2
+      ]
+    },
+    "R_technical": {
+      "inputs": [
+        "Sc4",
+        "Fl4",
+        "Rs4"
+      ],
+      "weights": [
+        0.45,
+        0.3,
+        0.25
+      ]
+    },
+    "R_reader": {
+      "inputs": [
+        "Lu_risk",
+        "Rm_reward",
+        "Mw_memory"
+      ],
+      "weights": [
+        0.3,
+        0.35,
+        0.35
+      ]
+    },
+    "R_convergence": {
+      "inputs": [
+        "Hp4",
+        "Ss4",
+        "Us4"
+      ],
+      "weights": [
+        0.4,
+        0.3,
+        0.3
+      ]
+    },
+    "R_embodiment": {
+      "inputs": [
+        "Sm_sensory",
+        "Bc4",
+        "Be_interact",
+        "Bl4"
+      ],
+      "weights": [
+        0.25,
+        0.25,
+        0.25,
+        0.25
+      ]
+    },
+    "R_ambiguity": {
+      "inputs": [
+        "Ie4",
+        "Me4",
+        "Ig_inference",
+        "Qc4"
+      ],
+      "weights": [
+        0.3,
+        0.25,
+        0.25,
+        0.2
+      ]
+    }
+  }
+}

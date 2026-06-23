@@ -1,0 +1,83 @@
+{
+  "interface_version": "1.0",
+  "status": "CANDIDATE",
+  "upstream": "网文伪数学公式与功能总表_v1.0_修订版",
+  "downstream": "八维伪线性探针_v3.2.1_CANDIDATE",
+  "execution_order": [
+    "hard_gates",
+    "broad_risk_audit",
+    "eight_axis_probe",
+    "joint_decision"
+  ],
+  "hard_blockers": [
+    "因果闸门",
+    "人物闸门",
+    "连续性闸门",
+    "视角闸门"
+  ],
+  "side_channels": [
+    "AI参与伪概率",
+    "AI味风险",
+    "文学表现剖面",
+    "肉身经验缺失",
+    "留白不足"
+  ],
+  "rules": {
+    "no_master_score": true,
+    "hard_gate_precedence": true,
+    "max_high_score_axes_per_identical_quote": 2,
+    "risk_vector_not_added_to_activation": true
+  },
+  "mappings": [
+    {
+      "formula_metric": "因果闸门/逻辑跳跃率",
+      "probe_target": "前置阻断；因果代价轴辅助",
+      "mode": "block_then_evidence"
+    },
+    {
+      "formula_metric": "人物主动度/动机断裂",
+      "probe_target": "活人冲突轴、主角发动机门",
+      "mode": "evidence"
+    },
+    {
+      "formula_metric": "章末牵引度",
+      "probe_target": "章尾钩子轴",
+      "mode": "evidence"
+    },
+    {
+      "formula_metric": "当章回报度",
+      "probe_target": "最小兑现门",
+      "mode": "gate_evidence"
+    },
+    {
+      "formula_metric": "情节平滑化",
+      "probe_target": "期待违背轴、极速流转轴",
+      "mode": "diagnostic_only"
+    },
+    {
+      "formula_metric": "设定动作化/说明负载",
+      "probe_target": "设定动作化轴",
+      "mode": "evidence"
+    },
+    {
+      "formula_metric": "配角反应与制度成本",
+      "probe_target": "侧面烘托轴",
+      "mode": "evidence"
+    },
+    {
+      "formula_metric": "人物反差与行为逻辑",
+      "probe_target": "反差造梗轴",
+      "mode": "evidence"
+    },
+    {
+      "formula_metric": "主线可读性/新变量负载",
+      "probe_target": "mainline.readability_risk",
+      "mode": "cap"
+    },
+    {
+      "formula_metric": "AI味/文学性/肉身/留白",
+      "probe_target": "独立旁路报告",
+      "mode": "side_channel"
+    }
+  ]
+}

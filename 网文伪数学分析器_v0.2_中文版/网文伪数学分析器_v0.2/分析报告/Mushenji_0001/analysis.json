@@ -1,0 +1,334 @@
+{
+  "project": "网文伪数学分析器",
+  "version": "0.2.0",
+  "calibration_level": "C0",
+  "task": {
+    "task_id": "Mushenji-single-c9fc80fb3f4c",
+    "work_id": "Mushenji",
+    "scope_type": "single",
+    "chapters": [
+      "0001"
+    ],
+    "source_sha256": "c9fc80fb3f4ca8f39737efd88f5c589690abb7ee2764a4086383932b96156868",
+    "text_char_count": 4086
+  },
+  "decision": {
+    "state": "ROBUST_PASS",
+    "reasons": [
+      "硬闸门全过、六维下限达标、九维风险均低于 2.0"
+    ]
+  },
+  "gate_state": "PASSED",
+  "gates": {
+    "G_C": {
+      "status": "PASS",
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "背着这个石像出村，黑暗里的东西怕石像，我一会半会死不了！",
+          "start": 554,
+          "end": 582
+        }
+      ],
+      "judgment": "核心因果链可核验：黑暗危险、石像防护、出村救婴、玉佩防护、牛皮女子脱困与被处理，事件之间有明确触发和后果。"
+    },
+    "G_A": {
+      "status": "PASS",
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧举起镰刀，小心翼翼割破牛皮",
+          "start": 2392,
+          "end": 2407
+        }
+      ],
+      "judgment": "人物行动不是空转：司婆婆主动救婴并收养，秦牧受母牛请求而割皮，瘸子介入杀死威胁者，行动均改变局面。"
+    },
+    "G_L": {
+      "status": "PASS",
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "这少年正是十一年前司婆婆从江边捡来的婴儿，这些年来村里的老人含辛茹苦将这孩子养大",
+          "start": 1944,
+          "end": 1984
+        }
+      ],
+      "judgment": "单章内从婴儿获救跳到十一年后，文本明确标记时间跨度，并延续玉佩、残老村、司婆婆与秦牧身份。"
+    },
+    "G_P": {
+      "status": "PASS",
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧脑中轰然，不知道这个从牛皮里钻出来的女子在说些什么。",
+          "start": 2680,
+          "end": 2708
+        }
+      ],
+      "judgment": "叙述以第三人称外部叙述为主，关键体验段落贴近秦牧认知，没有出现互相冲突的视角信息。"
+    }
+  },
+  "chapter_profile": {
+    "S_ch_interval": [
+      3.25,
+      3.25
+    ],
+    "dimensions": {
+      "U_ch": [
+        3.5,
+        3.5
+      ],
+      "C_ch": [
+        3.4,
+        3.4
+      ],
+      "A_ch": [
+        3.0,
+        3.0
+      ],
+      "E_ch": [
+        3.2,
+        3.2
+      ],
+      "R_ch": [
+        2.8,
+        2.8
+      ],
+      "F_ch": [
+        3.7,
+        3.7
+      ]
+    }
+  },
+  "risk_vector": {
+    "R_narrative": {
+      "interval": [
+        0.5043,
+        0.5043
+      ],
+      "center": 0.5043,
+      "status": "PASS",
+      "action": "保留",
+      "stability": {
+        "baseline_status": "PASS",
+        "stability": 1.0,
+        "trials": 200,
+        "perturbation": 0.2,
+        "status_distribution": {
+          "PASS": 200
+        }
+      }
+    },
+    "R_creative": {
+      "interval": [
+        0.0,
+        0.0
+      ],
+      "center": 0.0,
+      "status": "PASS",
+      "action": "保留",
+      "stability": {
+        "baseline_status": "PASS",
+        "stability": 1.0,
+        "trials": 200,
+        "perturbation": 0.2,
+        "status_distribution": {
+          "PASS": 200
+        }
+      }
+    },
+    "R_character": {
+      "interval": [
+        0.3095,
+        0.3095
+      ],
+      "center": 0.3095,
+      "status": "PASS",
+      "action": "保留",
+      "stability": {
+        "baseline_status": "PASS",
+        "stability": 1.0,
+        "trials": 200,
+        "perturbation": 0.2,
+        "status_distribution": {
+          "PASS": 200
+        }
+      }
+    },
+    "R_technical": {
+      "interval": [
+        0.1667,
+        0.1667
+      ],
+      "center": 0.1667,
+      "status": "PASS",
+      "action": "保留",
+      "stability": {
+        "baseline_status": "PASS",
+        "stability": 1.0,
+        "trials": 200,
+        "perturbation": 0.2,
+        "status_distribution": {
+          "PASS": 200
+        }
+      }
+    },
+    "R_reader": {
+      "interval": null,
+      "center": null,
+      "status": "INSUFFICIENT_DATA",
+      "action": "补充样本或人工复核",
+      "stability": null
+    },
+    "R_convergence": {
+      "interval": [
+        0.6,
+        0.6
+      ],
+      "center": 0.6,
+      "status": "PASS",
+      "action": "保留",
+      "stability": {
+        "baseline_status": "PASS",
+        "stability": 1.0,
+        "trials": 200,
+        "perturbation": 0.2,
+        "status_distribution": {
+          "PASS": 200
+        }
+      }
+    },
+    "R_embodiment": {
+      "interval": [
+        0.2,
+        0.2
+      ],
+      "center": 0.2,
+      "status": "PASS",
+      "action": "保留",
+      "stability": {
+        "baseline_status": "PASS",
+        "stability": 1.0,
+        "trials": 200,
+        "perturbation": 0.2,
+        "status_distribution": {
+          "PASS": 200
+        }
+      }
+    },
+    "R_ambiguity": {
+      "interval": [
+        0.8667,
+        0.8667
+      ],
+      "center": 0.8667,
+      "status": "PASS",
+      "action": "保留",
+      "stability": {
+        "baseline_status": "PASS",
+        "stability": 1.0,
+        "trials": 200,
+        "perturbation": 0.2,
+        "status_distribution": {
+          "PASS": 200
+        }
+      }
+    },
+    "R_language": {
+      "interval": [
+        0.5917,
+        0.5917
+      ],
+      "center": 0.5917,
+      "status": "PASS",
+      "action": "保留",
+      "stability": null
+    }
+  },
+  "ai_style_index": {
+    "index": 0.271,
+    "interval": [
+      0,
+      21.711
+    ],
+    "status": "INTERNAL_TREND",
+    "interpretation": "AI式文本迹象指数，不是作者身份概率"
+  },
+  "anti_gaming": {
+    "AG_SENSORY_STUFFING": {
+      "status": "PASS",
+      "evidence": [],
+      "judgment": "感官描写服务于黑暗、尸体、牛皮和尾骨等事件，不是机械堆砌。"
+    },
+    "AG_RANDOM_REVERSAL": {
+      "status": "PASS",
+      "evidence": [],
+      "judgment": "母牛变人和瘸子杀人虽有反转，但均被封印、养育和残老村规则承接。"
+    },
+    "AG_MEANINGLESS_CHOICE": {
+      "status": "PASS",
+      "evidence": [],
+      "judgment": "秦牧割开牛皮导致威胁释放，司婆婆收养导致十一年后的事件，选择有后果。"
+    },
+    "AG_SYMBOL_SPAM": {
+      "status": "PASS",
+      "evidence": [],
+      "judgment": "石像和玉佩有防护功能，符号反复出现但承担规则和情节作用。"
+    },
+    "AG_RANDOM_RHYTHM": {
+      "status": "PASS",
+      "evidence": [],
+      "judgment": "节奏由夜幕、救婴、时间跳跃、牛皮危机、黑暗章尾递进，未靠随机断句刷节奏。"
+    },
+    "AG_HARMFUL_OMISSION": {
+      "status": "PASS",
+      "evidence": [],
+      "judgment": "黑暗本质留白，但石像保护、出村危险、尾巴被吞等必要信息已给出。"
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "FIND-EXPOSITION_CLUSTER",
+      "primary_metric": "A-01",
+      "secondary_impacts": [
+        "L-03",
+        "R_ambiguity"
+      ],
+      "severity": 2,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "司婆婆瞥他一眼，道：“这女子是距离这儿千里外的镶龙城城主夫人，镶龙城主好色",
+          "start": 3517,
+          "end": 3554
+        }
+      ],
+      "judgment": "牛皮女子来历、城主恶行、司婆婆作案动机集中由台词解释，虽然信息有效，但压缩了部分读者推断空间。",
+      "repair_action": "若要修订，可把城主夫人前史拆成秦牧后续追问、物证或村民互相遮掩的片段，不必一次说尽。"
+    },
+    {
+      "finding_id": "FIND-PROTAGONIST_REACTIVE_END",
+      "primary_metric": "A_ch",
+      "secondary_impacts": [
+        "Vb_branch"
+      ],
+      "severity": 2,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧一脚高一脚低往村里走，回头看去，却见瘸子将那女子的尸体丢进江里。",
+          "start": 2896,
+          "end": 2930
+        }
+      ],
+      "judgment": "秦牧在后半章主要承受信息冲击，危机解决和尸体处理均由瘸子完成，主角能动性略弱。",
+      "repair_action": "可增加秦牧在危机后主动确认牛皮、玉佩或黑暗边界的一个小动作，但不要改变瘸子救场的核心事件。"
+    }
+  ],
+  "boundaries": [
+    "风险值不是客观文学质量",
+    "AI_STYLE_INDEX不是作者身份概率",
+    "C0结果不得用于跨作者排名或商业成功预测"
+  ]
+}

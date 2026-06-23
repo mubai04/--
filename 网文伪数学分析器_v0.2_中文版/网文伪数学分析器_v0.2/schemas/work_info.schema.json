@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "作品信息 v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "work_id",
+    "title",
+    "genre",
+    "platform",
+    "current_version",
+    "chapter_directory",
+    "encoding",
+    "chapter_order_rule",
+    "calibration_group"
+  ],
+  "properties": {
+    "work_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "genre": {
+      "type": "string"
+    },
+    "platform": {
+      "type": "string"
+    },
+    "current_version": {
+      "type": "string",
+      "pattern": "^v[0-9]{3,}$"
+    },
+    "chapter_directory": {
+      "const": "当前版本/章节"
+    },
+    "encoding": {
+      "const": "utf-8"
+    },
+    "chapter_order_rule": {
+      "const": "filename_numeric_prefix"
+    },
+    "calibration_group": {
+      "type": "string"
+    }
+  }
+}

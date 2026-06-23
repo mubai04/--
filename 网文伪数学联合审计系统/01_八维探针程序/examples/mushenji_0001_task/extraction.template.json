@@ -1,0 +1,181 @@
+{
+  "schema_version": "3.2.1",
+  "rubric_version": "八维伪线性探针-v3.2.1",
+  "task_id": "9c259ad8a7c5f1a133be",
+  "source_sha256": "eb22d82f4bece7ecd03093315e80659567e8dfbb92511ca1af30925498ec4a12",
+  "input_type": "single_chapter",
+  "extractor": {
+    "name": "Codex",
+    "run_note": ""
+  },
+  "mainline": {
+    "core_viewpoint": "",
+    "current_goal": "",
+    "current_obstacle": "",
+    "gained_or_lost": "",
+    "situation_change": "",
+    "next_commitment": "",
+    "one_sentence_mainline": "",
+    "readability_risk": "证据不足",
+    "missing_items": [
+      "待提取"
+    ]
+  },
+  "axes": [
+    {
+      "axis": "因果代价轴",
+      "evidence_sufficient": false,
+      "score": null,
+      "confidence": 0,
+      "overload_risk": "低",
+      "evidence": [],
+      "judgment": "",
+      "root_issue": "",
+      "related_axes": [],
+      "evidence_gap": "待提取"
+    },
+    {
+      "axis": "期待违背轴",
+      "evidence_sufficient": false,
+      "score": null,
+      "confidence": 0,
+      "overload_risk": "低",
+      "evidence": [],
+      "judgment": "",
+      "root_issue": "",
+      "related_axes": [],
+      "evidence_gap": "待提取"
+    },
+    {
+      "axis": "极速流转轴",
+      "evidence_sufficient": false,
+      "score": null,
+      "confidence": 0,
+      "overload_risk": "低",
+      "evidence": [],
+      "judgment": "",
+      "root_issue": "",
+      "related_axes": [],
+      "evidence_gap": "待提取"
+    },
+    {
+      "axis": "章尾钩子轴",
+      "evidence_sufficient": false,
+      "score": null,
+      "confidence": 0,
+      "overload_risk": "低",
+      "evidence": [],
+      "judgment": "",
+      "root_issue": "",
+      "related_axes": [],
+      "evidence_gap": "待提取"
+    },
+    {
+      "axis": "活人冲突轴",
+      "evidence_sufficient": false,
+      "score": null,
+      "confidence": 0,
+      "overload_risk": "低",
+      "evidence": [],
+      "judgment": "",
+      "root_issue": "",
+      "related_axes": [],
+      "evidence_gap": "待提取"
+    },
+    {
+      "axis": "侧面烘托轴",
+      "evidence_sufficient": false,
+      "score": null,
+      "confidence": 0,
+      "overload_risk": "低",
+      "evidence": [],
+      "judgment": "",
+      "root_issue": "",
+      "related_axes": [],
+      "evidence_gap": "待提取"
+    },
+    {
+      "axis": "反差造梗轴",
+      "evidence_sufficient": false,
+      "score": null,
+      "confidence": 0,
+      "overload_risk": "低",
+      "evidence": [],
+      "judgment": "",
+      "root_issue": "",
+      "related_axes": [],
+      "evidence_gap": "待提取"
+    },
+    {
+      "axis": "设定动作化轴",
+      "evidence_sufficient": false,
+      "score": null,
+      "confidence": 0,
+      "overload_risk": "低",
+      "evidence": [],
+      "judgment": "",
+      "root_issue": "",
+      "related_axes": [],
+      "evidence_gap": "待提取"
+    }
+  ],
+  "gates": [
+    {
+      "gate": "卖点识别门",
+      "evidence_sufficient": false,
+      "score": null,
+      "confidence": 0,
+      "evidence": [],
+      "judgment": "",
+      "evidence_gap": "待提取"
+    },
+    {
+      "gate": "情绪承诺门",
+      "evidence_sufficient": false,
+      "score": null,
+      "confidence": 0,
+      "evidence": [],
+      "judgment": "",
+      "evidence_gap": "待提取"
+    },
+    {
+      "gate": "开篇入口门",
+      "evidence_sufficient": false,
+      "score": null,
+      "confidence": 0,
+      "evidence": [],
+      "judgment": "",
+      "evidence_gap": "待提取"
+    },
+    {
+      "gate": "主角发动机门",
+      "evidence_sufficient": false,
+      "score": null,
+      "confidence": 0,
+      "evidence": [],
+      "judgment": "",
+      "evidence_gap": "待提取"
+    },
+    {
+      "gate": "最小兑现门",
+      "evidence_sufficient": false,
+      "score": null,
+      "confidence": 0,
+      "evidence": [],
+      "judgment": "",
+      "evidence_gap": "待提取"
+    },
+    {
+      "gate": "连载扩展门",
+      "evidence_sufficient": false,
+      "score": null,
+      "confidence": 0,
+      "evidence": [],
+      "judgment": "",
+      "evidence_gap": "待提取"
+    }
+  ],
+  "top_issues": [],
+  "evidence_gaps": [],
+  "extraction_confidence": 0
+}

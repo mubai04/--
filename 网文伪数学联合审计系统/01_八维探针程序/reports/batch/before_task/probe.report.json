@@ -1,0 +1,325 @@
+{
+  "run": {
+    "version": "3.2.1",
+    "schema_version": "3.2.1",
+    "rubric_version": "八维伪线性探针-v3.2.1",
+    "created_at": "2026-06-22T06:29:25.028989+00:00",
+    "task": "./examples/before_task/task.json",
+    "extraction": "./examples/before_task/extraction.json",
+    "source_name": "chapter_before.txt",
+    "source_sha256": "8df532e45a2ac961704ff2eb2993e81866079c79d8fa02826ee58ab97b6e514b",
+    "input_type": "single_chapter",
+    "truncated": false,
+    "metadata": {
+      "project": "本地示例",
+      "genre": "都市规则悬疑",
+      "note": "仅用于验证 prepare→score→compare，本例不是市场有效性证据"
+    },
+    "api_called_by_script": false
+  },
+  "extraction": {
+    "schema_version": "3.2.1",
+    "rubric_version": "八维伪线性探针-v3.2.1",
+    "task_id": "cf092b45d7c46affba79",
+    "source_sha256": "8df532e45a2ac961704ff2eb2993e81866079c79d8fa02826ee58ab97b6e514b",
+    "input_type": "single_chapter",
+    "extractor": {
+      "name": "Codex-example",
+      "run_note": "包内可复现人工结构化示例"
+    },
+    "mainline": {
+      "core_viewpoint": "沈砚",
+      "current_goal": "摆脱当天债务",
+      "current_obstacle": "掌柜要求交出账簿并封锁出口",
+      "gained_or_lost": "失去账簿并被黑印认债",
+      "situation_change": "从可谈判状态变成被追捕",
+      "next_commitment": "骨头里的债将继续追索",
+      "one_sentence_mainline": "沈砚试图交账脱身，却被黑印认债后逃出当铺。",
+      "readability_risk": "低",
+      "missing_items": []
+    },
+    "axes": [
+      {
+        "axis": "因果代价轴",
+        "evidence_sufficient": true,
+        "score": 2,
+        "confidence": 90,
+        "overload_risk": "低",
+        "evidence": [
+          "账簿刚落到掌柜手里，纸页上的黑印便爬上沈砚手腕。"
+        ],
+        "judgment": "交账带来直接代价，但代价机制仍较单一。",
+        "root_issue": "",
+        "related_axes": [],
+        "evidence_gap": ""
+      },
+      {
+        "axis": "期待违背轴",
+        "evidence_sufficient": true,
+        "score": 2,
+        "confidence": 85,
+        "overload_risk": "低",
+        "evidence": [
+          "沈砚这才知道，交出账簿不是还债，而是认债。"
+        ],
+        "judgment": "出现一次有效认知反转。",
+        "root_issue": "",
+        "related_axes": [],
+        "evidence_gap": ""
+      },
+      {
+        "axis": "极速流转轴",
+        "evidence_sufficient": true,
+        "score": 2,
+        "confidence": 88,
+        "overload_risk": "低",
+        "evidence": [
+          "三个人在柜台前推搡，药柜被撞倒，铜钱滚了一地。"
+        ],
+        "judgment": "场面发生变化，但主要仍是逃跑动作。",
+        "root_issue": "",
+        "related_axes": [],
+        "evidence_gap": ""
+      },
+      {
+        "axis": "章尾钩子轴",
+        "evidence_sufficient": true,
+        "score": 2,
+        "confidence": 90,
+        "overload_risk": "低",
+        "evidence": [
+          "“跑吧，账已经记在你骨头里了。”"
+        ],
+        "judgment": "留下后续债务追索承诺。",
+        "root_issue": "",
+        "related_axes": [],
+        "evidence_gap": ""
+      },
+      {
+        "axis": "活人冲突轴",
+        "evidence_sufficient": true,
+        "score": 2,
+        "confidence": 86,
+        "overload_risk": "低",
+        "evidence": [
+          "他转身撞向窗户，掌柜抬手让两个伙计拦住他。"
+        ],
+        "judgment": "人物围绕脱身与控制发生直接冲突。",
+        "root_issue": "",
+        "related_axes": [],
+        "evidence_gap": ""
+      },
+      {
+        "axis": "侧面烘托轴",
+        "evidence_sufficient": true,
+        "score": 1,
+        "confidence": 80,
+        "overload_risk": "低",
+        "evidence": [
+          "守门人松了口气，重新把门闩插好。"
+        ],
+        "judgment": "配角有反应，但没有承担明显成本或改变立场。",
+        "root_issue": "侧面反应较弱",
+        "related_axes": [],
+        "evidence_gap": ""
+      },
+      {
+        "axis": "反差造梗轴",
+        "evidence_sufficient": true,
+        "score": 1,
+        "confidence": 78,
+        "overload_risk": "低",
+        "evidence": [
+          "沈砚犹豫片刻，还是把账簿递了过去。"
+        ],
+        "judgment": "人物反差不足，选择较常规。",
+        "root_issue": "反差未形成局势收益",
+        "related_axes": [],
+        "evidence_gap": ""
+      },
+      {
+        "axis": "设定动作化轴",
+        "evidence_sufficient": true,
+        "score": 2,
+        "confidence": 88,
+        "overload_risk": "低",
+        "evidence": [
+          "纸页上的黑印便爬上沈砚手腕。"
+        ],
+        "judgment": "规则通过身体结果出现，没有停顿解释。",
+        "root_issue": "",
+        "related_axes": [],
+        "evidence_gap": ""
+      }
+    ],
+    "gates": [
+      {
+        "gate": "卖点识别门",
+        "evidence_sufficient": true,
+        "score": 2,
+        "confidence": 87,
+        "evidence": [
+          "沈砚收到一张写着自己死期的欠条。"
+        ],
+        "judgment": "死亡欠条与认债机制可识别。",
+        "evidence_gap": ""
+      },
+      {
+        "gate": "情绪承诺门",
+        "evidence_sufficient": true,
+        "score": 2,
+        "confidence": 85,
+        "evidence": [
+          "身后传来掌柜的笑声。"
+        ],
+        "judgment": "形成规则压迫和逃亡感。",
+        "evidence_gap": ""
+      },
+      {
+        "gate": "开篇入口门",
+        "evidence_sufficient": true,
+        "score": 3,
+        "confidence": 90,
+        "evidence": [
+          "城南当铺关门时，沈砚收到一张写着自己死期的欠条。"
+        ],
+        "judgment": "首句直接给出具体异常。",
+        "evidence_gap": ""
+      },
+      {
+        "gate": "主角发动机门",
+        "evidence_sufficient": true,
+        "score": 2,
+        "confidence": 82,
+        "evidence": [
+          "沈砚趁乱跳出窗外，摔进雨水里。"
+        ],
+        "judgment": "主角以脱身为稳定行动目标。",
+        "evidence_gap": ""
+      },
+      {
+        "gate": "最小兑现门",
+        "evidence_sufficient": true,
+        "score": 2,
+        "confidence": 84,
+        "evidence": [
+          "交出账簿不是还债，而是认债。"
+        ],
+        "judgment": "完成一次规则反转。",
+        "evidence_gap": ""
+      },
+      {
+        "gate": "连载扩展门",
+        "evidence_sufficient": true,
+        "score": 2,
+        "confidence": 80,
+        "evidence": [
+          "账已经记在你骨头里了。"
+        ],
+        "judgment": "债务可继续扩展，但对象与层级尚未展开。",
+        "evidence_gap": ""
+      }
+    ],
+    "top_issues": [
+      {
+        "issue_id": "P01",
+        "primary_axis": "侧面烘托轴",
+        "related_axes": [
+          "反差造梗轴"
+        ],
+        "location": "守门人和伙计反应段",
+        "evidence": "守门人松了口气，重新把门闩插好。",
+        "root_cause": "配角只执行封锁，没有因主角异常付出代价或改变态度。",
+        "commercial_damage": "主角异常缺少外部确认，场面仍像普通逃跑。",
+        "minimum_change": "让至少一名配角因规则暴露改变阵营或承担损失。"
+      }
+    ],
+    "evidence_gaps": [],
+    "extraction_confidence": 87
+  },
+  "linear_result": {
+    "judgment_name": "本章追读执行强度",
+    "judgment_boundary": {
+      "allowed_judgment": "本章追读执行强度",
+      "forbidden_extrapolation": "不得外推整书爆款、真实留存、签约率、收入或连载稳定性"
+    },
+    "raw_z": -0.2375,
+    "activation": 0.440903,
+    "activation_note": "内部线性激活值，不是市场成功概率",
+    "coverage": 1.0,
+    "weighted_coverage": 1.0,
+    "missing_axes": [],
+    "missing_critical_axes": [],
+    "raw_level": "低",
+    "final_level": "低",
+    "cap_reasons": [],
+    "features": {
+      "因果代价轴": 0.0,
+      "期待违背轴": 0.0,
+      "极速流转轴": 0.0,
+      "章尾钩子轴": 0.0,
+      "活人冲突轴": 0.0,
+      "侧面烘托轴": -0.4,
+      "反差造梗轴": -0.39,
+      "设定动作化轴": 0.0
+    },
+    "overload_factors": {
+      "因果代价轴": 1.0,
+      "期待违背轴": 1.0,
+      "极速流转轴": 1.0,
+      "章尾钩子轴": 1.0,
+      "活人冲突轴": 1.0,
+      "侧面烘托轴": 1.0,
+      "反差造梗轴": 1.0,
+      "设定动作化轴": 1.0
+    },
+    "high_overload_axes": [],
+    "weights": {
+      "因果代价轴": 0.45,
+      "期待违背轴": 0.55,
+      "极速流转轴": 0.65,
+      "章尾钩子轴": 0.75,
+      "活人冲突轴": 0.75,
+      "侧面烘托轴": 0.35,
+      "反差造梗轴": 0.25,
+      "设定动作化轴": 0.6
+    },
+    "critical_axes": [
+      "因果代价轴",
+      "极速流转轴",
+      "章尾钩子轴",
+      "活人冲突轴"
+    ],
+    "bias": 0.0,
+    "thresholds": {
+      "high": 0.68,
+      "medium": 0.5,
+      "low": 0.35,
+      "minimum_coverage": 0.625,
+      "minimum_weighted_coverage": 0.7
+    },
+    "weight_source": "内置工程初始权重",
+    "weight_status": "uncalibrated",
+    "contributions": {
+      "因果代价轴": 0.0,
+      "期待违背轴": 0.0,
+      "极速流转轴": 0.0,
+      "章尾钩子轴": 0.0,
+      "活人冲突轴": 0.0,
+      "侧面烘托轴": -0.14,
+      "反差造梗轴": -0.0975,
+      "设定动作化轴": 0.0
+    },
+    "top_positive": [],
+    "top_negative": [
+      {
+        "axis": "侧面烘托轴",
+        "contribution": -0.14
+      },
+      {
+        "axis": "反差造梗轴",
+        "contribution": -0.0975
+      }
+    ]
+  }
+}

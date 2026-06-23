@@ -1,0 +1,20 @@
+{
+  "schema_version": "3.2.1",
+  "rubric_version": "八维伪线性探针-v3.2.1",
+  "task_id": "cf092b45d7c46affba79",
+  "created_at": "2026-06-22T06:28:52.949542+00:00",
+  "input_type": "single_chapter",
+  "source": {
+    "name": "chapter_before.txt",
+    "path": "./samples/chapter_before.txt",
+    "sha256": "8df532e45a2ac961704ff2eb2993e81866079c79d8fa02826ee58ab97b6e514b",
+    "character_count": 221
+  },
+  "metadata": {
+    "project": "本地示例",
+    "genre": "都市规则悬疑",
+    "note": "仅用于验证 prepare→score→compare，本例不是市场有效性证据"
+  },
+  "text": "城南当铺关门时，沈砚收到一张写着自己死期的欠条。\n掌柜说，只要他把账簿交出去，就能免掉今天的债。\n沈砚犹豫片刻，还是把账簿递了过去。\n守门人松了口气，重新把门闩插好。\n账簿刚落到掌柜手里，纸页上的黑印便爬上沈砚手腕。\n沈砚这才知道，交出账簿不是还债，而是认债。\n他转身撞向窗户，掌柜抬手让两个伙计拦住他。\n三个人在柜台前推搡，药柜被撞倒，铜钱滚了一地。\n沈砚趁乱跳出窗外，摔进雨水里。\n身后传来掌柜的笑声。\n“跑吧，账已经记在你骨头里了。”\n",
+  "truncated": false
+}

@@ -1,0 +1,343 @@
+{
+  "run": {
+    "version": "3.2.1",
+    "schema_version": "3.2.1",
+    "rubric_version": "八维伪线性探针-v3.2.1",
+    "created_at": "2026-06-22T09:29:46.486182+00:00",
+    "task": "/mnt/data/v102_build/网文伪数学联合审计系统_v1.0.2_CANDIDATE_中文包/05_联合审计运行层/测试样本/第一章_八维正式任务/task.json",
+    "extraction": "/mnt/data/v102_build/网文伪数学联合审计系统_v1.0.2_CANDIDATE_中文包/05_联合审计运行层/测试样本/第一章_八维正式任务/extraction.json",
+    "source_name": "第一章_第三扇门不能开.md",
+    "source_sha256": "7859595ebdefd57ea551870283590a23d0a58119351d5b0dbe2a81c8fe07c0fd",
+    "input_type": "single_chapter",
+    "truncated": false,
+    "metadata": {},
+    "api_called_by_script": false
+  },
+  "extraction": {
+    "schema_version": "3.2.1",
+    "rubric_version": "八维伪线性探针-v3.2.1",
+    "task_id": "10010ae8b1eeb1726b55",
+    "source_sha256": "7859595ebdefd57ea551870283590a23d0a58119351d5b0dbe2a81c8fe07c0fd",
+    "input_type": "single_chapter",
+    "extractor": {
+      "name": "Codex-人工基准复核",
+      "run_note": "由既有八维报告结构化迁移；所有证据由探针验证原文存在"
+    },
+    "mainline": {
+      "core_viewpoint": "陆沉舟",
+      "current_goal": "在韩照骨赶到前弄清黑钥匙和周不问遗留线索，并决定是否进入灰雾之门",
+      "current_obstacle": "周不问死而复死、尸体消失、韩照骨封路、灰雾入口正在关闭",
+      "gained_or_lost": "得到黑钥匙与停尸房异变线索，也因此被韩照骨锁定追拿并被未知疼痛侵入身体",
+      "situation_change": "从停尸房登记凡人死者，骤然转入药地塌陷、灰雾开门和灭门遗迹显形",
+      "next_commitment": "陆沉舟已进入门后青岚宗遗迹，必须面对三扇门和两个韩照骨的谜局",
+      "one_sentence_mainline": "陆沉舟因周不问留下的黑钥匙卷入停尸房异变，在韩照骨追捕下闯入灰雾之门，撞见与青岚宗灭门有关的第三扇门谜局。",
+      "readability_risk": "低",
+      "missing_items": []
+    },
+    "axes": [
+      {
+        "axis": "因果代价轴",
+        "evidence_sufficient": true,
+        "score": 4,
+        "confidence": 94,
+        "overload_risk": "低",
+        "evidence": [
+          "进去也许会死。",
+          "留下来，大概会死得更慢。"
+        ],
+        "judgment": "选择与死亡代价明确绑定。",
+        "root_issue": "",
+        "related_axes": [],
+        "evidence_gap": ""
+      },
+      {
+        "axis": "期待违背轴",
+        "evidence_sufficient": true,
+        "score": 4,
+        "confidence": 95,
+        "overload_risk": "低",
+        "evidence": [
+          "那具瘦小的身体像被一只看不见的手从世上擦掉，只剩枯黄药叶贴在木板上，轻轻发抖。"
+        ],
+        "judgment": "尸体不是苏醒或腐坏，而是被从现实擦除。",
+        "root_issue": "",
+        "related_axes": [],
+        "evidence_gap": ""
+      },
+      {
+        "axis": "极速流转轴",
+        "evidence_sufficient": true,
+        "score": 4,
+        "confidence": 93,
+        "overload_risk": "中",
+        "evidence": [
+          "药田、木屋、井台、篱笆，全都往同一个点陷下去。不是石土坍落，而是那一片地方像被揉成一团，边缘冒出灰白雾气。"
+        ],
+        "judgment": "空间、风险和行动入口在同一节点连续变化。",
+        "root_issue": "",
+        "related_axes": [],
+        "evidence_gap": ""
+      },
+      {
+        "axis": "章尾钩子轴",
+        "evidence_sufficient": true,
+        "score": 4,
+        "confidence": 96,
+        "overload_risk": "低",
+        "evidence": [
+          "第三扇门后，藏着青岚宗第一次灭门。"
+        ],
+        "judgment": "明确启动下一章不可搁置的问题。",
+        "root_issue": "",
+        "related_axes": [],
+        "evidence_gap": ""
+      },
+      {
+        "axis": "活人冲突轴",
+        "evidence_sufficient": true,
+        "score": 3,
+        "confidence": 88,
+        "overload_risk": "低",
+        "evidence": [
+          "韩照骨走在最前面。",
+          "屋里的人，一个不许走。"
+        ],
+        "judgment": "活人压力成立，但对手利益差尚未完全展开。",
+        "root_issue": "",
+        "related_axes": [],
+        "evidence_gap": ""
+      },
+      {
+        "axis": "侧面烘托轴",
+        "evidence_sufficient": true,
+        "score": 3,
+        "confidence": 87,
+        "overload_risk": "低",
+        "evidence": [
+          "来的是韩照骨。",
+          "陆沉舟听过这个名字。"
+        ],
+        "judgment": "他人恐惧侧面建立韩照骨威慑。",
+        "root_issue": "",
+        "related_axes": [],
+        "evidence_gap": ""
+      },
+      {
+        "axis": "反差造梗轴",
+        "evidence_sufficient": true,
+        "score": 3,
+        "confidence": 86,
+        "overload_risk": "低",
+        "evidence": [
+          "只有陆沉舟看见了。",
+          "他忽然明白，周不问给他的不是遗物。"
+        ],
+        "judgment": "杂役身份与唯一可见、被选中形成反差。",
+        "root_issue": "",
+        "related_axes": [],
+        "evidence_gap": ""
+      },
+      {
+        "axis": "设定动作化轴",
+        "evidence_sufficient": true,
+        "score": 4,
+        "confidence": 94,
+        "overload_risk": "低",
+        "evidence": [
+          "黑钥匙碰到血，烫得像要融进肉里。",
+          "门缝里的红光猛地亮了一下。"
+        ],
+        "judgment": "规则通过身体反应和开门动作呈现。",
+        "root_issue": "",
+        "related_axes": [],
+        "evidence_gap": ""
+      }
+    ],
+    "gates": [
+      {
+        "gate": "卖点识别门",
+        "evidence_sufficient": true,
+        "score": 4,
+        "confidence": 94,
+        "evidence": [
+          "第三扇门后，藏着青岚宗第一次灭门。"
+        ],
+        "judgment": "停尸房钥匙、第三扇门和灭门谜案构成清晰卖点。",
+        "evidence_gap": ""
+      },
+      {
+        "gate": "情绪承诺门",
+        "evidence_sufficient": true,
+        "score": 4,
+        "confidence": 92,
+        "evidence": [
+          "他没有时间害怕。",
+          "害怕要等活下来以后。"
+        ],
+        "judgment": "稳定提供压迫、逃亡、禁忌和揭秘快感。",
+        "evidence_gap": ""
+      },
+      {
+        "gate": "开篇入口门",
+        "evidence_sufficient": true,
+        "score": 4,
+        "confidence": 91,
+        "evidence": [
+          "姓名一栏，也是周不问。",
+          "死亡时间在十七年前。"
+        ],
+        "judgment": "前段快速建立死两次的异常。",
+        "evidence_gap": ""
+      },
+      {
+        "gate": "主角发动机门",
+        "evidence_sufficient": true,
+        "score": 3,
+        "confidence": 84,
+        "evidence": [
+          "陆沉舟知道自己有两个选择。"
+        ],
+        "judgment": "主角从观察者切到主动决断者，长期欲望仍可加强。",
+        "evidence_gap": ""
+      },
+      {
+        "gate": "最小兑现门",
+        "evidence_sufficient": true,
+        "score": 4,
+        "confidence": 92,
+        "evidence": [
+          "他站在一座黑色山门前。"
+        ],
+        "judgment": "钥匙、追捕和进门均完成即时兑现。",
+        "evidence_gap": ""
+      },
+      {
+        "gate": "连载扩展门",
+        "evidence_sufficient": true,
+        "score": 4,
+        "confidence": 94,
+        "evidence": [
+          "第一扇门骗活人。",
+          "第二扇门困死人。"
+        ],
+        "judgment": "三扇门规则、双韩照骨和灭门旧史具备扩展空间。",
+        "evidence_gap": ""
+      }
+    ],
+    "top_issues": [],
+    "evidence_gaps": [],
+    "extraction_confidence": 91
+  },
+  "linear_result": {
+    "judgment_name": "本章追读执行强度",
+    "judgment_boundary": {
+      "allowed_judgment": "本章追读执行强度",
+      "forbidden_extrapolation": "不得外推整书爆款、真实留存、签约率、收入或连载稳定性"
+    },
+    "raw_z": 3.2424,
+    "activation": 0.962399,
+    "activation_note": "内部线性激活值，不是市场成功概率",
+    "coverage": 1.0,
+    "weighted_coverage": 1.0,
+    "missing_axes": [],
+    "missing_critical_axes": [],
+    "raw_level": "高",
+    "final_level": "高",
+    "cap_reasons": [],
+    "features": {
+      "因果代价轴": 0.94,
+      "期待违背轴": 0.95,
+      "极速流转轴": 0.651,
+      "章尾钩子轴": 0.96,
+      "活人冲突轴": 0.44,
+      "侧面烘托轴": 0.435,
+      "反差造梗轴": 0.43,
+      "设定动作化轴": 0.94
+    },
+    "overload_factors": {
+      "因果代价轴": 1.0,
+      "期待违背轴": 1.0,
+      "极速流转轴": 0.7,
+      "章尾钩子轴": 1.0,
+      "活人冲突轴": 1.0,
+      "侧面烘托轴": 1.0,
+      "反差造梗轴": 1.0,
+      "设定动作化轴": 1.0
+    },
+    "high_overload_axes": [],
+    "weights": {
+      "因果代价轴": 0.45,
+      "期待违背轴": 0.55,
+      "极速流转轴": 0.65,
+      "章尾钩子轴": 0.75,
+      "活人冲突轴": 0.75,
+      "侧面烘托轴": 0.35,
+      "反差造梗轴": 0.25,
+      "设定动作化轴": 0.6
+    },
+    "critical_axes": [
+      "因果代价轴",
+      "极速流转轴",
+      "章尾钩子轴",
+      "活人冲突轴"
+    ],
+    "bias": 0.0,
+    "thresholds": {
+      "high": 0.68,
+      "medium": 0.5,
+      "low": 0.35,
+      "minimum_coverage": 0.625,
+      "minimum_weighted_coverage": 0.7
+    },
+    "weight_source": "内置工程初始权重",
+    "weight_status": "uncalibrated",
+    "weight_config_sha256": "53ad24b9d0a21df3f6a77cfed06d20d45c0df1adb8d5c735a7bf3990dd596824",
+    "commercial_gate_result": {
+      "status": "通过",
+      "required_gates": [
+        "卖点识别门",
+        "情绪承诺门",
+        "开篇入口门",
+        "主角发动机门",
+        "最小兑现门",
+        "连载扩展门"
+      ],
+      "minimum_score": 2,
+      "missing_gates": [],
+      "failed_gates": [],
+      "passed_gates": [
+        "卖点识别门",
+        "情绪承诺门",
+        "开篇入口门",
+        "主角发动机门",
+        "最小兑现门",
+        "连载扩展门"
+      ]
+    },
+    "contributions": {
+      "因果代价轴": 0.423,
+      "期待违背轴": 0.5225,
+      "极速流转轴": 0.42315,
+      "章尾钩子轴": 0.72,
+      "活人冲突轴": 0.33,
+      "侧面烘托轴": 0.15225,
+      "反差造梗轴": 0.1075,
+      "设定动作化轴": 0.564
+    },
+    "top_positive": [
+      {
+        "axis": "章尾钩子轴",
+        "contribution": 0.72
+      },
+      {
+        "axis": "设定动作化轴",
+        "contribution": 0.564
+      },
+      {
+        "axis": "期待违背轴",
+        "contribution": 0.5225
+      }
+    ],
+    "top_negative": []
+  }
+}

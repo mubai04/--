@@ -162,7 +162,7 @@
                       "milestone":  "M1",
                       "severity":  "P0",
                       "sequence":  4,
-                      "status":  "READY_FOR_REVIEW",
+                      "status":  "ACCEPTED",
                       "depends_on":  [
                                          "M0-02"
                                      ],
@@ -192,7 +192,8 @@
                       "rollback_required":  true,
                       "blocks_release":  true,
                       "execution_policy":  "DIRECT",
-                      "status_change_reason":  "BATCH-1A：已新增公共输入校验并接入 L2/L3 入口，L2/L3 空对象输入在业务执行和报告生成前返回 INPUT_INVALID；等待独立验收，未标记 ACCEPTED。",
+                      "status_change_reason":  "BATCH-1A：代码复核确认公共输入校验在 L2/L3 业务执行和报告生成前生效，三项回归与全量 pytest 已通过；已建立回退提交 30a6642，标记 ACCEPTED。",
+                      "accepted_at":  "2026-06-23",
                       "ready_for_review_at":  "2026-06-23",
                       "review_evidence":  [
                                               "00_工程总控/工程执行层/公共组件/输入校验.py",
@@ -209,7 +210,7 @@
                       "milestone":  "M1",
                       "severity":  "P0",
                       "sequence":  5,
-                      "status":  "TODO",
+                      "status":  "READY_FOR_REVIEW",
                       "depends_on":  [
                                          "M1-01"
                                      ],
@@ -240,7 +241,18 @@
                       "rollback_required":  true,
                       "blocks_release":  true,
                       "execution_policy":  "DIRECT",
-                      "status_note":  "BATCH-1A 未修改 Schema；现有 Schema 接入口后已覆盖 L2/L3 空对象输入案例，但六份核心 JSON Schema 的内部约束仍需按 M1-02 任务正文另行检查。"
+                      "status_change_reason":  "M1-02：已收紧六份核心 JSON Schema，补充每份 1 组合法样本与至少 10 组非法样本的纯 Schema 单测；执行层测试和全量 pytest 通过，等待独立验收。",
+                      "ready_for_review_at":  "2026-06-23",
+                      "review_evidence":  [
+                                              "00_工程总控/工程执行层/公共组件/结构校验.py",
+                                              "00_工程总控/工程执行层/公共组件/结构定义/失败包结构.json",
+                                              "00_工程总控/工程执行层/公共组件/结构定义/第一层报告结构.json",
+                                              "00_工程总控/工程执行层/公共组件/结构定义/第二层报告结构.json",
+                                              "00_工程总控/工程执行层/公共组件/结构定义/第三层任务包结构.json",
+                                              "00_工程总控/工程执行层/公共组件/结构定义/流水线清单结构.json",
+                                              "00_工程总控/工程执行层/公共组件/结构定义/产物记录结构.json",
+                                              "00_工程总控/工程执行层/测试/测试_M1_02_Schema收紧.py"
+                                          ]
                   },
                   {
                       "task_id":  "M1-03",
@@ -250,7 +262,7 @@
                       "milestone":  "M1",
                       "severity":  "P0",
                       "sequence":  6,
-                      "status":  "READY_FOR_REVIEW",
+                      "status":  "ACCEPTED",
                       "depends_on":  [
                                          "M1-01"
                                      ],
@@ -281,7 +293,8 @@
                       "rollback_required":  true,
                       "blocks_release":  true,
                       "execution_policy":  "DIRECT",
-                      "status_change_reason":  "BATCH-1A：已新增结构化错误信封，损坏 JSON 返回 INPUT_INVALID JSON 错误输出且不含 Traceback；等待独立验收，未标记 ACCEPTED。",
+                      "status_change_reason":  "BATCH-1A：代码复核确认损坏 JSON 由公共校验转换为结构化错误信封，输出合法 JSON 且不含 Traceback；三项回归与全量 pytest 已通过，已建立回退提交 30a6642，标记 ACCEPTED。",
+                      "accepted_at":  "2026-06-23",
                       "ready_for_review_at":  "2026-06-23",
                       "review_evidence":  [
                                               "00_工程总控/工程执行层/公共组件/错误信封.py",

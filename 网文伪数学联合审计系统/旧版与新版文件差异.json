@@ -1,0 +1,103 @@
+{
+  "removed": [],
+  "modified": [
+    {
+      "path": "00_开始使用.txt",
+      "old_sha256": "7f1d687e794d1f2d8f75503bbc30b0bd84ce19c5c1260b6f1803018d62ec4ccd",
+      "new_sha256": "32ea6a33b8a34710e74bf15eae83ad36e56e770c3bcbb10746e45e8d27dfee2f"
+    },
+    {
+      "path": "01_八维探针程序/CHANGELOG_v3.2_to_v3.2.1.md",
+      "old_sha256": "9835cb23770cb70bc1d70692981fac48de467198a5e9b473e9d95afbd659f9cd",
+      "new_sha256": "74bbc0f268dbd1d86709a30e15957d3be3f8f70c37e4722012347b4a51ab0ae9"
+    },
+    {
+      "path": "01_八维探针程序/MANIFEST.sha256",
+      "old_sha256": "b3dd6533252da0f92d8162244e0535d7a12810fdbf7ad9bb5f8d6c1560ab979d",
+      "new_sha256": "b035a4083ea180251200cb7ee3082f6e425d6d639bd216a8faccd3399128afc0"
+    },
+    {
+      "path": "01_八维探针程序/pseudo_linear_probe.py",
+      "old_sha256": "9bdbd4734d97158cc119307cf5e7fa686891d61ac31de422c6b323216e6b1f5f",
+      "new_sha256": "7fe416c526a7106b5e0683ce9364ac23a83badaa0fa82dba9fce876a9cf0dab2"
+    },
+    {
+      "path": "01_八维探针程序/reports/after.probe.json",
+      "old_sha256": "8247ce006671696c469301e92636720935b6d908c48a838f79c8016d2f769824",
+      "new_sha256": "4f384ec86aed77c792168443cd0b0efb341ab256bc289656aa0386fc03062f2d"
+    },
+    {
+      "path": "01_八维探针程序/reports/before.probe.json",
+      "old_sha256": "716632775e6d167ed9df07c01b331694ec039facbb345ddb6a6ddc143ca88d41",
+      "new_sha256": "42afdb3e383e2342764e2b3e3b8713a5f6bc00a55a67745d63a23672e015d8e8"
+    },
+    {
+      "path": "05_联合审计运行层/CODEX_联合提取指令.md",
+      "old_sha256": "8f635fcd2f0c59ed388b5c0c3a57c2d62e44a91f522fa814e6a76a324724d81c",
+      "new_sha256": "15293fabbd0c87b2ade6a4dac6fe15ccc9d1bb7ab21c43653606f46fa3197dd0"
+    },
+    {
+      "path": "05_联合审计运行层/README_联合审计.md",
+      "old_sha256": "d5d578f3393e847b369a0ef3ca9c1e03ff466fe81d9399692ab8e5dcb703508a",
+      "new_sha256": "e091432a438d082a3e8cf2b65c625c6a049ef0b875d123d7596d1e09b70ffa8c"
+    },
+    {
+      "path": "05_联合审计运行层/TEST_EVIDENCE_联合审计.md",
+      "old_sha256": "727e633c262effa7890b3226af0b4c522a6d21ae8e952f750c9fce68a3a83557",
+      "new_sha256": "d908fbf66c75d112a49f33a7487596a8710fc2346703450e09cfac1d3dd0253d"
+    },
+    {
+      "path": "05_联合审计运行层/联合审计器.py",
+      "old_sha256": "971aa98ff235c2e03c759024bbce5d9eeed5053bdf9c0a701e4a8a0476cf65f4",
+      "new_sha256": "330eec1f8035299dec65e31958a32e96522369390d1fa92cdad80133ef0cd3fc"
+    },
+    {
+      "path": "包状态.json",
+      "old_sha256": "08d85be65d4ac9fbacc3374f26ff268cdb2e3d5ac42d0cd6abe64fd9ecc5f1d4",
+      "new_sha256": "4a218345511622df8623a538b99ee4e41d15d001a3d8fae392df933907b732ad"
+    }
+  ],
+  "added": [
+    "01_八维探针程序/__pycache__/commercial_gate_rules.cpython-313.pyc",
+    "01_八维探针程序/__pycache__/pseudo_linear_probe.cpython-313.pyc",
+    "01_八维探针程序/commercial_gate_rules.py",
+    "01_八维探针程序/history/joint_v1.0.2_patch_before/pseudo_linear_probe.py",
+    "05_联合审计运行层/history_v1.0.1/README_联合审计.md",
+    "05_联合审计运行层/history_v1.0.1/TEST_EVIDENCE_联合审计.md",
+    "05_联合审计运行层/history_v1.0.1/修复报告_v1.0.1.md",
+    "05_联合审计运行层/history_v1.0.1/八维探针摘要.schema.json",
+    "05_联合审计运行层/history_v1.0.1/广域审计模板.json",
+    "05_联合审计运行层/history_v1.0.1/广域审计输入.schema.json",
+    "05_联合审计运行层/history_v1.0.1/接口执行状态_v1.0.1.md",
+    "05_联合审计运行层/history_v1.0.1/测试报告/本地联合自检.txt",
+    "05_联合审计运行层/history_v1.0.1/测试报告/第一章_完整联合审计报告.json",
+    "05_联合审计运行层/history_v1.0.1/测试报告/第一章_完整联合审计报告.md",
+    "05_联合审计运行层/history_v1.0.1/测试报告/运行结果.txt",
+    "05_联合审计运行层/history_v1.0.1/测试样本/第一章_八维探针摘要.json",
+    "05_联合审计运行层/history_v1.0.1/测试样本/第一章_广域审计.json",
+    "05_联合审计运行层/history_v1.0.1/测试样本/第一章_第三扇门不能开.md",
+    "05_联合审计运行层/history_v1.0.1/联合审计器.py",
+    "05_联合审计运行层/requirements.txt",
+    "05_联合审计运行层/tests/test_joint_audit.py",
+    "05_联合审计运行层/修复报告_v1.0.2.md",
+    "05_联合审计运行层/八维正式报告_v3.2.1.schema.json",
+    "05_联合审计运行层/八维正式报告转联合输入.py",
+    "05_联合审计运行层/广域审计输入_v1.0.2.schema.json",
+    "05_联合审计运行层/接口执行状态_v1.0.2.md",
+    "05_联合审计运行层/测试报告/复验临时.json",
+    "05_联合审计运行层/测试报告/复验临时.md",
+    "05_联合审计运行层/测试报告/正向测试报告.md",
+    "05_联合审计运行层/测试报告/第一章_完整联合审计报告_v1.0.2.json",
+    "05_联合审计运行层/测试报告/第一章_完整联合审计报告_v1.0.2.md",
+    "05_联合审计运行层/测试报告/负向测试报告.md",
+    "05_联合审计运行层/测试样本/第一章_八维正式任务/CODEX_TASK.md",
+    "05_联合审计运行层/测试样本/第一章_八维正式任务/extraction.json",
+    "05_联合审计运行层/测试样本/第一章_八维正式任务/extraction.schema.json",
+    "05_联合审计运行层/测试样本/第一章_八维正式任务/extraction.template.json",
+    "05_联合审计运行层/测试样本/第一章_八维正式任务/task.json",
+    "05_联合审计运行层/测试样本/第一章_八维正式报告.json",
+    "05_联合审计运行层/测试样本/第一章_八维正式报告.md",
+    "05_联合审计运行层/测试样本/第一章_广域审计_v1.0.2.json",
+    "基线文件清单_v1.0.1.json"
+  ]
+}

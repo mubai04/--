@@ -1,0 +1,463 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/eight-dimension-pseudo-linear-probe-v3.2.1.schema.json",
+  "title": "八维伪线性探针 v3.2.1 特征提取",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "rubric_version",
+    "task_id",
+    "source_sha256",
+    "input_type",
+    "extractor",
+    "mainline",
+    "axes",
+    "gates",
+    "top_issues",
+    "evidence_gaps",
+    "extraction_confidence"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "3.2.1"
+    },
+    "rubric_version": {
+      "const": "八维伪线性探针-v3.2.1"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "input_type": {
+      "enum": [
+        "online_full",
+        "unpublished_full",
+        "first_three",
+        "single_chapter",
+        "fragment"
+      ]
+    },
+    "extractor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "run_note"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "run_note": {
+          "type": "string"
+        }
+      }
+    },
+    "mainline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "core_viewpoint",
+        "current_goal",
+        "current_obstacle",
+        "gained_or_lost",
+        "situation_change",
+        "next_commitment",
+        "one_sentence_mainline",
+        "readability_risk",
+        "missing_items"
+      ],
+      "properties": {
+        "core_viewpoint": {
+          "type": "string"
+        },
+        "current_goal": {
+          "type": "string"
+        },
+        "current_obstacle": {
+          "type": "string"
+        },
+        "gained_or_lost": {
+          "type": "string"
+        },
+        "situation_change": {
+          "type": "string"
+        },
+        "next_commitment": {
+          "type": "string"
+        },
+        "one_sentence_mainline": {
+          "type": "string"
+        },
+        "readability_risk": {
+          "enum": [
+            "中",
+            "低",
+            "证据不足",
+            "高"
+          ]
+        },
+        "missing_items": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "axes": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "axis",
+          "evidence_sufficient",
+          "score",
+          "confidence",
+          "overload_risk",
+          "evidence",
+          "judgment",
+          "root_issue",
+          "related_axes",
+          "evidence_gap"
+        ],
+        "properties": {
+          "axis": {
+            "enum": [
+              "因果代价轴",
+              "期待违背轴",
+              "极速流转轴",
+              "章尾钩子轴",
+              "活人冲突轴",
+              "侧面烘托轴",
+              "反差造梗轴",
+              "设定动作化轴"
+            ]
+          },
+          "evidence_sufficient": {
+            "type": "boolean"
+          },
+          "score": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 4
+          },
+          "confidence": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "overload_risk": {
+            "enum": [
+              "中",
+              "低",
+              "高"
+            ]
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "judgment": {
+            "type": "string"
+          },
+          "root_issue": {
+            "type": "string"
+          },
+          "related_axes": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "因果代价轴",
+                "期待违背轴",
+                "极速流转轴",
+                "章尾钩子轴",
+                "活人冲突轴",
+                "侧面烘托轴",
+                "反差造梗轴",
+                "设定动作化轴"
+              ]
+            }
+          },
+          "evidence_gap": {
+            "type": "string"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "evidence_sufficient": {
+                  "const": true
+                }
+              },
+              "required": [
+                "evidence_sufficient"
+              ]
+            },
+            "then": {
+              "properties": {
+                "score": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 4
+                },
+                "confidence": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                },
+                "evidence": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "minLength": 2
+                  }
+                },
+                "judgment": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "evidence_gap": {
+                  "const": ""
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "score": {
+                  "type": "null"
+                },
+                "evidence": {
+                  "type": "array",
+                  "maxItems": 0
+                },
+                "evidence_gap": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "gates": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "gate",
+          "evidence_sufficient",
+          "score",
+          "confidence",
+          "evidence",
+          "judgment",
+          "evidence_gap"
+        ],
+        "properties": {
+          "gate": {
+            "enum": [
+              "卖点识别门",
+              "情绪承诺门",
+              "开篇入口门",
+              "主角发动机门",
+              "最小兑现门",
+              "连载扩展门"
+            ]
+          },
+          "evidence_sufficient": {
+            "type": "boolean"
+          },
+          "score": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 4
+          },
+          "confidence": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "judgment": {
+            "type": "string"
+          },
+          "evidence_gap": {
+            "type": "string"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "evidence_sufficient": {
+                  "const": true
+                }
+              },
+              "required": [
+                "evidence_sufficient"
+              ]
+            },
+            "then": {
+              "properties": {
+                "score": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 4
+                },
+                "confidence": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                },
+                "evidence": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "minLength": 2
+                  }
+                },
+                "judgment": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "evidence_gap": {
+                  "const": ""
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "score": {
+                  "type": "null"
+                },
+                "evidence": {
+                  "type": "array",
+                  "maxItems": 0
+                },
+                "evidence_gap": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "top_issues": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "issue_id",
+          "primary_axis",
+          "related_axes",
+          "location",
+          "evidence",
+          "root_cause",
+          "commercial_damage",
+          "minimum_change"
+        ],
+        "properties": {
+          "issue_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "primary_axis": {
+            "enum": [
+              "因果代价轴",
+              "期待违背轴",
+              "极速流转轴",
+              "章尾钩子轴",
+              "活人冲突轴",
+              "侧面烘托轴",
+              "反差造梗轴",
+              "设定动作化轴"
+            ]
+          },
+          "related_axes": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "因果代价轴",
+                "期待违背轴",
+                "极速流转轴",
+                "章尾钩子轴",
+                "活人冲突轴",
+                "侧面烘托轴",
+                "反差造梗轴",
+                "设定动作化轴"
+              ]
+            }
+          },
+          "location": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 2
+          },
+          "root_cause": {
+            "type": "string",
+            "minLength": 1
+          },
+          "commercial_damage": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minimum_change": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "evidence_gaps": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "extraction_confidence": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    }
+  }
+}

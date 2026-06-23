@@ -1,0 +1,632 @@
+SELF-TEST PASS
+{
+  "neutral": {
+    "judgment_name": "开篇文本执行潜力",
+    "judgment_boundary": {
+      "allowed_judgment": "开篇文本执行潜力与首轮兑现能力",
+      "forbidden_extrapolation": "不得虚构真实市场数据、具体爆款概率、签约率、留存率或收入"
+    },
+    "raw_z": 0.0,
+    "activation": 0.5,
+    "activation_note": "内部线性激活值，不是市场成功概率",
+    "coverage": 1.0,
+    "weighted_coverage": 1.0,
+    "missing_axes": [],
+    "missing_critical_axes": [],
+    "raw_level": "中",
+    "final_level": "中",
+    "cap_reasons": [],
+    "features": {
+      "因果代价轴": 0.0,
+      "期待违背轴": 0.0,
+      "极速流转轴": 0.0,
+      "章尾钩子轴": 0.0,
+      "活人冲突轴": 0.0,
+      "侧面烘托轴": 0.0,
+      "反差造梗轴": 0.0,
+      "设定动作化轴": 0.0
+    },
+    "overload_factors": {
+      "因果代价轴": 1.0,
+      "期待违背轴": 1.0,
+      "极速流转轴": 1.0,
+      "章尾钩子轴": 1.0,
+      "活人冲突轴": 1.0,
+      "侧面烘托轴": 1.0,
+      "反差造梗轴": 1.0,
+      "设定动作化轴": 1.0
+    },
+    "high_overload_axes": [],
+    "weights": {
+      "因果代价轴": 0.45,
+      "期待违背轴": 0.55,
+      "极速流转轴": 0.65,
+      "章尾钩子轴": 0.75,
+      "活人冲突轴": 0.75,
+      "侧面烘托轴": 0.35,
+      "反差造梗轴": 0.25,
+      "设定动作化轴": 0.6
+    },
+    "critical_axes": [
+      "因果代价轴",
+      "极速流转轴",
+      "章尾钩子轴",
+      "活人冲突轴"
+    ],
+    "bias": 0.0,
+    "thresholds": {
+      "high": 0.68,
+      "medium": 0.5,
+      "low": 0.35,
+      "minimum_coverage": 0.625,
+      "minimum_weighted_coverage": 0.7
+    },
+    "weight_source": "self-test",
+    "weight_status": "uncalibrated",
+    "contributions": {
+      "因果代价轴": 0.0,
+      "期待违背轴": 0.0,
+      "极速流转轴": 0.0,
+      "章尾钩子轴": 0.0,
+      "活人冲突轴": 0.0,
+      "侧面烘托轴": 0.0,
+      "反差造梗轴": 0.0,
+      "设定动作化轴": 0.0
+    },
+    "top_positive": [],
+    "top_negative": []
+  },
+  "high": {
+    "judgment_name": "开篇文本执行潜力",
+    "judgment_boundary": {
+      "allowed_judgment": "开篇文本执行潜力与首轮兑现能力",
+      "forbidden_extrapolation": "不得虚构真实市场数据、具体爆款概率、签约率、留存率或收入"
+    },
+    "raw_z": 4.35,
+    "activation": 0.987258,
+    "activation_note": "内部线性激活值，不是市场成功概率",
+    "coverage": 1.0,
+    "weighted_coverage": 1.0,
+    "missing_axes": [],
+    "missing_critical_axes": [],
+    "raw_level": "高",
+    "final_level": "高",
+    "cap_reasons": [],
+    "features": {
+      "因果代价轴": 1.0,
+      "期待违背轴": 1.0,
+      "极速流转轴": 1.0,
+      "章尾钩子轴": 1.0,
+      "活人冲突轴": 1.0,
+      "侧面烘托轴": 1.0,
+      "反差造梗轴": 1.0,
+      "设定动作化轴": 1.0
+    },
+    "overload_factors": {
+      "因果代价轴": 1.0,
+      "期待违背轴": 1.0,
+      "极速流转轴": 1.0,
+      "章尾钩子轴": 1.0,
+      "活人冲突轴": 1.0,
+      "侧面烘托轴": 1.0,
+      "反差造梗轴": 1.0,
+      "设定动作化轴": 1.0
+    },
+    "high_overload_axes": [],
+    "weights": {
+      "因果代价轴": 0.45,
+      "期待违背轴": 0.55,
+      "极速流转轴": 0.65,
+      "章尾钩子轴": 0.75,
+      "活人冲突轴": 0.75,
+      "侧面烘托轴": 0.35,
+      "反差造梗轴": 0.25,
+      "设定动作化轴": 0.6
+    },
+    "critical_axes": [
+      "因果代价轴",
+      "极速流转轴",
+      "章尾钩子轴",
+      "活人冲突轴"
+    ],
+    "bias": 0.0,
+    "thresholds": {
+      "high": 0.68,
+      "medium": 0.5,
+      "low": 0.35,
+      "minimum_coverage": 0.625,
+      "minimum_weighted_coverage": 0.7
+    },
+    "weight_source": "self-test",
+    "weight_status": "uncalibrated",
+    "contributions": {
+      "因果代价轴": 0.45,
+      "期待违背轴": 0.55,
+      "极速流转轴": 0.65,
+      "章尾钩子轴": 0.75,
+      "活人冲突轴": 0.75,
+      "侧面烘托轴": 0.35,
+      "反差造梗轴": 0.25,
+      "设定动作化轴": 0.6
+    },
+    "top_positive": [
+      {
+        "axis": "章尾钩子轴",
+        "contribution": 0.75
+      },
+      {
+        "axis": "活人冲突轴",
+        "contribution": 0.75
+      },
+      {
+        "axis": "极速流转轴",
+        "contribution": 0.65
+      }
+    ],
+    "top_negative": []
+  },
+  "overloaded": {
+    "judgment_name": "开篇文本执行潜力",
+    "judgment_boundary": {
+      "allowed_judgment": "开篇文本执行潜力与首轮兑现能力",
+      "forbidden_extrapolation": "不得虚构真实市场数据、具体爆款概率、签约率、留存率或收入"
+    },
+    "raw_z": 1.0875,
+    "activation": 0.747911,
+    "activation_note": "内部线性激活值，不是市场成功概率",
+    "coverage": 1.0,
+    "weighted_coverage": 1.0,
+    "missing_axes": [],
+    "missing_critical_axes": [],
+    "raw_level": "高",
+    "final_level": "中",
+    "cap_reasons": [
+      "至少两个高分维度存在高过载风险，高等级被下调：因果代价轴、期待违背轴、极速流转轴、章尾钩子轴、活人冲突轴、侧面烘托轴、反差造梗轴、设定动作化轴"
+    ],
+    "features": {
+      "因果代价轴": 0.25,
+      "期待违背轴": 0.25,
+      "极速流转轴": 0.25,
+      "章尾钩子轴": 0.25,
+      "活人冲突轴": 0.25,
+      "侧面烘托轴": 0.25,
+      "反差造梗轴": 0.25,
+      "设定动作化轴": 0.25
+    },
+    "overload_factors": {
+      "因果代价轴": 0.25,
+      "期待违背轴": 0.25,
+      "极速流转轴": 0.25,
+      "章尾钩子轴": 0.25,
+      "活人冲突轴": 0.25,
+      "侧面烘托轴": 0.25,
+      "反差造梗轴": 0.25,
+      "设定动作化轴": 0.25
+    },
+    "high_overload_axes": [
+      "因果代价轴",
+      "期待违背轴",
+      "极速流转轴",
+      "章尾钩子轴",
+      "活人冲突轴",
+      "侧面烘托轴",
+      "反差造梗轴",
+      "设定动作化轴"
+    ],
+    "weights": {
+      "因果代价轴": 0.45,
+      "期待违背轴": 0.55,
+      "极速流转轴": 0.65,
+      "章尾钩子轴": 0.75,
+      "活人冲突轴": 0.75,
+      "侧面烘托轴": 0.35,
+      "反差造梗轴": 0.25,
+      "设定动作化轴": 0.6
+    },
+    "critical_axes": [
+      "因果代价轴",
+      "极速流转轴",
+      "章尾钩子轴",
+      "活人冲突轴"
+    ],
+    "bias": 0.0,
+    "thresholds": {
+      "high": 0.68,
+      "medium": 0.5,
+      "low": 0.35,
+      "minimum_coverage": 0.625,
+      "minimum_weighted_coverage": 0.7
+    },
+    "weight_source": "self-test",
+    "weight_status": "uncalibrated",
+    "contributions": {
+      "因果代价轴": 0.1125,
+      "期待违背轴": 0.1375,
+      "极速流转轴": 0.1625,
+      "章尾钩子轴": 0.1875,
+      "活人冲突轴": 0.1875,
+      "侧面烘托轴": 0.0875,
+      "反差造梗轴": 0.0625,
+      "设定动作化轴": 0.15
+    },
+    "top_positive": [
+      {
+        "axis": "章尾钩子轴",
+        "contribution": 0.1875
+      },
+      {
+        "axis": "活人冲突轴",
+        "contribution": 0.1875
+      },
+      {
+        "axis": "极速流转轴",
+        "contribution": 0.1625
+      }
+    ],
+    "top_negative": []
+  },
+  "missing": {
+    "judgment_name": "开篇文本执行潜力",
+    "judgment_boundary": {
+      "allowed_judgment": "开篇文本执行潜力与首轮兑现能力",
+      "forbidden_extrapolation": "不得虚构真实市场数据、具体爆款概率、签约率、留存率或收入"
+    },
+    "raw_z": 0.0,
+    "activation": 0.5,
+    "activation_note": "内部线性激活值，不是市场成功概率",
+    "coverage": 0.5,
+    "weighted_coverage": 0.448276,
+    "missing_axes": [
+      "因果代价轴",
+      "期待违背轴",
+      "极速流转轴",
+      "章尾钩子轴"
+    ],
+    "missing_critical_axes": [
+      "因果代价轴",
+      "极速流转轴",
+      "章尾钩子轴"
+    ],
+    "raw_level": "证据不足",
+    "final_level": "证据不足",
+    "cap_reasons": [
+      "有效维度覆盖率不足：50.0%",
+      "权重覆盖率不足：44.8%",
+      "关键轴证据不足：因果代价轴、极速流转轴、章尾钩子轴"
+    ],
+    "features": {
+      "因果代价轴": null,
+      "期待违背轴": null,
+      "极速流转轴": null,
+      "章尾钩子轴": null,
+      "活人冲突轴": 0.0,
+      "侧面烘托轴": 0.0,
+      "反差造梗轴": 0.0,
+      "设定动作化轴": 0.0
+    },
+    "overload_factors": {
+      "因果代价轴": null,
+      "期待违背轴": null,
+      "极速流转轴": null,
+      "章尾钩子轴": null,
+      "活人冲突轴": 1.0,
+      "侧面烘托轴": 1.0,
+      "反差造梗轴": 1.0,
+      "设定动作化轴": 1.0
+    },
+    "high_overload_axes": [],
+    "weights": {
+      "因果代价轴": 0.45,
+      "期待违背轴": 0.55,
+      "极速流转轴": 0.65,
+      "章尾钩子轴": 0.75,
+      "活人冲突轴": 0.75,
+      "侧面烘托轴": 0.35,
+      "反差造梗轴": 0.25,
+      "设定动作化轴": 0.6
+    },
+    "critical_axes": [
+      "因果代价轴",
+      "极速流转轴",
+      "章尾钩子轴",
+      "活人冲突轴"
+    ],
+    "bias": 0.0,
+    "thresholds": {
+      "high": 0.68,
+      "medium": 0.5,
+      "low": 0.35,
+      "minimum_coverage": 0.625,
+      "minimum_weighted_coverage": 0.7
+    },
+    "weight_source": "self-test",
+    "weight_status": "uncalibrated",
+    "contributions": {
+      "因果代价轴": null,
+      "期待违背轴": null,
+      "极速流转轴": null,
+      "章尾钩子轴": null,
+      "活人冲突轴": 0.0,
+      "侧面烘托轴": 0.0,
+      "反差造梗轴": 0.0,
+      "设定动作化轴": 0.0
+    },
+    "top_positive": [],
+    "top_negative": []
+  },
+  "critical_missing": {
+    "judgment_name": "开篇文本执行潜力",
+    "judgment_boundary": {
+      "allowed_judgment": "开篇文本执行潜力与首轮兑现能力",
+      "forbidden_extrapolation": "不得虚构真实市场数据、具体爆款概率、签约率、留存率或收入"
+    },
+    "raw_z": 1.8,
+    "activation": 0.858149,
+    "activation_note": "内部线性激活值，不是市场成功概率",
+    "coverage": 0.875,
+    "weighted_coverage": 0.827586,
+    "missing_axes": [
+      "章尾钩子轴"
+    ],
+    "missing_critical_axes": [
+      "章尾钩子轴"
+    ],
+    "raw_level": "证据不足",
+    "final_level": "证据不足",
+    "cap_reasons": [
+      "关键轴证据不足：章尾钩子轴"
+    ],
+    "features": {
+      "因果代价轴": 0.5,
+      "期待违背轴": 0.5,
+      "极速流转轴": 0.5,
+      "章尾钩子轴": null,
+      "活人冲突轴": 0.5,
+      "侧面烘托轴": 0.5,
+      "反差造梗轴": 0.5,
+      "设定动作化轴": 0.5
+    },
+    "overload_factors": {
+      "因果代价轴": 1.0,
+      "期待违背轴": 1.0,
+      "极速流转轴": 1.0,
+      "章尾钩子轴": null,
+      "活人冲突轴": 1.0,
+      "侧面烘托轴": 1.0,
+      "反差造梗轴": 1.0,
+      "设定动作化轴": 1.0
+    },
+    "high_overload_axes": [],
+    "weights": {
+      "因果代价轴": 0.45,
+      "期待违背轴": 0.55,
+      "极速流转轴": 0.65,
+      "章尾钩子轴": 0.75,
+      "活人冲突轴": 0.75,
+      "侧面烘托轴": 0.35,
+      "反差造梗轴": 0.25,
+      "设定动作化轴": 0.6
+    },
+    "critical_axes": [
+      "因果代价轴",
+      "极速流转轴",
+      "章尾钩子轴",
+      "活人冲突轴"
+    ],
+    "bias": 0.0,
+    "thresholds": {
+      "high": 0.68,
+      "medium": 0.5,
+      "low": 0.35,
+      "minimum_coverage": 0.625,
+      "minimum_weighted_coverage": 0.7
+    },
+    "weight_source": "self-test",
+    "weight_status": "uncalibrated",
+    "contributions": {
+      "因果代价轴": 0.225,
+      "期待违背轴": 0.275,
+      "极速流转轴": 0.325,
+      "章尾钩子轴": null,
+      "活人冲突轴": 0.375,
+      "侧面烘托轴": 0.175,
+      "反差造梗轴": 0.125,
+      "设定动作化轴": 0.3
+    },
+    "top_positive": [
+      {
+        "axis": "活人冲突轴",
+        "contribution": 0.375
+      },
+      {
+        "axis": "极速流转轴",
+        "contribution": 0.325
+      },
+      {
+        "axis": "设定动作化轴",
+        "contribution": 0.3
+      }
+    ],
+    "top_negative": []
+  },
+  "weighted_missing": {
+    "judgment_name": "开篇文本执行潜力",
+    "judgment_boundary": {
+      "allowed_judgment": "开篇文本执行潜力与首轮兑现能力",
+      "forbidden_extrapolation": "不得虚构真实市场数据、具体爆款概率、签约率、留存率或收入"
+    },
+    "raw_z": 0.3,
+    "activation": 0.574443,
+    "activation_note": "内部线性激活值，不是市场成功概率",
+    "coverage": 0.75,
+    "weighted_coverage": 0.029126,
+    "missing_axes": [
+      "因果代价轴",
+      "章尾钩子轴"
+    ],
+    "missing_critical_axes": [],
+    "raw_level": "证据不足",
+    "final_level": "证据不足",
+    "cap_reasons": [
+      "权重覆盖率不足：2.9%"
+    ],
+    "features": {
+      "因果代价轴": null,
+      "期待违背轴": 0.5,
+      "极速流转轴": 0.5,
+      "章尾钩子轴": null,
+      "活人冲突轴": 0.5,
+      "侧面烘托轴": 0.5,
+      "反差造梗轴": 0.5,
+      "设定动作化轴": 0.5
+    },
+    "overload_factors": {
+      "因果代价轴": null,
+      "期待违背轴": 1.0,
+      "极速流转轴": 1.0,
+      "章尾钩子轴": null,
+      "活人冲突轴": 1.0,
+      "侧面烘托轴": 1.0,
+      "反差造梗轴": 1.0,
+      "设定动作化轴": 1.0
+    },
+    "high_overload_axes": [],
+    "weights": {
+      "因果代价轴": 10.0,
+      "期待违背轴": 0.1,
+      "极速流转轴": 0.1,
+      "章尾钩子轴": 10.0,
+      "活人冲突轴": 0.1,
+      "侧面烘托轴": 0.1,
+      "反差造梗轴": 0.1,
+      "设定动作化轴": 0.1
+    },
+    "critical_axes": [],
+    "bias": 0.0,
+    "thresholds": {
+      "high": 0.68,
+      "medium": 0.5,
+      "low": 0.35,
+      "minimum_coverage": 0.625,
+      "minimum_weighted_coverage": 0.7
+    },
+    "weight_source": "weighted-self-test",
+    "weight_status": "uncalibrated",
+    "contributions": {
+      "因果代价轴": null,
+      "期待违背轴": 0.05,
+      "极速流转轴": 0.05,
+      "章尾钩子轴": null,
+      "活人冲突轴": 0.05,
+      "侧面烘托轴": 0.05,
+      "反差造梗轴": 0.05,
+      "设定动作化轴": 0.05
+    },
+    "top_positive": [
+      {
+        "axis": "期待违背轴",
+        "contribution": 0.05
+      },
+      {
+        "axis": "极速流转轴",
+        "contribution": 0.05
+      },
+      {
+        "axis": "活人冲突轴",
+        "contribution": 0.05
+      }
+    ],
+    "top_negative": []
+  },
+  "gated": {
+    "judgment_name": "开篇文本执行潜力",
+    "judgment_boundary": {
+      "allowed_judgment": "开篇文本执行潜力与首轮兑现能力",
+      "forbidden_extrapolation": "不得虚构真实市场数据、具体爆款概率、签约率、留存率或收入"
+    },
+    "raw_z": 4.35,
+    "activation": 0.987258,
+    "activation_note": "内部线性激活值，不是市场成功概率",
+    "coverage": 1.0,
+    "weighted_coverage": 1.0,
+    "missing_axes": [],
+    "missing_critical_axes": [],
+    "raw_level": "高",
+    "final_level": "低",
+    "cap_reasons": [
+      "关键商业门未过，八维高分不得补偿：卖点识别门"
+    ],
+    "features": {
+      "因果代价轴": 1.0,
+      "期待违背轴": 1.0,
+      "极速流转轴": 1.0,
+      "章尾钩子轴": 1.0,
+      "活人冲突轴": 1.0,
+      "侧面烘托轴": 1.0,
+      "反差造梗轴": 1.0,
+      "设定动作化轴": 1.0
+    },
+    "overload_factors": {
+      "因果代价轴": 1.0,
+      "期待违背轴": 1.0,
+      "极速流转轴": 1.0,
+      "章尾钩子轴": 1.0,
+      "活人冲突轴": 1.0,
+      "侧面烘托轴": 1.0,
+      "反差造梗轴": 1.0,
+      "设定动作化轴": 1.0
+    },
+    "high_overload_axes": [],
+    "weights": {
+      "因果代价轴": 0.45,
+      "期待违背轴": 0.55,
+      "极速流转轴": 0.65,
+      "章尾钩子轴": 0.75,
+      "活人冲突轴": 0.75,
+      "侧面烘托轴": 0.35,
+      "反差造梗轴": 0.25,
+      "设定动作化轴": 0.6
+    },
+    "critical_axes": [
+      "因果代价轴",
+      "极速流转轴",
+      "章尾钩子轴",
+      "活人冲突轴"
+    ],
+    "bias": 0.0,
+    "thresholds": {
+      "high": 0.68,
+      "medium": 0.5,
+      "low": 0.35,
+      "minimum_coverage": 0.625,
+      "minimum_weighted_coverage": 0.7
+    },
+    "weight_source": "self-test",
+    "weight_status": "uncalibrated",
+    "contributions": {
+      "因果代价轴": 0.45,
+      "期待违背轴": 0.55,
+      "极速流转轴": 0.65,
+      "章尾钩子轴": 0.75,
+      "活人冲突轴": 0.75,
+      "侧面烘托轴": 0.35,
+      "反差造梗轴": 0.25,
+      "设定动作化轴": 0.6
+    },
+    "top_positive": [
+      {
+        "axis": "章尾钩子轴",
+        "contribution": 0.75
+      },
+      {
+        "axis": "活人冲突轴",
+        "contribution": 0.75
+      },
+      {
+        "axis": "极速流转轴",
+        "contribution": 0.65
+      }
+    ],
+    "top_negative": []
+  }
+}

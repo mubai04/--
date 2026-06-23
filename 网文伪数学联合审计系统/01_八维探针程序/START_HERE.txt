@@ -1,0 +1,7 @@
+八维伪线性探针 v3.2.1 CANDIDATE
+
+1. 首先阅读 README_运行说明.md。
+2. 运行：python pseudo_linear_probe.py self-test
+3. 可直接复现包内示例：samples、examples、reports。
+4. 本包采用 UTF-8 文件名和内容编码；建议使用 Windows 11、7-Zip 或新版解压工具。
+5. 当前状态为工程候选版，不是已完成市场校准的稳定版。

@@ -1,0 +1,10 @@
+{
+  "version": "3.2.1",
+  "status": "CANDIDATE",
+  "schema_version": "3.2.1",
+  "rubric_version": "八维伪线性探针-v3.2.1",
+  "local_code_loop": "PASS",
+  "market_calibration": "NOT_PROVEN",
+  "freeze_allowed": false,
+  "compatible_interface": "INTERFACE_网文伪数学公式总表_八维探针_v1.0.json"
+}

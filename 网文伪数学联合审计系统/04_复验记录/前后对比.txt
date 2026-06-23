@@ -1,0 +1,2 @@
+对比 JSON：/mnt/data/zh_pack_work/compare_check.json
+对比 Markdown：/mnt/data/zh_pack_work/compare_check.md

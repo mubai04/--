@@ -1,0 +1,160 @@
+{
+  "project": "网文伪数学分析器",
+  "version": "0.2.0",
+  "calibration_level": "C0",
+  "task": {
+    "task_id": "Mushenji-range-256eac9328dc",
+    "work_id": "Mushenji",
+    "scope_type": "range",
+    "chapters": [
+      "0001",
+      "0002"
+    ],
+    "source_sha256": "256eac9328dc59841279a891ac92c60643be6b96a7c59ad295292ad371cb7bbf",
+    "text_char_count": 7714
+  },
+  "decision": {
+    "state": "NEEDS_REVIEW",
+    "reasons": [
+      "至少一个硬闸门为 UNKNOWN"
+    ]
+  },
+  "gate_state": "NEEDS_REVIEW",
+  "gates": {
+    "G_C": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "烟测提取：未进行人工编码，保守标记为 UNKNOWN"
+    },
+    "G_A": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "烟测提取：未进行人工编码，保守标记为 UNKNOWN"
+    },
+    "G_L": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "烟测提取：未进行人工编码，保守标记为 UNKNOWN"
+    },
+    "G_P": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "烟测提取：未进行人工编码，保守标记为 UNKNOWN"
+    }
+  },
+  "chapter_profile": {
+    "S_ch_interval": null,
+    "dimensions": {
+      "U_ch": null,
+      "C_ch": null,
+      "A_ch": null,
+      "E_ch": null,
+      "R_ch": null,
+      "F_ch": null
+    }
+  },
+  "risk_vector": {
+    "R_narrative": {
+      "interval": null,
+      "center": null,
+      "status": "INSUFFICIENT_DATA",
+      "action": "补充样本或人工复核",
+      "stability": null
+    },
+    "R_creative": {
+      "interval": null,
+      "center": null,
+      "status": "INSUFFICIENT_DATA",
+      "action": "补充样本或人工复核",
+      "stability": null
+    },
+    "R_character": {
+      "interval": null,
+      "center": null,
+      "status": "INSUFFICIENT_DATA",
+      "action": "补充样本或人工复核",
+      "stability": null
+    },
+    "R_technical": {
+      "interval": null,
+      "center": null,
+      "status": "INSUFFICIENT_DATA",
+      "action": "补充样本或人工复核",
+      "stability": null
+    },
+    "R_reader": {
+      "interval": null,
+      "center": null,
+      "status": "INSUFFICIENT_DATA",
+      "action": "补充样本或人工复核",
+      "stability": null
+    },
+    "R_convergence": {
+      "interval": null,
+      "center": null,
+      "status": "INSUFFICIENT_DATA",
+      "action": "补充样本或人工复核",
+      "stability": null
+    },
+    "R_embodiment": {
+      "interval": null,
+      "center": null,
+      "status": "INSUFFICIENT_DATA",
+      "action": "补充样本或人工复核",
+      "stability": null
+    },
+    "R_ambiguity": {
+      "interval": null,
+      "center": null,
+      "status": "INSUFFICIENT_DATA",
+      "action": "补充样本或人工复核",
+      "stability": null
+    },
+    "R_language": {
+      "interval": null,
+      "center": null,
+      "status": "INSUFFICIENT_DATA",
+      "action": "补充样本或人工复核",
+      "stability": null
+    }
+  },
+  "ai_style_index": null,
+  "anti_gaming": {
+    "AG_SENSORY_STUFFING": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "烟测提取：未进行人工编码"
+    },
+    "AG_RANDOM_REVERSAL": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "烟测提取：未进行人工编码"
+    },
+    "AG_MEANINGLESS_CHOICE": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "烟测提取：未进行人工编码"
+    },
+    "AG_SYMBOL_SPAM": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "烟测提取：未进行人工编码"
+    },
+    "AG_RANDOM_RHYTHM": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "烟测提取：未进行人工编码"
+    },
+    "AG_HARMFUL_OMISSION": {
+      "status": "UNKNOWN",
+      "evidence": [],
+      "judgment": "烟测提取：未进行人工编码"
+    }
+  },
+  "findings": [],
+  "boundaries": [
+    "风险值不是客观文学质量",
+    "AI_STYLE_INDEX不是作者身份概率",
+    "C0结果不得用于跨作者排名或商业成功预测"
+  ]
+}

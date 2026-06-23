@@ -1,0 +1,10 @@
+{
+  "package": "网文伪数学联合审计系统",
+  "version": "1.0.2",
+  "state": "CANDIDATE",
+  "joint_input_truthfulness": "passed_candidate",
+  "probe_version": "3.2.1",
+  "ai_probability_calibration": "not_completed",
+  "market_calibration": "not_completed",
+  "frozen": false
+}

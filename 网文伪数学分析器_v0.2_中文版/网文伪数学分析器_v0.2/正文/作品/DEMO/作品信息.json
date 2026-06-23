@@ -1,0 +1,11 @@
+{
+  "work_id": "DEMO",
+  "title": "示例作品",
+  "genre": "未设置",
+  "platform": "未设置",
+  "current_version": "v001",
+  "chapter_directory": "当前版本/章节",
+  "encoding": "utf-8",
+  "chapter_order_rule": "filename_numeric_prefix",
+  "calibration_group": "未校准"
+}

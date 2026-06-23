@@ -1,0 +1,392 @@
+[
+  {
+    "path": "00_开始使用.txt",
+    "size": 427,
+    "sha256": "7f1d687e794d1f2d8f75503bbc30b0bd84ce19c5c1260b6f1803018d62ec4ccd"
+  },
+  {
+    "path": "01_八维探针程序/.editorconfig",
+    "size": 78,
+    "sha256": "a38dc184aabf62d6bea89d602420a10eb74d0cf4c464968cf6b597670752e669"
+  },
+  {
+    "path": "01_八维探针程序/CHANGELOG_v3.2_to_v3.2.1.md",
+    "size": 868,
+    "sha256": "9835cb23770cb70bc1d70692981fac48de467198a5e9b473e9d95afbd659f9cd"
+  },
+  {
+    "path": "01_八维探针程序/CODEX_执行指令.md",
+    "size": 1205,
+    "sha256": "b4245f0492a34ceeae8ce3cc50b9c57d392496c15c7e5a088e9ab9e85f153f89"
+  },
+  {
+    "path": "01_八维探针程序/INTERFACE_网文伪数学公式总表_八维探针_v1.0.json",
+    "size": 2159,
+    "sha256": "331fbf145fcfdf12784d4dda6bb714a6fee8689d8ad61881d3f6952d6471bf0a"
+  },
+  {
+    "path": "01_八维探针程序/INTERFACE_网文伪数学公式总表_八维探针_v1.0.md",
+    "size": 4014,
+    "sha256": "5ebf3f17b15db0e4fe12e9d71526530983be5f6afd9753f57bad11bbf27e2e01"
+  },
+  {
+    "path": "01_八维探针程序/MANIFEST.sha256",
+    "size": 4238,
+    "sha256": "b3dd6533252da0f92d8162244e0535d7a12810fdbf7ad9bb5f8d6c1560ab979d"
+  },
+  {
+    "path": "01_八维探针程序/PACKAGE_STATUS.json",
+    "size": 315,
+    "sha256": "2600a8f9cfe180916947079ba82040df1260dcc789e8f4e34c43a0da780f79b3"
+  },
+  {
+    "path": "01_八维探针程序/README_运行说明.md",
+    "size": 6469,
+    "sha256": "284cb40cbc33e90ca17749e0674bcbef60ed8ce7d46c5f05e9586a17c970885b"
+  },
+  {
+    "path": "01_八维探针程序/SET_UTF8_CONSOLE.ps1",
+    "size": 226,
+    "sha256": "97bf37fd532d9caad25b234580c56fc1c15011d33ed900b90360ec3d5cdc8b83"
+  },
+  {
+    "path": "01_八维探针程序/START_HERE.txt",
+    "size": 384,
+    "sha256": "1899a6c103c36e60beb0a589142f5725fe07c29edc6fa3488d8f8cb34db7cd81"
+  },
+  {
+    "path": "01_八维探针程序/TEST_EVIDENCE_v3.2.1.md",
+    "size": 4294,
+    "sha256": "50c9d05396dcbda8fcf793f21f163c62f1cde2f3f4cc7916769a105e232d8ee8"
+  },
+  {
+    "path": "01_八维探针程序/examples/after_task/CODEX_TASK.md",
+    "size": 3680,
+    "sha256": "f2ce007813499b7c70783cda092847d063ade6a561a1d6c70ee5ae08207f968e"
+  },
+  {
+    "path": "01_八维探针程序/examples/after_task/extraction.json",
+    "size": 6454,
+    "sha256": "41e0e93456ed4d580da9dfdef2e4715df6d2d800157737653db8fb85b214e4c6"
+  },
+  {
+    "path": "01_八维探针程序/examples/after_task/extraction.schema.json",
+    "size": 11020,
+    "sha256": "9e8ac610b1dfa045c5860b49e08518cbbed8906de45f043ecbd0ccd01fae3ec7"
+  },
+  {
+    "path": "01_八维探针程序/examples/after_task/extraction.template.json",
+    "size": 4212,
+    "sha256": "03891cf66a8321c7d1f4ff773bd32046dd669cc026cf93072713bc12041053ee"
+  },
+  {
+    "path": "01_八维探针程序/examples/after_task/task.json",
+    "size": 1750,
+    "sha256": "dc816a0469d848016fc67fcd0f342c5ecab28ebf822dc6549fb9f4fee11702a7"
+  },
+  {
+    "path": "01_八维探针程序/examples/before_task/CODEX_TASK.md",
+    "size": 3683,
+    "sha256": "0a2f4f75b8d924725d9f68fc783b8fe4886812ae8ff864ccb68e60283f885df0"
+  },
+  {
+    "path": "01_八维探针程序/examples/before_task/extraction.json",
+    "size": 6447,
+    "sha256": "0e342887c577cc783f216c94843ed0c2cb31ed7a5d5ccb8c9b88889817a9f487"
+  },
+  {
+    "path": "01_八维探针程序/examples/before_task/extraction.schema.json",
+    "size": 11020,
+    "sha256": "9e8ac610b1dfa045c5860b49e08518cbbed8906de45f043ecbd0ccd01fae3ec7"
+  },
+  {
+    "path": "01_八维探针程序/examples/before_task/extraction.template.json",
+    "size": 4212,
+    "sha256": "3eb2df4a3964bc870994566aed75a89deb65560e5b871b94c7894849301e6ec6"
+  },
+  {
+    "path": "01_八维探针程序/examples/before_task/task.json",
+    "size": 1280,
+    "sha256": "ecd0c759ad4fd732c4d46987df57ccff051d848fe9da79838e8ae3b20bdb01a6"
+  },
+  {
+    "path": "01_八维探针程序/examples/revision_relation.json",
+    "size": 360,
+    "sha256": "65c8dc0507066f439c8a4a0d7a564f6132db8705b594477d2eeb3bbb1d4d39b3"
+  },
+  {
+    "path": "01_八维探针程序/history/CHANGELOG_v3.0_to_v3.1.md",
+    "size": 1224,
+    "sha256": "6f1daf7798a9d06fe2f7fb63458c415c6de786b9edac82b5575dc4adda1c4515"
+  },
+  {
+    "path": "01_八维探针程序/history/CHANGELOG_v3.1_to_v3.2.md",
+    "size": 796,
+    "sha256": "2351ca472e02c87c5b7350d02dd5b39b0c9d51563fc76d3bfa0bedc2174c4874"
+  },
+  {
+    "path": "01_八维探针程序/history/验收报告_v3.1.md",
+    "size": 1908,
+    "sha256": "2834792a736d3e4dd9e4d627ffc2879c53a5964f81b342856907ff7e822fc058"
+  },
+  {
+    "path": "01_八维探针程序/history/验收报告_v3.2.md",
+    "size": 2171,
+    "sha256": "f294b257f716fe2941ae3ca7dd9a9c0d79586f9767ce917b17e66d77229c103e"
+  },
+  {
+    "path": "01_八维探针程序/metadata.example.json",
+    "size": 156,
+    "sha256": "e293093ed36b18484a86ca09aa14a60f40f661ae3b907c4aa7b1d206bf60e005"
+  },
+  {
+    "path": "01_八维探针程序/pseudo_linear_probe.py",
+    "size": 78804,
+    "sha256": "9bdbd4734d97158cc119307cf5e7fa686891d61ac31de422c6b323216e6b1f5f"
+  },
+  {
+    "path": "01_八维探针程序/reports/after.probe.json",
+    "size": 10013,
+    "sha256": "8247ce006671696c469301e92636720935b6d908c48a838f79c8016d2f769824"
+  },
+  {
+    "path": "01_八维探针程序/reports/after.probe.md",
+    "size": 4069,
+    "sha256": "07fe89e582af3b06749eb4362d976c5c2fce28836eb6c4e83ef6d2981ea5b389"
+  },
+  {
+    "path": "01_八维探针程序/reports/batch/after_task/probe.report.json",
+    "size": 10013,
+    "sha256": "5da7216adf05327472ec3364112aa64251f2cf46f0aafa23ff5036b8d770726f"
+  },
+  {
+    "path": "01_八维探针程序/reports/batch/after_task/probe.report.md",
+    "size": 4069,
+    "sha256": "07fe89e582af3b06749eb4362d976c5c2fce28836eb6c4e83ef6d2981ea5b389"
+  },
+  {
+    "path": "01_八维探针程序/reports/batch/before_task/probe.report.json",
+    "size": 9922,
+    "sha256": "de88f8070774f5b1d469f04ea7c527d4673bcf6ac8188d3b64fff66070bb8d64"
+  },
+  {
+    "path": "01_八维探针程序/reports/batch/before_task/probe.report.md",
+    "size": 3825,
+    "sha256": "83f9a526bc7fbb2e88c1a56d8169bb765c2c7f9c83f693ab1b26ba915d84af17"
+  },
+  {
+    "path": "01_八维探针程序/reports/batch/probe_failures.json",
+    "size": 3,
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  {
+    "path": "01_八维探针程序/reports/batch/probe_index.csv",
+    "size": 237,
+    "sha256": "d4f0204d3245e5ea454aada5e452a32ab5d808e8847cd387c445afa10a3f2579"
+  },
+  {
+    "path": "01_八维探针程序/reports/before.probe.json",
+    "size": 9922,
+    "sha256": "716632775e6d167ed9df07c01b331694ec039facbb345ddb6a6ddc143ca88d41"
+  },
+  {
+    "path": "01_八维探针程序/reports/before.probe.md",
+    "size": 3825,
+    "sha256": "83f9a526bc7fbb2e88c1a56d8169bb765c2c7f9c83f693ab1b26ba915d84af17"
+  },
+  {
+    "path": "01_八维探针程序/reports/before_after.compare.json",
+    "size": 1893,
+    "sha256": "1e07331bcb3da04100e789cbebca45bc6ec7e9a705cd24471d3cf88a52c9bf87"
+  },
+  {
+    "path": "01_八维探针程序/reports/before_after.compare.md",
+    "size": 652,
+    "sha256": "ba5ab3b162c53c79637a4ab460da8d92a22808f3ed4f9b7f7287f408d19f7cb7"
+  },
+  {
+    "path": "01_八维探针程序/samples/chapter_after.txt",
+    "size": 1111,
+    "sha256": "072d24ec37574df1361b7f2eff2084d8057b644061b500e51a0793f1eb9e6dd9"
+  },
+  {
+    "path": "01_八维探针程序/samples/chapter_before.txt",
+    "size": 641,
+    "sha256": "8df532e45a2ac961704ff2eb2993e81866079c79d8fa02826ee58ab97b6e514b"
+  },
+  {
+    "path": "01_八维探针程序/爆款判断_八维伪线性探针_v3.2.1_CANDIDATE.md",
+    "size": 44996,
+    "sha256": "7eb0ea5a486cdb345c3bf244738de27e54e166ecf9361affb62c8c16fd85f738"
+  },
+  {
+    "path": "01_八维探针程序/验收报告_v3.2.1.md",
+    "size": 2322,
+    "sha256": "994295e86d36776cdc5d9b069b4d1b911cf1d57818e6d2f7c2770629420447be"
+  },
+  {
+    "path": "02_伪数学公式总表/网文伪数学公式与功能总表_v1.0_修订版.docx",
+    "size": 57940,
+    "sha256": "832d8b2f8eab49fffb33ae92925d17a2c4657929e7be69721405f993fd2c4300"
+  },
+  {
+    "path": "03_验收与接口规范/八维伪线性探针_v3.2.1_联合验收报告.docx",
+    "size": 41291,
+    "sha256": "40bc607f06398851122183e5599e7df5bb9c5fc8b16b4db2f5c8e95023e709a3"
+  },
+  {
+    "path": "03_验收与接口规范/网文伪数学公式总表_八维探针接口映射_v1.0.docx",
+    "size": 42015,
+    "sha256": "64e8282bc746e84c4459dd9cd9bbcbafb45731fa2887cc3102699f172a6895c7"
+  },
+  {
+    "path": "03_验收与接口规范/网文伪数学公式总表_八维探针接口映射_v1.0.json",
+    "size": 2159,
+    "sha256": "331fbf145fcfdf12784d4dda6bb714a6fee8689d8ad61881d3f6952d6471bf0a"
+  },
+  {
+    "path": "04_复验记录/修改前评分.txt",
+    "size": 178,
+    "sha256": "c5664d079d7f6cb066edba11c667925f2f27200cafe09951d497a50f906af7f8"
+  },
+  {
+    "path": "04_复验记录/修改后评分.txt",
+    "size": 176,
+    "sha256": "f89419b9e01b5eef310931355ed23c53cfc45bd365b8549ac677e853cd75e4dd"
+  },
+  {
+    "path": "04_复验记录/前后对比.txt",
+    "size": 114,
+    "sha256": "74b49c5f7b1e5d772a5290afba5437ea9c40802702d59c82037500f55f7d8406"
+  },
+  {
+    "path": "04_复验记录/本地自检.txt",
+    "size": 17394,
+    "sha256": "c1e47d280b6931b5a49cfeded2cfb5bef86c9090bedfdae31a6481211c26a94a"
+  },
+  {
+    "path": "04_复验记录/清单复验.txt",
+    "size": 47,
+    "sha256": "1b666b8213be7be19adbbdb92dcf8ea6030afd08005306c06cd8955a59999f30"
+  },
+  {
+    "path": "05_联合审计运行层/CODEX_联合提取指令.md",
+    "size": 512,
+    "sha256": "8f635fcd2f0c59ed388b5c0c3a57c2d62e44a91f522fa814e6a76a324724d81c"
+  },
+  {
+    "path": "05_联合审计运行层/README_联合审计.md",
+    "size": 1703,
+    "sha256": "d5d578f3393e847b369a0ef3ca9c1e03ff466fe81d9399692ab8e5dcb703508a"
+  },
+  {
+    "path": "05_联合审计运行层/TEST_EVIDENCE_联合审计.md",
+    "size": 1016,
+    "sha256": "727e633c262effa7890b3226af0b4c522a6d21ae8e952f750c9fce68a3a83557"
+  },
+  {
+    "path": "05_联合审计运行层/history_v1.0.0/README_联合审计.md",
+    "size": 842,
+    "sha256": "6d19016a6098fe076d1feebdf65e8e1d9408266e32074d20e7f36d26c0aeb45c"
+  },
+  {
+    "path": "05_联合审计运行层/history_v1.0.0/TEST_EVIDENCE_联合审计.md",
+    "size": 416,
+    "sha256": "2ad2d35af133f9e1ffc3ea4ef4f1e98ca8fae9e4e33eeae7febc4fd8b11b9531"
+  },
+  {
+    "path": "05_联合审计运行层/history_v1.0.0/广域审计模板.json",
+    "size": 501,
+    "sha256": "d73c2bb6d227fa6155f8d71820252246a433b5cc3d5e34c2ca50939dce670227"
+  },
+  {
+    "path": "05_联合审计运行层/history_v1.0.0/第一章_八维探针摘要.json",
+    "size": 1516,
+    "sha256": "29ca98b0e7c7605dba7d77503ab0e8fae268721529fb560cbfd6deefd6b9438a"
+  },
+  {
+    "path": "05_联合审计运行层/history_v1.0.0/第一章_广域审计.json",
+    "size": 2350,
+    "sha256": "d3e95f2f1bfbf70cddb73541127a34c7611a685e20ae9e73269891f8e2719274"
+  },
+  {
+    "path": "05_联合审计运行层/history_v1.0.0/联合审计器.py",
+    "size": 12225,
+    "sha256": "881d48b78c5f1255d6d4dec95803c5feb8f3cbd351c74a48c453a7137edc88d5"
+  },
+  {
+    "path": "05_联合审计运行层/修复报告_v1.0.1.md",
+    "size": 1064,
+    "sha256": "4dc716edab439b109fee661408da0bfe1fe73c499a2bf552b0c5a60e13036c3c"
+  },
+  {
+    "path": "05_联合审计运行层/八维探针摘要.schema.json",
+    "size": 1141,
+    "sha256": "e24076cc1401ba8e85169eb147c900d88a00c467ce6cca1aa60d86a2f8ecf9cb"
+  },
+  {
+    "path": "05_联合审计运行层/广域审计模板.json",
+    "size": 9341,
+    "sha256": "fcd8dc45b177d5a34c73ccbe3153777a1975c8ab729e0d48857c47b503efe9d0"
+  },
+  {
+    "path": "05_联合审计运行层/广域审计输入.schema.json",
+    "size": 1357,
+    "sha256": "93a47feba5bee2f28825c0e1dd840fcab4a281afaad3120ffc0dbf9ee85c2f2f"
+  },
+  {
+    "path": "05_联合审计运行层/接口执行状态_v1.0.1.md",
+    "size": 527,
+    "sha256": "69f6adefb89fe4215cc0f0e3b1ad71c5f1e2fdcb3227920f5ff11cc62e08d404"
+  },
+  {
+    "path": "05_联合审计运行层/测试报告/本地联合自检.txt",
+    "size": 106,
+    "sha256": "afb1cee3be2487c3522a08266477249760b08cad8fb9eb51308107f8c3b7270b"
+  },
+  {
+    "path": "05_联合审计运行层/测试报告/第一章_完整联合审计报告.json",
+    "size": 19550,
+    "sha256": "cf69f44c87a84386a873c10e02600fa9fb83eddc56ef9c6ab05ea454f5d29056"
+  },
+  {
+    "path": "05_联合审计运行层/测试报告/第一章_完整联合审计报告.md",
+    "size": 10706,
+    "sha256": "7319b2c99ffaf29af8f55c49db19b4664149e7c2c197e7131764bdb3f1c1ae2e"
+  },
+  {
+    "path": "05_联合审计运行层/测试报告/运行结果.txt",
+    "size": 17,
+    "sha256": "91115ecaba370cb7523a7c5e848ddb6e5a2bc16006b9cd4de439ad166df8b9f8"
+  },
+  {
+    "path": "05_联合审计运行层/测试样本/第一章_八维探针摘要.json",
+    "size": 6257,
+    "sha256": "0e51deb2a148e8dc6cfaca7da57869aeadca8f0c65910c52de97489cb480889f"
+  },
+  {
+    "path": "05_联合审计运行层/测试样本/第一章_广域审计.json",
+    "size": 9341,
+    "sha256": "fcd8dc45b177d5a34c73ccbe3153777a1975c8ab729e0d48857c47b503efe9d0"
+  },
+  {
+    "path": "05_联合审计运行层/测试样本/第一章_第三扇门不能开.md",
+    "size": 9036,
+    "sha256": "7859595ebdefd57ea551870283590a23d0a58119351d5b0dbe2a81c8fe07c0fd"
+  },
+  {
+    "path": "05_联合审计运行层/联合审计器.py",
+    "size": 27279,
+    "sha256": "971aa98ff235c2e03c759024bbce5d9eeed5053bdf9c0a701e4a8a0476cf65f4"
+  },
+  {
+    "path": "包状态.json",
+    "size": 504,
+    "sha256": "08d85be65d4ac9fbacc3374f26ff268cdb2e3d5ac42d0cd6abe64fd9ecc5f1d4"
+  },
+  {
+    "path": "整合包清单.sha256",
+    "size": 9350,
+    "sha256": "9cb608217b1c3c22f3e7147f20ffaf691fedbb4adf641014d4bda7af2c92bcbd"
+  }
+]

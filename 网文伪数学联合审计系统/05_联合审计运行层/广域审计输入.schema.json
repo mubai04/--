@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "广域审计输入.schema.json",
+  "title": "网文伪数学广域审计输入 v1.0.1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "元数据",
+    "直接测量",
+    "硬闸门",
+    "章级六维",
+    "文学表现",
+    "AI味",
+    "情节平滑化",
+    "九维风险",
+    "AI参与反向证据",
+    "AI伪概率不确定度"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.1"
+    },
+    "元数据": {
+      "type": "object",
+      "required": [
+        "输入",
+        "输入类型",
+        "提取端",
+        "校准状态",
+        "源文件SHA256"
+      ]
+    },
+    "直接测量": {
+      "type": "object"
+    },
+    "硬闸门": {
+      "type": "object"
+    },
+    "章级六维": {
+      "type": "object"
+    },
+    "文学表现": {
+      "type": "object"
+    },
+    "AI味": {
+      "type": "object"
+    },
+    "情节平滑化": {
+      "type": "object"
+    },
+    "九维风险": {
+      "type": "object"
+    },
+    "AI参与反向证据": {
+      "type": "object"
+    },
+    "AI伪概率不确定度": {
+      "type": "object",
+      "required": [
+        "正文汉字数",
+        "评审分歧",
+        "缺同类型基线",
+        "疑似深度人机混编"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

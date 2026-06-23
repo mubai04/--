@@ -1,0 +1,1013 @@
+{
+  "task_id": "Mushenji-single-c9fc80fb3f4c",
+  "source_sha256": "c9fc80fb3f4ca8f39737efd88f5c589690abb7ee2764a4086383932b96156868",
+  "gates": {
+    "G_C": {
+      "status": "PASS",
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "背着这个石像出村，黑暗里的东西怕石像，我一会半会死不了！",
+          "start": 554,
+          "end": 582
+        }
+      ],
+      "judgment": "核心因果链可核验：黑暗危险、石像防护、出村救婴、玉佩防护、牛皮女子脱困与被处理，事件之间有明确触发和后果。"
+    },
+    "G_A": {
+      "status": "PASS",
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧举起镰刀，小心翼翼割破牛皮",
+          "start": 2392,
+          "end": 2407
+        }
+      ],
+      "judgment": "人物行动不是空转：司婆婆主动救婴并收养，秦牧受母牛请求而割皮，瘸子介入杀死威胁者，行动均改变局面。"
+    },
+    "G_L": {
+      "status": "PASS",
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "这少年正是十一年前司婆婆从江边捡来的婴儿，这些年来村里的老人含辛茹苦将这孩子养大",
+          "start": 1944,
+          "end": 1984
+        }
+      ],
+      "judgment": "单章内从婴儿获救跳到十一年后，文本明确标记时间跨度，并延续玉佩、残老村、司婆婆与秦牧身份。"
+    },
+    "G_P": {
+      "status": "PASS",
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧脑中轰然，不知道这个从牛皮里钻出来的女子在说些什么。",
+          "start": 2680,
+          "end": 2708
+        }
+      ],
+      "judgment": "叙述以第三人称外部叙述为主，关键体验段落贴近秦牧认知，没有出现互相冲突的视角信息。"
+    }
+  },
+  "chapter_profile": {
+    "U_ch": {
+      "status": "OK",
+      "value": 3.5,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "天黑的时候，会有一些可怕的东西在黑暗中活动，出去就是死。",
+          "start": 3083,
+          "end": 3111
+        }
+      ],
+      "judgment": "读者能理解当前局势：残老村依靠石像抵御黑暗，秦牧身份和危险规则都被清楚建立。"
+    },
+    "C_ch": {
+      "status": "OK",
+      "value": 3.4,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "那具女尸似乎听到了她的话，手掌松开，被江水冲走，消失在黑暗中。",
+          "start": 1190,
+          "end": 1221
+        }
+      ],
+      "judgment": "本章持续推进因果：婴儿获救导致秦牧成长，奶牛真相导致当前危机，黑暗规则导致章尾悬念。"
+    },
+    "A_ch": {
+      "status": "OK",
+      "value": 3.0,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧迟疑，母牛道：“你忘记哺育之恩了吗？”",
+          "start": 2366,
+          "end": 2387
+        }
+      ],
+      "judgment": "秦牧在母牛事件中做出关键动作，但危机最终由瘸子解决，主角能动性成立但还未完全主导章节结果。"
+    },
+    "E_ch": {
+      "status": "OK",
+      "value": 3.2,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "这一幕给他的冲击实在太大，以至于他都不知道自己是何时回到村子里。",
+          "start": 2935,
+          "end": 2967
+        }
+      ],
+      "judgment": "情绪反应与事件强度匹配，秦牧从惊吓、迟疑到冲击后的失神，能承接牛皮女子与杀人事件。"
+    },
+    "R_ch": {
+      "status": "OK",
+      "value": 2.8,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "这枚玉佩的光芒与石像的光芒很相似，但是却要微弱很多",
+          "start": 1266,
+          "end": 1291
+        }
+      ],
+      "judgment": "开篇承诺的黑暗与防护规则获得部分支付，秦牧身世、玉佩和黑暗仍保留后续问题。"
+    },
+    "F_ch": {
+      "status": "OK",
+      "value": 3.7,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "“黑暗里到底有什么？”他心中纳闷。",
+          "start": 4037,
+          "end": 4054
+        }
+      ],
+      "judgment": "章末把黑暗的实体危险和秦牧的疑问钉在一起，形成明确追读牵引。"
+    }
+  },
+  "facts": {
+    "N-01": {
+      "status": "OK",
+      "numerator": 1,
+      "denominator": 8,
+      "sample_size": 8,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "那母牛道：“你腰间有镰刀，将我的皮扒下来，便可以救我脱困。”",
+          "start": 2331,
+          "end": 2361
+        }
+      ],
+      "judgment": "主要因果链清晰；较突兀的风险点集中在母牛主动要求剥皮这一异常触发，但后文给出解释。"
+    },
+    "N-02": {
+      "status": "OK",
+      "numerator": 0,
+      "denominator": 5,
+      "sample_size": 5,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "十一年前她就应该死了，如果不是要奶你，她能活到现在？",
+          "start": 3473,
+          "end": 3499
+        }
+      ],
+      "judgment": "十一年前救婴、秦牧成长、女子被封为牛的时间关系可以对齐，未发现明确时间冲突。"
+    },
+    "N-06": {
+      "status": "OK",
+      "numerator": 1,
+      "denominator": 7,
+      "sample_size": 7,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "司婆婆大怒：“老娘凭本事捡到的小孩，为什么要送人？”",
+          "start": 1492,
+          "end": 1518
+        }
+      ],
+      "judgment": "人物动机大体清楚；司婆婆收养秦牧的情感动机强，但其极端手段需要读者接受残老村的异常道德环境。"
+    },
+    "L-01": {
+      "status": "OK",
+      "numerator": 3,
+      "denominator": 30,
+      "sample_size": 30,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "黑暗从西方缓缓的淹没过来，沿途吞噬山川河流道路树木",
+          "start": 153,
+          "end": 178
+        }
+      ],
+      "judgment": "黑暗意象多次出现但承担规则和气氛功能，语义复述比例较低。"
+    },
+    "L-03": {
+      "status": "OK",
+      "numerator": 4,
+      "denominator": 30,
+      "sample_size": 30,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "这女子是距离这儿千里外的镶龙城城主夫人",
+          "start": 3528,
+          "end": 3547
+        }
+      ],
+      "judgment": "后段存在一段集中解释城主夫人与变牛来历，构成少量冗余解释风险。"
+    },
+    "L-04": {
+      "status": "OK",
+      "numerator": 2,
+      "denominator": 30,
+      "sample_size": 30,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "黑暗如同潮水飞快的向村子涌来",
+          "start": 3818,
+          "end": 3832
+        }
+      ],
+      "judgment": "多数规则通过事件和物象展示，抽象概括不多。"
+    },
+    "L-05": {
+      "status": "OK",
+      "numerator": 1,
+      "denominator": 8,
+      "sample_size": 8,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "……\n    江边，笛声传来",
+          "start": 1868,
+          "end": 1882
+        }
+      ],
+      "judgment": "章节转场有省略号和时间跳跃，但模板化过渡使用很少。"
+    },
+    "L-06": {
+      "status": "OK",
+      "numerator": 0,
+      "denominator": 8,
+      "sample_size": 8,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "残老村的四个角竖着四个古老石像",
+          "start": 199,
+          "end": 214
+        }
+      ],
+      "judgment": "未观察到明显重复句式模板支配叙述。"
+    },
+    "C-01": {
+      "status": "OK",
+      "numerator": 0,
+      "denominator": 4,
+      "sample_size": 4,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "村里的石像会保护我们，黑暗里的东西不敢进入村子。",
+          "start": 3125,
+          "end": 3149
+        }
+      ],
+      "judgment": "石像、玉佩、黑暗危险的规则相互兼容，未见规则互斥。"
+    },
+    "C-02": {
+      "status": "OK",
+      "numerator": 4,
+      "denominator": 4,
+      "sample_size": 4,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "玉佩散发出荧光。这枚玉佩的光芒与石像的光芒很相似",
+          "start": 1258,
+          "end": 1282
+        }
+      ],
+      "judgment": "玉佩与石像均有保护功能和剧情用途，不是单纯装饰符号。"
+    },
+    "C-03": {
+      "status": "OK",
+      "numerator": 0,
+      "denominator": 4,
+      "sample_size": 4,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "猛虎的尾巴竟然只剩下了一节节骨头",
+          "start": 3954,
+          "end": 3970
+        }
+      ],
+      "judgment": "危险呈现包含救婴、牛皮、黑暗吞噬等不同路径，路径模板化低。"
+    },
+    "CH-02": {
+      "status": "OK",
+      "numerator": 0,
+      "denominator": 5,
+      "sample_size": 5,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧红了脸，四岁断奶的确有些太长了，不过好像关键不是在四岁断奶吧？",
+          "start": 3388,
+          "end": 3421
+        }
+      ],
+      "judgment": "秦牧的尴尬、震惊和疑问与场景信息匹配。"
+    },
+    "CH-03": {
+      "status": "OK",
+      "numerator": 1,
+      "denominator": 12,
+      "sample_size": 12,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "马老瞪他一眼：“死瘸子，你断了条腿，能走吗？我虽然只有一条胳膊，但这条胳膊力气大得很！”",
+          "start": 702,
+          "end": 746
+        }
+      ],
+      "judgment": "对话带身份、关系和脾气，只有少量解释性台词偏整洁。"
+    },
+    "CH-04": {
+      "status": "OK",
+      "numerator": 1,
+      "denominator": 6,
+      "sample_size": 6,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧迟疑，母牛道：“你忘记哺育之恩了吗？”",
+          "start": 2366,
+          "end": 2387
+        }
+      ],
+      "judgment": "人物选择有压力来源；少量风险在秦牧选择割皮的判断空间较短。"
+    },
+    "T-01": {
+      "status": "OK",
+      "numerator": 0,
+      "denominator": 5,
+      "sample_size": 5,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "在他走入村子的一刹那，浓烈的黑暗正好将村子淹没。",
+          "start": 3883,
+          "end": 3907
+        }
+      ],
+      "judgment": "空间、时间、人物状态在章内连续，未见状态矛盾。"
+    },
+    "T-02": {
+      "status": "OK",
+      "numerator": 0,
+      "denominator": 3,
+      "sample_size": 3,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "“婆婆，为什么天黑不能出门？”秦牧抬头问道。",
+          "start": 3055,
+          "end": 3077
+        }
+      ],
+      "judgment": "本章提出并部分支付黑暗规则、玉佩、牛皮女子三个承诺，没有到期失联。"
+    },
+    "T-03": {
+      "status": "OK",
+      "numerator": 1,
+      "denominator": 6,
+      "sample_size": 6,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "突然，他身下的母牛开口说话，秦牧吓了一跳",
+          "start": 2226,
+          "end": 2246
+        }
+      ],
+      "judgment": "母牛说话具有突发性，但与后续封印解释相连，不是纯随机反转。"
+    },
+    "R-03": {
+      "status": "OK",
+      "numerator": 4,
+      "denominator": 5,
+      "sample_size": 5,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "村外的黑暗中传来婴儿的哭声",
+          "start": 417,
+          "end": 430
+        }
+      ],
+      "judgment": "读者期待获得回报：哭声通向秦牧来历，牛皮通向村民隐秘，黑暗通向章尾悬念。"
+    },
+    "R-04": {
+      "status": "OK",
+      "value": 0.5,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "天黑，别出门。Ｘ更新最快",
+          "start": 17,
+          "end": 29
+        }
+      ],
+      "judgment": "开篇禁令、石像、玉佩、牛皮女子与黑暗吞尾形成较强记忆点，记忆弱化风险低。"
+    },
+    "P-01": {
+      "status": "OK",
+      "numerator": 0,
+      "denominator": 4,
+      "sample_size": 4,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "那篮子下面是一条被江水泡得发白的手臂",
+          "start": 1108,
+          "end": 1126
+        }
+      ],
+      "judgment": "救婴场景和牛皮场景均有具体异常物象，高频套路感低。"
+    },
+    "P-02": {
+      "status": "OK",
+      "numerator": 1,
+      "denominator": 4,
+      "sample_size": 4,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "女子尸体倒下，身后站着的是村里的瘸子爷爷",
+          "start": 2769,
+          "end": 2789
+        }
+      ],
+      "judgment": "瘸子直接解决危机有安全解法风险，但同时暴露村庄道德和能力异常。"
+    },
+    "P-03": {
+      "status": "OK",
+      "numerator": 3,
+      "denominator": 4,
+      "sample_size": 4,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "你想学？我教你……瘸子回来了！",
+          "start": 3762,
+          "end": 3777
+        }
+      ],
+      "judgment": "文本保留学习变形术、追查黑暗、理解村民等低频合理方向，未明显压制选项。"
+    },
+    "B-01": {
+      "status": "OK",
+      "numerator": 4,
+      "denominator": 5,
+      "sample_size": 5,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "一口刀从她胸前穿出",
+          "start": 2736,
+          "end": 2745
+        }
+      ],
+      "judgment": "黑暗、尸体、牛皮、刀和尾骨都有身体/感官落点。"
+    },
+    "B-02": {
+      "status": "OK",
+      "numerator": 0,
+      "denominator": 5,
+      "sample_size": 5,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "镰刀架在秦牧脖子上",
+          "start": 2563,
+          "end": 2572
+        }
+      ],
+      "judgment": "身体威胁具体，不依赖空泛生理套语。"
+    },
+    "B-03": {
+      "status": "OK",
+      "numerator": 5,
+      "denominator": 5,
+      "sample_size": 5,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "尾巴上的皮毛和血肉全都不见了，好像是被什么东西啃掉的一般。",
+          "start": 3971,
+          "end": 4000
+        }
+      ],
+      "judgment": "环境危险直接作用于肉身，身体与环境交互充分。"
+    },
+    "B-04": {
+      "status": "OK",
+      "numerator": 0,
+      "denominator": 5,
+      "sample_size": 5,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧身躯发软，看了看地上的那张牛皮和女子尸体",
+          "start": 2831,
+          "end": 2853
+        }
+      ],
+      "judgment": "身体后果和心理后果有承接。"
+    },
+    "A-01": {
+      "status": "OK",
+      "numerator": 2,
+      "denominator": 6,
+      "sample_size": 6,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "司婆婆瞥他一眼，道：“这女子是距离这儿千里外的镶龙城城主夫人",
+          "start": 3517,
+          "end": 3547
+        }
+      ],
+      "judgment": "部分世界/前史解释来得较快，但核心黑暗仍保留未知。"
+    },
+    "A-02": {
+      "status": "OK",
+      "numerator": 1,
+      "denominator": 6,
+      "sample_size": 6,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "而她善妒，镶龙城主喜欢在外面沾花惹草",
+          "start": 3555,
+          "end": 3573
+        }
+      ],
+      "judgment": "城主夫人动机有直接说明，主要人物动机仍通过行动展示。"
+    },
+    "A-03": {
+      "status": "OK",
+      "numerator": 5,
+      "denominator": 6,
+      "sample_size": 6,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "他好奇的看了看村外的黑暗，那里漆黑一片，什么也看不到。",
+          "start": 4005,
+          "end": 4032
+        }
+      ],
+      "judgment": "读者仍需推断黑暗本质、村民来历和秦牧身世，推断空间充足。"
+    },
+    "A-04": {
+      "status": "OK",
+      "numerator": 1,
+      "denominator": 6,
+      "sample_size": 6,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧瞠目结舌，失声道：“婆婆，人怎么能变成牛？”",
+          "start": 3715,
+          "end": 3739
+        }
+      ],
+      "judgment": "牛皮事件解释了近因，但变形术、黑暗和残老村真相未过早关闭。"
+    }
+  },
+  "manual_scores": {
+    "Ca_causal": {
+      "status": "OK",
+      "value": 3.2,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "司婆婆眼睛一亮，看到一丁点荧光，那是一个篮子停在江岸边",
+          "start": 1018,
+          "end": 1045
+        }
+      ],
+      "judgment": "救婴、收养、成长、牛皮危机、黑暗章尾之间具备可追踪因果。"
+    },
+    "Cg_goal": {
+      "status": "OK",
+      "value": 3.1,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "“我去看看！”\n    司婆婆激动起来",
+          "start": 484,
+          "end": 503
+        }
+      ],
+      "judgment": "司婆婆救婴目标明确，秦牧后段目标从救母牛转向理解真相，主角目标尚处开启阶段。"
+    },
+    "Cs_state": {
+      "status": "OK",
+      "value": 3.3,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "夜幕降临，残老村四角的石像又自动亮了起来",
+          "start": 2999,
+          "end": 3019
+        }
+      ],
+      "judgment": "人物位置、天色、石像保护和黑暗威胁状态清楚。"
+    },
+    "Ve_salience": {
+      "status": "OK",
+      "value": 3.5,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "只有这块玉佩，没有其他纸条什么的。玉佩上有字，是个秦字。",
+          "start": 1688,
+          "end": 1716
+        }
+      ],
+      "judgment": "玉佩、石像、牛皮、黑暗吞噬都是显著信息点。"
+    },
+    "Vu_reframe": {
+      "status": "OK",
+      "value": 3.6,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "早在你四岁断奶的时候我就说过将牛卖了",
+          "start": 3320,
+          "end": 3338
+        }
+      ],
+      "judgment": "奶牛身份反转重构秦牧童年和司婆婆道德形象。"
+    },
+    "Vb_branch": {
+      "status": "OK",
+      "value": 2.9,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "你忘记哺育之恩了吗？",
+          "start": 2376,
+          "end": 2386
+        }
+      ],
+      "judgment": "秦牧割皮触发危机，但选择后果很快被长辈接管。"
+    },
+    "Vr_rhythm": {
+      "status": "OK",
+      "value": 3.1,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "突然，他身下的母牛开口说话，秦牧吓了一跳",
+          "start": 2226,
+          "end": 2246
+        }
+      ],
+      "judgment": "救婴、时间跳跃、牛皮危机、章尾黑暗形成节奏递进。"
+    },
+    "ES_same": {
+      "status": "OK",
+      "value": 0.8,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "残老村的村民虽然都凶神恶煞，但对他都很好",
+          "start": 2029,
+          "end": 2049
+        }
+      ],
+      "judgment": "情绪类型有温情、惊悚、荒诞和悬疑变化，同质化低。"
+    },
+    "EI_lowvar": {
+      "status": "OK",
+      "value": 0.9,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧吓了一跳，连忙从牛背上跳下来",
+          "start": 2240,
+          "end": 2256
+        }
+      ],
+      "judgment": "情绪强度随事件升级而变化。"
+    },
+    "ER_repeat": {
+      "status": "OK",
+      "value": 0.7,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "司婆婆嘿嘿一笑，露出半嘴零落牙齿",
+          "start": 3744,
+          "end": 3760
+        }
+      ],
+      "judgment": "人物反应有差异化，重复反应少。"
+    },
+    "EA_mismatch": {
+      "status": "OK",
+      "value": 0.8,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧瞠目结舌，失声道：“婆婆，人怎么能变成牛？”",
+          "start": 3715,
+          "end": 3739
+        }
+      ],
+      "judgment": "情绪与异常信息匹配。"
+    },
+    "Sh_syntax": {
+      "status": "OK",
+      "value": 0.8,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "瘸子还是不紧不慢的往村子走",
+          "start": 3869,
+          "end": 3882
+        }
+      ],
+      "judgment": "句法以叙事推进为主，规则化模板痕迹低。"
+    },
+    "Lv_voice": {
+      "status": "OK",
+      "value": 3.3,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "老娘凭本事捡到的小孩，为什么要送人？",
+          "start": 1499,
+          "end": 1517
+        }
+      ],
+      "judgment": "司婆婆、马老、秦牧、瘸子说话有区分度。"
+    },
+    "Li_sensory": {
+      "status": "OK",
+      "value": 3.2,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "只见猛虎的尾巴竟然只剩下了一节节骨头",
+          "start": 3952,
+          "end": 3970
+        }
+      ],
+      "judgment": "视觉、声音、触目后果较充分。"
+    },
+    "Lm_layers": {
+      "status": "OK",
+      "value": 3.4,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "只是玉佩的光芒很弱，只能保护得了孩子，却保护不了那个女人。",
+          "start": 1322,
+          "end": 1351
+        }
+      ],
+      "judgment": "救婴表层下有牺牲、身世、规则和村庄隐秘多层信息。"
+    },
+    "Lr_rhythm": {
+      "status": "OK",
+      "value": 3.1,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "马老和司\n    婆婆走出残老村",
+          "start": 854,
+          "end": 870
+        }
+      ],
+      "judgment": "场景切换和危机推进有节奏，但个别换行来自文本源格式。"
+    },
+    "Lp_pov": {
+      "status": "OK",
+      "value": 3.0,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧不明所以。\n    司婆婆瞥他一眼",
+          "start": 3505,
+          "end": 3524
+        }
+      ],
+      "judgment": "视角能靠近秦牧困惑，也能保持外部叙事交代。"
+    },
+    "Lo_original": {
+      "status": "OK",
+      "value": 3.5,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "牛皮剥到一半时，从里面滚出一个二三十岁的妇人",
+          "start": 2453,
+          "end": 2475
+        }
+      ],
+      "judgment": "牛皮女子和残老村黑暗规则具有强识别度。"
+    },
+    "U_ch": {
+      "status": "OK",
+      "value": 3.5,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "村里的石像会保护我们，黑暗里的东西不敢进入村子。",
+          "start": 3125,
+          "end": 3149
+        }
+      ],
+      "judgment": "当前局势可理解。"
+    },
+    "C_ch": {
+      "status": "OK",
+      "value": 3.4,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "那女子正要一刀砍死他，突然后心一凉",
+          "start": 2713,
+          "end": 2730
+        }
+      ],
+      "judgment": "事件推进清楚。"
+    },
+    "A_ch": {
+      "status": "OK",
+      "value": 3.0,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧举起镰刀，小心翼翼割破牛皮，说来也怪牛皮被剥开",
+          "start": 2392,
+          "end": 2417
+        }
+      ],
+      "judgment": "人物参与关键结果但主角主导性有限。"
+    },
+    "E_ch": {
+      "status": "OK",
+      "value": 3.2,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧脑中轰然，不知道这个从牛皮里钻出来的女子在说些什么。",
+          "start": 2680,
+          "end": 2708
+        }
+      ],
+      "judgment": "情绪和信息冲击匹配。"
+    },
+    "R_ch": {
+      "status": "OK",
+      "value": 2.8,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "玉佩上有字，是个秦字。",
+          "start": 1705,
+          "end": 1716
+        }
+      ],
+      "judgment": "部分承诺支付，身世与黑暗继续悬置。"
+    },
+    "F_ch": {
+      "status": "OK",
+      "value": 3.7,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "“黑暗里到底有什么？”他心中纳闷。",
+          "start": 4037,
+          "end": 4054
+        }
+      ],
+      "judgment": "章尾追读强。"
+    },
+    "H_long": {
+      "status": "OK",
+      "value": 3.2,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "这些年来村里的老人含辛茹苦将这孩子养大",
+          "start": 1965,
+          "end": 1984
+        }
+      ],
+      "judgment": "章节有长期时间沉淀和关系积累。"
+    },
+    "H_voice": {
+      "status": "OK",
+      "value": 3.1,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "死瘸子，快点，快点！",
+          "start": 3842,
+          "end": 3852
+        }
+      ],
+      "judgment": "人物口吻和关系具有人工叙事的不对称细节。"
+    },
+    "H_asym": {
+      "status": "OK",
+      "value": 3.0,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "不过好像关键不是在四岁断奶吧？",
+          "start": 3406,
+          "end": 3421
+        }
+      ],
+      "judgment": "幽默、残酷和悬疑并置，信息分布不完全规整。"
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "FIND-EXPOSITION_CLUSTER",
+      "primary_metric": "A-01",
+      "secondary_impacts": [
+        "L-03",
+        "R_ambiguity"
+      ],
+      "severity": 2,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "司婆婆瞥他一眼，道：“这女子是距离这儿千里外的镶龙城城主夫人，镶龙城主好色",
+          "start": 3517,
+          "end": 3554
+        }
+      ],
+      "judgment": "牛皮女子来历、城主恶行、司婆婆作案动机集中由台词解释，虽然信息有效，但压缩了部分读者推断空间。",
+      "repair_action": "若要修订，可把城主夫人前史拆成秦牧后续追问、物证或村民互相遮掩的片段，不必一次说尽。"
+    },
+    {
+      "finding_id": "FIND-PROTAGONIST_REACTIVE_END",
+      "primary_metric": "A_ch",
+      "secondary_impacts": [
+        "Vb_branch"
+      ],
+      "severity": 2,
+      "evidence": [
+        {
+          "file": "0001_第一章 天黑别出门.txt",
+          "quote": "秦牧一脚高一脚低往村里走，回头看去，却见瘸子将那女子的尸体丢进江里。",
+          "start": 2896,
+          "end": 2930
+        }
+      ],
+      "judgment": "秦牧在后半章主要承受信息冲击，危机解决和尸体处理均由瘸子完成，主角能动性略弱。",
+      "repair_action": "可增加秦牧在危机后主动确认牛皮、玉佩或黑暗边界的一个小动作，但不要改变瘸子救场的核心事件。"
+    }
+  ],
+  "anti_gaming": {
+    "AG_SENSORY_STUFFING": {
+      "status": "PASS",
+      "evidence": [],
+      "judgment": "感官描写服务于黑暗、尸体、牛皮和尾骨等事件，不是机械堆砌。"
+    },
+    "AG_RANDOM_REVERSAL": {
+      "status": "PASS",
+      "evidence": [],
+      "judgment": "母牛变人和瘸子杀人虽有反转，但均被封印、养育和残老村规则承接。"
+    },
+    "AG_MEANINGLESS_CHOICE": {
+      "status": "PASS",
+      "evidence": [],
+      "judgment": "秦牧割开牛皮导致威胁释放，司婆婆收养导致十一年后的事件，选择有后果。"
+    },
+    "AG_SYMBOL_SPAM": {
+      "status": "PASS",
+      "evidence": [],
+      "judgment": "石像和玉佩有防护功能，符号反复出现但承担规则和情节作用。"
+    },
+    "AG_RANDOM_RHYTHM": {
+      "status": "PASS",
+      "evidence": [],
+      "judgment": "节奏由夜幕、救婴、时间跳跃、牛皮危机、黑暗章尾递进，未靠随机断句刷节奏。"
+    },
+    "AG_HARMFUL_OMISSION": {
+      "status": "PASS",
+      "evidence": [],
+      "judgment": "黑暗本质留白，但石像保护、出村危险、尾巴被吞等必要信息已给出。"
+    }
+  },
+  "context": {
+    "rater_disagreement": 0.12,
+    "baseline_missing": 1,
+    "mixed_edit": 0
+  }
+}

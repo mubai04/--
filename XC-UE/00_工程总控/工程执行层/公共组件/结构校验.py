@@ -7,9 +7,10 @@ from typing import Any
 from 工程异常 import 结构错误
 
 try:
-    from jsonschema import Draft202012Validator
+    from jsonschema import Draft202012Validator, FormatChecker
 except ModuleNotFoundError:  # pragma: no cover - exercised when dependency is absent
     Draft202012Validator = None
+    FormatChecker = None
 
 
 def 读取结构(path: Path) -> dict[str, Any]:
@@ -30,7 +31,7 @@ def 校验列表字段(data: dict[str, Any], field: str, label: str) -> None:
 def 校验JSONSchema(data: dict[str, Any], schema: dict[str, Any], label: str) -> None:
     if Draft202012Validator is None:
         raise 结构错误(f"{label} JSON Schema 校验失败：缺少 jsonschema 依赖")
-    validator = Draft202012Validator(schema)
+    validator = Draft202012Validator(schema, format_checker=FormatChecker())
     errors = sorted(validator.iter_errors(data), key=lambda item: list(item.path))
     if errors:
         first = errors[0]

@@ -1,0 +1,7 @@
+{
+  "relation_type": "revision_pair",
+  "pair_id": "demo-before-after-v321",
+  "before_source_sha256": "8df532e45a2ac961704ff2eb2993e81866079c79d8fa02826ee58ab97b6e514b",
+  "after_source_sha256": "072d24ec37574df1361b7f2eff2084d8057b644061b500e51a0793f1eb9e6dd9",
+  "note": "包内示例：同一概念的修改前后文本，用于复现 compare 命令。"
+}
