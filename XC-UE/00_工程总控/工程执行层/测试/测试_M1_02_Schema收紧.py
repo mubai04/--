@@ -85,6 +85,9 @@ def _interface_judgement() -> dict:
         "回流验收位置": "L1-02",
         "最终状态": "接口明确",
         "备注": "",
+        "route_rule_id": "L2-ROUTE-005",
+        "route_rule_version": "pytest",
+        "route_rule_hash": "a" * 64,
     }
 
 

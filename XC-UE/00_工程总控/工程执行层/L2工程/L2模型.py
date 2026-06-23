@@ -40,6 +40,9 @@ class 接口判断:
     回流验收位置: str = ""
     最终状态: str = "接口明确"
     备注: str = ""
+    route_rule_id: str = ""
+    route_rule_version: str = ""
+    route_rule_hash: str = ""
 
 
 @dataclass

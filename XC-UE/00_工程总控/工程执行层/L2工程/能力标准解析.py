@@ -3,6 +3,8 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 
+from 路由规则加载 import 路由规则集
+
 
 REQUIRED_SECTIONS = {
     "L2-00": ["定位", "能力", "边界"],
@@ -45,6 +47,7 @@ class L2规则:
     能力接口表: dict[str, 能力规则] = field(default_factory=dict)
     能力规则: dict[str, 能力规则] = field(default_factory=dict)
     接口失败类型: dict[str, str] = field(default_factory=dict)
+    路由规则集: 路由规则集 | None = None
 
 
 def 标准完整性(standards: dict[str, str]) -> dict[str, list[str]]:

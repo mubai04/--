@@ -34,6 +34,10 @@ def L2标准路径(root: Path) -> dict[str, Path]:
     return files
 
 
+def L2路由规则路径(root: Path) -> Path:
+    return root / "00_工程总控" / "工程执行层" / "L2工程" / "routes.json"
+
+
 def 读L2标准(root: Path, standard_mode: str = 生产模式) -> dict[str, str]:
     texts, _records = 读L2标准与记录(root, standard_mode)
     return texts

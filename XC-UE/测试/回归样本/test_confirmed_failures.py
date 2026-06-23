@@ -22,6 +22,8 @@ for path in [公共组件, L2工程, L3工程]:
 
 from L2_99_接口判断 import 判断
 from L2模型 import 失败输入
+from L2读取 import L2路由规则路径
+from 路由规则加载 import 加载路由规则
 from 能力标准解析 import 解析规则
 from 标准加载器 import 候选试验模式
 from 退出码 import ExitCode
@@ -295,8 +297,7 @@ def test_mixed_valid_and_out_of_scope_l2_items_should_still_emit_valid_fix(tmp_p
     assert report["阻断项"]
 
 
-@pytest.mark.xfail(strict=True, reason="M0-02 固化：修改 L2 Markdown 路由后行为不变。")
-def test_l2_markdown_route_change_should_change_interface_decision():
+def test_l2_structured_route_rules_control_interface_decision():
     item = 失败输入(
         来源闸门="L1-03",
         名称="入口弱",
@@ -310,6 +311,13 @@ def test_l2_markdown_route_change_should_change_interface_decision():
         修复方向="pytest 固化复现",
     )
     assert 判断(item, None).主候选模块 != "L2-05"
+    rules = 解析规则({})
+    rules.路由规则集 = 加载路由规则(L2路由规则路径(ROOT))
+    judgement = 判断(item, rules)
+    assert judgement.主候选模块 == "L2-05"
+    assert judgement.route_rule_id == "L2-ROUTE-005"
+    assert judgement.route_rule_version
+    assert len(judgement.route_rule_hash) == 64
 
 
 @pytest.mark.xfail(strict=True, reason="M0-02 固化：L2 六能力禁止项解析为零。")

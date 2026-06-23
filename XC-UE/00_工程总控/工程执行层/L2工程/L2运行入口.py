@@ -17,11 +17,12 @@ if str(公共组件) not in sys.path:
 
 from L2报告 import 写报告
 from L2模型 import L2报告
-from L2读取 import 读L2标准, 读失败包
+from L2读取 import L2路由规则路径, 读L2标准, 读失败包
 from L2_99_接口判断 import 判断
 from 修复单生成 import 生成
 from L2禁止项检查 import 检查
 from 能力标准解析 import 标准完整性, 解析规则
+from 路由规则加载 import 加载路由规则
 from 回流校验 import 校验
 from 退出码 import ExitCode
 from 运行状态 import 状态说明, 已完成, 已阻断, 结构无效
@@ -118,6 +119,7 @@ def main() -> int:
     try:
         standards = 读L2标准(ROOT, args.standard_mode)
         rules = 解析规则(standards)
+        rules.路由规则集 = 加载路由规则(L2路由规则路径(ROOT))
     except 工程错误 as exc:
         print(json.dumps({"error": str(exc), "exit_code": int(exc.exit_code)}, ensure_ascii=False), file=sys.stderr)
         return int(exc.exit_code)

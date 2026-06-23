@@ -141,6 +141,10 @@
         "$ref": "#/$defs/text"
       }
     },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
     "interface_judgement": {
       "type": "object",
       "additionalProperties": false,
@@ -158,7 +162,10 @@
         "建议动作",
         "回流验收位置",
         "最终状态",
-        "备注"
+        "备注",
+        "route_rule_id",
+        "route_rule_version",
+        "route_rule_hash"
       ],
       "properties": {
         "来源闸门": {
@@ -208,6 +215,15 @@
         },
         "备注": {
           "$ref": "#/$defs/text"
+        },
+        "route_rule_id": {
+          "$ref": "#/$defs/short_text"
+        },
+        "route_rule_version": {
+          "$ref": "#/$defs/short_text"
+        },
+        "route_rule_hash": {
+          "$ref": "#/$defs/sha256"
         }
       }
     },
@@ -317,8 +333,7 @@
           "$ref": "#/$defs/path_text"
         },
         "sha256": {
-          "type": "string",
-          "pattern": "^[a-f0-9]{64}$"
+          "$ref": "#/$defs/sha256"
         },
         "producer_stage": {
           "type": "string",
