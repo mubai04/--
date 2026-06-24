@@ -10,6 +10,10 @@ from datetime import datetime
 from pathlib import Path
 
 sys.dont_write_bytecode = True
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
 
 公共组件 = Path(__file__).resolve().parents[1] / "公共组件"
 if str(公共组件) not in sys.path:
@@ -34,12 +38,11 @@ from 标准加载器 import 候选试验模式, 生产模式
 from 生产资格 import 判定结果转标准字段, 要求生产资格
 from 安全路径 import resolve_inside_root, safe_id
 from 错误信封 import 打印错误信封
-from 项目加载器 import 加载项目
+from 项目加载器 import 加载项目, 校验项目正文路径
 from 文件哈希 import 计算文件哈希
 
 
 ROOT = Path(__file__).resolve().parents[3]
-DEFAULT_CANDIDATE_CHAPTER = Path("chapters") / "_candidates" / "ch01_candidate_RUN-20260621-002.md"
 测试IO令牌内容 = "XCUE_TEST_EXTERNAL_IO_TOKEN_V1"
 
 
@@ -71,11 +74,34 @@ def _解析输入输出路径(value: str | Path, label: str) -> Path:
     return resolve_inside_root(ROOT, value)
 
 
+def _是流水线输入快照(path: Path, pipeline_run_id: str) -> bool:
+    if not pipeline_run_id:
+        return False
+    try:
+        path.resolve().relative_to((ROOT / "运行记录" / pipeline_run_id / "输入快照").resolve())
+    except ValueError:
+        return False
+    return True
+
+
+def _是测试注入正文(path: Path) -> bool:
+    if not _允许测试外部IO():
+        return False
+    try:
+        path.resolve().relative_to(Path(tempfile.gettempdir()).resolve())
+    except ValueError:
+        return False
+    return True
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="XC-UE L1工程：按结构化 L1 闸门规则生成章节正文检测报告。")
     parser.add_argument("--chapter", default=None, help="待检测正文 Markdown 路径；未指定时使用默认项目候选正文。")
     parser.add_argument("--run-id", default=None, help="报告编号。")
-    parser.add_argument("--project", default="未命名项目", help="项目名。")
+    parser.add_argument("--project", default=None, help="项目 ID；未指定时加载默认项目。")
+    parser.add_argument("--project-registry", default=None, help="项目注册表路径。")
+    parser.add_argument("--project-root", default=None, help="显式项目根目录。")
+    parser.add_argument("--project-manifest", default=None, help="显式项目清单路径。")
     parser.add_argument("--out-dir", default=None, help="输出目录。")
     parser.add_argument("--pipeline-run-id", default="", help="流水线编号。")
     parser.add_argument("--stage-run-id", default="", help="阶段运行编号。")
@@ -87,19 +113,18 @@ def main() -> int:
         run_id = safe_id(args.run_id or "L1_RUN-" + datetime.now().strftime("%Y%m%d-%H%M%S"), "run_id")
         pipeline_run_id = safe_id(args.pipeline_run_id, "pipeline_run_id") if args.pipeline_run_id else ""
         stage_run_id = safe_id(args.stage_run_id, "stage_run_id") if args.stage_run_id else ""
-        default_chapter = 加载项目(ROOT).project_root / DEFAULT_CANDIDATE_CHAPTER
-        chapter_path = _解析输入输出路径(args.chapter or default_chapter, "chapter")
+        project_context = 加载项目(
+            ROOT,
+            args.project,
+            args.project_registry,
+            project_root=args.project_root,
+            project_manifest=args.project_manifest,
+        )
         out_dir = _解析输入输出路径(args.out_dir, "out_dir") if args.out_dir else Path(__file__).resolve().parent / "reports"
         拒绝覆盖既有报告(run_id, out_dir)
     except 工程错误 as exc:
         打印错误信封(exc, stage="L1", run_id=locals().get("run_id", ""), path=locals().get("out_dir", ""))
         return int(exc.exit_code)
-    if not chapter_path.exists():
-        raise SystemExit(ExitCode.INPUT_INVALID)
-
-    raw = 读文本(chapter_path)
-    if not raw.strip():
-        raise SystemExit(ExitCode.INPUT_INVALID)
     try:
         gate_rules_path = Path(args.gate_rules) if args.gate_rules else L1闸门规则路径(ROOT)
         if not gate_rules_path.is_absolute():
@@ -108,8 +133,21 @@ def main() -> int:
             requested_mode=args.standard_mode,
             rule_source=gate_rules_path,
             entrypoint="L1",
-            project_identity=args.project,
+            project_identity=project_context.project_id,
         )
+        if args.chapter:
+            chapter_input = _解析输入输出路径(args.chapter, "chapter")
+            if _是流水线输入快照(chapter_input, pipeline_run_id) or _是测试注入正文(chapter_input):
+                chapter_path = chapter_input
+            else:
+                chapter_path = 校验项目正文路径(project_context, chapter_input)
+        else:
+            chapter_path = project_context.chapter_source
+        if not chapter_path.exists():
+            raise SystemExit(ExitCode.INPUT_INVALID)
+        raw = 读文本(chapter_path)
+        if not raw.strip():
+            raise SystemExit(ExitCode.INPUT_INVALID)
         rules = 加载闸门规则(gate_rules_path)
         gate_rules_raw = json.loads(gate_rules_path.read_text(encoding="utf-8-sig"))
         gate_rule_version = gate_rules_raw["version"]
@@ -160,7 +198,7 @@ def main() -> int:
 
     result = 正文检测结果(
         run_id=run_id,
-        项目=args.project,
+        项目=project_context.project_id,
         章节路径=str(chapter_path),
         章节标题=title,
         当前字数=word_count,

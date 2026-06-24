@@ -22,7 +22,7 @@ from 标准加载器 import 候选试验模式, 加载标准文本, 标准记录
 from 生产资格 import 判定结果转标准字段, 要求生产资格
 from 结构校验 import 按结构文件校验
 from 安全路径 import resolve_inside_root, safe_id, safe_output_path
-from 项目加载器 import 项目上下文, 加载项目
+from 项目加载器 import 项目上下文, 加载项目, 校验项目正文路径
 from 错误信封 import 错误信封
 
 
@@ -209,18 +209,29 @@ def _项目上下文(project: 项目上下文 | str) -> 项目上下文:
 def 运行流水线(chapter: Path, project: 项目上下文 | str, pipeline_run_id: str | None = None, standard_mode: str = 候选试验模式) -> int:
     try:
         project_context = _项目上下文(project)
-        chapter = resolve_inside_root(ROOT, chapter)
+        chapter = 校验项目正文路径(project_context, chapter or project_context.chapter_source)
         pipeline_id = safe_id(pipeline_run_id, "pipeline_run_id") if pipeline_run_id else safe_id(新流水线编号(), "pipeline_run_id")
         input_stage = safe_id(f"{pipeline_id}-INPUT", "stage_run_id")
         l1_stage = safe_id(f"{pipeline_id}-L1", "stage_run_id")
         l2_stage = safe_id(f"{pipeline_id}-L2", "stage_run_id")
         l3_stage = safe_id(f"{pipeline_id}-L3", "stage_run_id")
     except 工程错误 as exc:
-        print(json.dumps({"error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(
+            json.dumps(
+                错误信封(
+                    exc,
+                    stage="PROJECT_LOADER",
+                    run_id=pipeline_run_id or "",
+                    path=chapter or "",
+                    details=getattr(exc, "details", {}),
+                )
+                | {"run_root_created": False},
+                ensure_ascii=False,
+                indent=2,
+            ),
+            file=sys.stderr,
+        )
         return int(exc.exit_code)
-    if not chapter.exists():
-        print(json.dumps({"error": f"章节不存在：{chapter}"}, ensure_ascii=False), file=sys.stderr)
-        return int(ExitCode.INPUT_INVALID)
 
     run_root = safe_output_path(ROOT, Path("运行记录") / pipeline_id)
     if run_root.exists():
@@ -326,6 +337,8 @@ def 运行流水线(chapter: Path, project: 项目上下文 | str, pipeline_run_
         str(snapshot),
         "--project",
         project_context.project_id,
+        "--project-manifest",
+        str(project_context.project_manifest),
         "--run-id",
         l1_stage,
         "--out-dir",

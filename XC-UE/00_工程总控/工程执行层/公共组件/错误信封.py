@@ -16,6 +16,7 @@ from 退出码 import ExitCode
     ExitCode.NO_PRODUCTION_RULESET: "NO_PRODUCTION_RULESET",
     ExitCode.RULE_PARSE_FAILED: "RULE_PARSE_FAILED",
     ExitCode.PRODUCTION_MODE_NOT_ELIGIBLE: "PRODUCTION_MODE_NOT_ELIGIBLE",
+    ExitCode.PROJECT_ERROR: "PROJECT_ERROR",
     ExitCode.BLOCKED: "STAGE_BLOCKED",
     ExitCode.INTERNAL_ERROR: "INTERNAL_ERROR",
 }
@@ -31,7 +32,9 @@ def 错误信封(
 ) -> dict[str, Any]:
     code = 错误码.get(exc.exit_code, "INTERNAL_ERROR")
     message = str(exc)
-    payload_details = details or getattr(exc, "details", {}) or {}
+    payload_details = {**(getattr(exc, "details", {}) or {}), **(details or {})}
+    if exc.exit_code == ExitCode.PROJECT_ERROR and isinstance(payload_details.get("reason"), str):
+        code = payload_details["reason"]
     envelope = {
         "ok": False,
         "error_code": code,

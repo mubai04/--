@@ -14,6 +14,12 @@ class 输入错误(工程错误):
         super().__init__(message, ExitCode.INPUT_INVALID)
 
 
+class 项目错误(工程错误):
+    def __init__(self, message: str, reason: str, **details: object) -> None:
+        super().__init__(message, ExitCode.PROJECT_ERROR)
+        self.details = {"reason": reason, **details}
+
+
 class 结构错误(工程错误):
     def __init__(self, message: str) -> None:
         super().__init__(message, ExitCode.SCHEMA_INVALID)
@@ -27,4 +33,3 @@ class 血缘错误(工程错误):
 class 哈希错误(工程错误):
     def __init__(self, message: str) -> None:
         super().__init__(message, ExitCode.HASH_MISMATCH)
-

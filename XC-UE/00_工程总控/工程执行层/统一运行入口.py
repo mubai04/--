@@ -32,7 +32,7 @@ TARGETS = {
         "cwd": ROOT,
         "entry": ROOT / "00_工程总控" / "工程执行层" / "L1工程" / "L1运行入口.py",
         "default_run_id": "L1_RUN-UNIFIED",
-        "forward_args": {"chapter", "project", "standard_mode"},
+        "forward_args": {"chapter", "project", "project_registry", "project_root", "project_manifest", "standard_mode"},
         "rule_source": ROOT / "00_工程总控" / "工程执行层" / "L1工程" / "gate_rules.json",
     },
     "正文检测": {
@@ -79,11 +79,13 @@ def main() -> int:
         },
     }
     parser = argparse.ArgumentParser(description="XC-UE 统一工程执行入口。")
-    parser.add_argument("--target", required=True, choices=sorted([*runtime_targets, "PIPELINE"]), help="运行目标。")
+    parser.add_argument("--target", required=True, choices=sorted([*runtime_targets, "PIPELINE", "PROJECT"]), help="运行目标。")
     parser.add_argument("--run-id", default=None, help="报告编号。")
     parser.add_argument("--chapter", default=None, help="PIPELINE 使用的章节正文路径。")
     parser.add_argument("--project", default=None, help="PIPELINE 使用的项目 ID；未指定时加载默认项目。")
     parser.add_argument("--project-registry", default=None, help="项目注册表路径；默认使用工程执行层项目注册表。")
+    parser.add_argument("--project-root", default=None, help="显式项目根目录。")
+    parser.add_argument("--project-manifest", default=None, help="显式项目清单路径。")
     parser.add_argument("--standard-mode", default=候选试验模式, choices=[生产模式, 候选试验模式], help="标准加载模式。")
     args, extra = parser.parse_known_args()
 
@@ -98,31 +100,65 @@ def main() -> int:
 
     if args.target == "PIPELINE":
         try:
-            project = 加载项目(ROOT, args.project, args.project_registry)
-        except 输入错误 as exc:
+            project = 加载项目(
+                ROOT,
+                args.project,
+                args.project_registry,
+                project_root=args.project_root,
+                project_manifest=args.project_manifest,
+            )
+        except 工程错误 as exc:
             打印错误信封(exc, stage="PROJECT_LOADER", run_id=run_id_arg or "", details={"project": args.project or ""})
             return int(exc.exit_code)
-        if not chapter_arg:
-            print(json.dumps({"error": "PIPELINE 需要 --chapter"}, ensure_ascii=False), file=sys.stderr)
-            return 20
-        return 运行流水线(Path(chapter_arg), project, run_id_arg, args.standard_mode)
+        return 运行流水线(Path(chapter_arg) if chapter_arg else project.chapter_source, project, run_id_arg, args.standard_mode)
 
-    target = dict(runtime_targets[args.target])
-    if "project_target" in target:
+    if args.target == "PROJECT":
         try:
-            project = 加载项目(ROOT, target["project_target"], args.project_registry)
-        except 输入错误 as exc:
-            打印错误信封(exc, stage="PROJECT_LOADER", run_id=run_id_arg or "", details={"project": target["project_target"]})
+            project = 加载项目(
+                ROOT,
+                args.project,
+                args.project_registry,
+                project_root=args.project_root,
+                project_manifest=args.project_manifest,
+            )
+        except 工程错误 as exc:
+            打印错误信封(exc, stage="PROJECT_LOADER", run_id=run_id_arg or "", details={"project": args.project or ""})
             return int(exc.exit_code)
-        target["cwd"] = project.project_root
-        target["entry"] = project.project_root / target["entry_relative"]
-        target["rule_source"] = project.project_root / target["rule_relative"]
+        target = {
+            "cwd": project.project_root,
+            "entry": project.entrypoint,
+            "default_run_id": f"PROJECT-RUN-UNIFIED-{project.project_id}",
+            "forward_args": set(),
+            "project_identity": project.project_id,
+            "rule_source": project.project_manifest,
+            "payload_target": project.project_id,
+        }
+    else:
+        target = dict(runtime_targets[args.target])
+        if "project_target" in target:
+            try:
+                project = 加载项目(ROOT, target["project_target"], args.project_registry)
+            except 工程错误 as exc:
+                打印错误信封(exc, stage="PROJECT_LOADER", run_id=run_id_arg or "", details={"project": target["project_target"]})
+                return int(exc.exit_code)
+            target["cwd"] = project.project_root
+            target["entry"] = project.entrypoint
+            target["rule_source"] = project.project_manifest
+            target["project_identity"] = project.project_id
+            target["payload_target"] = project.project_id
+
     forward_args = target["forward_args"]
 
     if chapter_arg and "chapter" in forward_args:
         extra = ["--chapter", chapter_arg, *extra]
     if args.project and "project" in forward_args:
         extra = ["--project", args.project, *extra]
+    if args.project_registry and "project_registry" in forward_args:
+        extra = ["--project-registry", args.project_registry, *extra]
+    if args.project_root and "project_root" in forward_args:
+        extra = ["--project-root", args.project_root, *extra]
+    if args.project_manifest and "project_manifest" in forward_args:
+        extra = ["--project-manifest", args.project_manifest, *extra]
     if "standard_mode" in forward_args:
         extra = ["--standard-mode", args.standard_mode, *extra]
 
@@ -137,7 +173,7 @@ def main() -> int:
             requested_mode=args.standard_mode,
             rule_source=target.get("rule_source"),
             entrypoint=args.target,
-            project_identity=args.project or args.target,
+            project_identity=target.get("project_identity", args.project or args.target),
         )
     except 工程错误 as exc:
         打印错误信封(exc, stage=args.target, run_id=run_id, path=target.get("rule_source", ""), details=getattr(exc, "details", {}))
@@ -149,9 +185,9 @@ def main() -> int:
     result = subprocess.run(cmd, cwd=str(cwd), text=True, capture_output=True, env=env)
 
     payload = {
-        "target": args.target,
-        "entry": str(entry.relative_to(ROOT)),
-        "cwd": str(cwd.relative_to(ROOT)),
+        "target": target.get("payload_target", args.target),
+        "entry": str(entry.relative_to(ROOT)) if entry.is_relative_to(ROOT) else str(entry),
+        "cwd": str(cwd.relative_to(ROOT)) if cwd.is_relative_to(ROOT) else str(cwd),
         "returncode": result.returncode,
         "stdout": result.stdout.strip(),
         "stderr": result.stderr.strip(),
