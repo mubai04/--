@@ -70,6 +70,19 @@ def 测试流水线专用错误终态清单符合Schema(root_case):
             "combined_sha256": "b" * 64,
             "standard_mode": "CANDIDATE_TEST",
             "experimental_standard": True,
+            "production_eligibility": {
+                "requested_mode": "CANDIDATE_TEST",
+                "effective_mode": "CANDIDATE_TEST",
+                "eligible": True,
+                "reason": "NON_PRODUCTION_MODE",
+                "rule_source": "00_工程总控/工程执行层/L1工程/gate_rules.json",
+                "entrypoint": "PIPELINE",
+                "rules_status": "",
+                "schema_version": "",
+                "production_eligible": False,
+                "experimental_standard": True,
+                "project_identity": "pytest",
+            },
             "records": [],
             "error": "pytest",
         },
@@ -235,12 +248,13 @@ def 测试生产规则错误不创建运行目录且返回专用错误(tmp_path:
         capture_output=True,
         timeout=30,
     )
-    assert result.returncode == int(ExitCode.NO_PRODUCTION_RULESET)
+    assert result.returncode == int(ExitCode.PRODUCTION_MODE_NOT_ELIGIBLE)
     manifest_path = ROOT / "运行记录" / run_id / "流水线清单.json"
     assert not manifest_path.exists()
     assert not (ROOT / "运行记录" / run_id).exists()
     payload = json.loads(result.stderr)
-    assert payload["error"] == "NO_PRODUCTION_RULESET"
+    assert payload["error_code"] == "PRODUCTION_MODE_NOT_ELIGIBLE"
+    assert payload["reason"] == "CANDIDATE_RULES_ONLY"
     assert payload["run_root_created"] is False
 
 

@@ -21,9 +21,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent / "公共组件"))
 from 流水线运行 import 运行流水线
 from 标准加载器 import 候选试验模式, 生产模式
 from 安全路径 import resolve_inside_root, safe_id
-from 工程异常 import 输入错误
+from 工程异常 import 工程错误, 输入错误
 from 项目加载器 import 加载项目, 读取默认项目ID
 from 错误信封 import 打印错误信封
+from 生产资格 import 要求生产资格
 
 
 TARGETS = {
@@ -32,24 +33,31 @@ TARGETS = {
         "entry": ROOT / "00_工程总控" / "工程执行层" / "L1工程" / "L1运行入口.py",
         "default_run_id": "L1_RUN-UNIFIED",
         "forward_args": {"chapter", "project", "standard_mode"},
+        "rule_source": ROOT / "00_工程总控" / "工程执行层" / "L1工程" / "gate_rules.json",
     },
     "正文检测": {
         "cwd": ROOT,
         "entry": ROOT / "00_工程总控" / "工程执行层" / "正文检测" / "正文检测运行入口.py",
         "default_run_id": "正文检测_COMPAT-RUN-UNIFIED",
         "forward_args": {"chapter", "project", "standard_mode"},
+        "rule_source": ROOT / "00_工程总控" / "工程执行层" / "L1工程" / "gate_rules.json",
     },
     "L2": {
         "cwd": ROOT,
         "entry": ROOT / "00_工程总控" / "工程执行层" / "L2工程" / "L2运行入口.py",
         "default_run_id": "L2_RUN-UNIFIED",
         "forward_args": {"standard_mode"},
+        "rule_source": [
+            ROOT / "00_工程总控" / "工程执行层" / "L2工程" / "ability_rules.json",
+            ROOT / "00_工程总控" / "工程执行层" / "L2工程" / "routes.json",
+        ],
     },
     "L3": {
         "cwd": ROOT,
         "entry": ROOT / "00_工程总控" / "工程执行层" / "L3工程" / "L3运行入口.py",
         "default_run_id": "L3_RUN-UNIFIED",
         "forward_args": {"standard_mode"},
+        "rule_source": ROOT / "00_工程总控" / "工程执行层" / "L3工程" / "protocol_rules.json",
     },
 }
 
@@ -65,6 +73,7 @@ def main() -> int:
         default_project_id: {
             "project_target": default_project_id,
             "entry_relative": Path("engine") / "TP001运行入口.py",
+            "rule_relative": Path("engine") / "rules_tp001_v0.1.json",
             "default_run_id": f"ENGINE-RUN-UNIFIED-{default_project_id}",
             "forward_args": set(),
         },
@@ -107,6 +116,7 @@ def main() -> int:
             return int(exc.exit_code)
         target["cwd"] = project.project_root
         target["entry"] = project.project_root / target["entry_relative"]
+        target["rule_source"] = project.project_root / target["rule_relative"]
     forward_args = target["forward_args"]
 
     if chapter_arg and "chapter" in forward_args:
@@ -122,6 +132,16 @@ def main() -> int:
 
     if not entry.exists():
         raise FileNotFoundError(f"Missing target entry: {entry}")
+    try:
+        要求生产资格(
+            requested_mode=args.standard_mode,
+            rule_source=target.get("rule_source"),
+            entrypoint=args.target,
+            project_identity=args.project or args.target,
+        )
+    except 工程错误 as exc:
+        打印错误信封(exc, stage=args.target, run_id=run_id, path=target.get("rule_source", ""), details=getattr(exc, "details", {}))
+        return int(exc.exit_code)
 
     env = os.environ.copy()
     env["PYTHONDONTWRITEBYTECODE"] = "1"

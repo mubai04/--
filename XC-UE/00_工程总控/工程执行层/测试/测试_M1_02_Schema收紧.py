@@ -311,6 +311,19 @@ def _valid_samples() -> dict[str, dict]:
                 "combined_sha256": SHA256,
                 "standard_mode": "CANDIDATE_TEST",
                 "experimental_standard": True,
+                "production_eligibility": {
+                    "requested_mode": "CANDIDATE_TEST",
+                    "effective_mode": "CANDIDATE_TEST",
+                    "eligible": True,
+                    "reason": "NON_PRODUCTION_MODE",
+                    "rule_source": "00_工程总控/工程执行层/L1工程/gate_rules.json",
+                    "entrypoint": "PIPELINE",
+                    "rules_status": "",
+                    "schema_version": "",
+                    "production_eligible": False,
+                    "experimental_standard": True,
+                    "project_identity": "pytest",
+                },
                 "records": [
                     {
                         "名称": "L1-02",

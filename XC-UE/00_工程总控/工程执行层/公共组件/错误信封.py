@@ -15,6 +15,7 @@ from 退出码 import ExitCode
     ExitCode.HASH_MISMATCH: "INPUT_HASH_MISMATCH",
     ExitCode.NO_PRODUCTION_RULESET: "NO_PRODUCTION_RULESET",
     ExitCode.RULE_PARSE_FAILED: "RULE_PARSE_FAILED",
+    ExitCode.PRODUCTION_MODE_NOT_ELIGIBLE: "PRODUCTION_MODE_NOT_ELIGIBLE",
     ExitCode.BLOCKED: "STAGE_BLOCKED",
     ExitCode.INTERNAL_ERROR: "INTERNAL_ERROR",
 }
@@ -47,7 +48,16 @@ def 错误信封(
         },
         "exit_code": int(exc.exit_code),
     }
-    for key in ["rule_source", "reason", "location", "detail"]:
+    for key in [
+        "rule_source",
+        "reason",
+        "location",
+        "detail",
+        "requested_mode",
+        "effective_mode",
+        "eligible",
+        "entrypoint",
+    ]:
         if key in payload_details:
             envelope[key] = payload_details[key]
     return envelope

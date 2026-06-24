@@ -57,6 +57,7 @@
         "combined_sha256",
         "standard_mode",
         "experimental_standard",
+        "production_eligibility",
         "records",
         "error"
       ],
@@ -79,6 +80,9 @@
         },
         "experimental_standard": {
           "type": "boolean"
+        },
+        "production_eligibility": {
+          "$ref": "#/$defs/production_eligibility"
         },
         "records": {
           "type": "array",
@@ -172,6 +176,7 @@
         "L2_STAGE_FAILED",
         "L3_STAGE_FAILED",
         "NO_PRODUCTION_RULESET",
+        "PRODUCTION_MODE_NOT_ELIGIBLE",
         "RULE_PARSE_FAILED",
         "STANDARD_PRECHECK_FAILED"
       ]
@@ -186,6 +191,7 @@
         "FAILED_HASH",
         "FAILED_LINEAGE",
         "NO_PRODUCTION_RULESET",
+        "PRODUCTION_MODE_NOT_ELIGIBLE",
         "BLOCKED",
         "GATE_REJECTED",
         "REVIEW_REQUIRED",
@@ -244,6 +250,78 @@
             "PRODUCTION",
             "CANDIDATE_TEST"
           ]
+        }
+      }
+    },
+    "production_eligibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requested_mode",
+        "effective_mode",
+        "eligible",
+        "reason",
+        "rule_source",
+        "entrypoint",
+        "rules_status",
+        "schema_version",
+        "production_eligible",
+        "experimental_standard",
+        "project_identity"
+      ],
+      "properties": {
+        "requested_mode": {
+          "type": "string",
+          "enum": [
+            "PRODUCTION",
+            "CANDIDATE_TEST"
+          ]
+        },
+        "effective_mode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "PRODUCTION",
+            "CANDIDATE_TEST",
+            null
+          ]
+        },
+        "eligible": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "rule_source": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "entrypoint": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "rules_status": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "schema_version": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "production_eligible": {
+          "type": "boolean"
+        },
+        "experimental_standard": {
+          "type": "boolean"
+        },
+        "project_identity": {
+          "type": "string",
+          "maxLength": 128
         }
       }
     },

@@ -30,6 +30,7 @@ from 退出码 import ExitCode
 from 运行状态 import 状态说明, 已完成, 已阻断, 结构无效
 from 文件哈希 import 计算文件哈希
 from 标准加载器 import 候选试验模式, 生产模式
+from 生产资格 import 判定结果转标准字段, 要求生产资格
 from 工程异常 import 工程错误
 from 安全路径 import resolve_inside_root, safe_id
 from 输入校验 import 校验JSON输入, 血缘期望
@@ -124,6 +125,12 @@ def main() -> int:
         ability_rules_path = Path(args.ability_rules) if args.ability_rules else L2能力规则路径(ROOT)
         if not ability_rules_path.is_absolute():
             ability_rules_path = (ROOT / ability_rules_path).resolve()
+        mode_decision = 要求生产资格(
+            requested_mode=args.standard_mode,
+            rule_source=[ability_rules_path, L2路由规则路径(ROOT)],
+            entrypoint="L2",
+            project_identity=pipeline_run_id,
+        )
         rules = 加载能力规则(ability_rules_path)
         rules.路由规则集 = 加载路由规则(L2路由规则路径(ROOT))
     except 工程错误 as exc:
@@ -170,6 +177,7 @@ def main() -> int:
         extensions={"L2-01真实诊断": [asdict(diagnosis) for diagnosis in l201_diagnostics]} if l201_diagnostics else {},
     )
     md_path, json_path = 写报告(result, out_dir)
+    standard_fields = 判定结果转标准字段(mode_decision)
     print(
         json.dumps(
             {
@@ -184,8 +192,7 @@ def main() -> int:
                 "report_md": str(md_path),
                 "report_json": str(json_path),
                 "ability_rules": str(ability_rules_path),
-                "standard_mode": args.standard_mode,
-                "experimental_standard": args.standard_mode == 候选试验模式,
+                **standard_fields,
                 "status": status,
                 "exit_code": int(exit_code),
             },

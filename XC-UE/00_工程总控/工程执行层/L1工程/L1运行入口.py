@@ -31,6 +31,7 @@ from 退出码 import ExitCode
 from 工程异常 import 工程错误
 from 运行状态 import 状态说明, 机器初筛通过, 机器初筛退回, 需要人工复核
 from 标准加载器 import 候选试验模式, 生产模式
+from 生产资格 import 判定结果转标准字段, 要求生产资格
 from 安全路径 import resolve_inside_root, safe_id
 from 错误信封 import 打印错误信封
 from 项目加载器 import 加载项目
@@ -103,6 +104,12 @@ def main() -> int:
         gate_rules_path = Path(args.gate_rules) if args.gate_rules else L1闸门规则路径(ROOT)
         if not gate_rules_path.is_absolute():
             gate_rules_path = (ROOT / gate_rules_path).resolve()
+        mode_decision = 要求生产资格(
+            requested_mode=args.standard_mode,
+            rule_source=gate_rules_path,
+            entrypoint="L1",
+            project_identity=args.project,
+        )
         rules = 加载闸门规则(gate_rules_path)
         gate_rules_raw = json.loads(gate_rules_path.read_text(encoding="utf-8-sig"))
         gate_rule_version = gate_rules_raw["version"]
@@ -175,6 +182,7 @@ def main() -> int:
     except 工程错误 as exc:
         打印错误信封(exc, stage="L1", run_id=run_id, path=out_dir)
         return int(exc.exit_code)
+    standard_fields = 判定结果转标准字段(mode_decision)
     print(
         json.dumps(
             {
@@ -193,8 +201,7 @@ def main() -> int:
                 "human_review_required": result.human_review_required,
                 "validation_status": result.validation_status,
                 "exit_code": int(exit_code),
-                "standard_mode": args.standard_mode,
-                "experimental_standard": args.standard_mode == 候选试验模式,
+                **standard_fields,
             },
             ensure_ascii=False,
             indent=2,

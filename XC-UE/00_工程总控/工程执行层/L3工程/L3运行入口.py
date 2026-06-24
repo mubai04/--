@@ -33,6 +33,7 @@ from 退出码 import ExitCode
 from 运行状态 import 状态说明, 已完成, 已阻断, 结构无效, 等待执行器
 from 文件哈希 import 计算文件哈希
 from 标准加载器 import 候选试验模式, 生产模式
+from 生产资格 import 判定结果转标准字段, 要求生产资格
 from 工程异常 import 工程错误
 from 安全路径 import resolve_inside_root, safe_id
 from 输入校验 import 校验JSON输入, 血缘期望
@@ -134,6 +135,12 @@ def main() -> int:
         protocol_rules_path = Path(args.protocol_rules) if args.protocol_rules else L3协议规则路径(ROOT)
         if not protocol_rules_path.is_absolute():
             protocol_rules_path = (ROOT / protocol_rules_path).resolve()
+        mode_decision = 要求生产资格(
+            requested_mode=args.standard_mode,
+            rule_source=protocol_rules_path,
+            entrypoint="L3",
+            project_identity=pipeline_run_id,
+        )
         rules = 加载协议规则(protocol_rules_path)
         允许状态跳转.clear()
         允许状态跳转.update(rules.状态跳转)
@@ -206,6 +213,7 @@ def main() -> int:
         task_package_created=bool(created_outputs),
     )
     md_path, json_path = 写报告(result, out_dir)
+    standard_fields = 判定结果转标准字段(mode_decision)
     print(
         json.dumps(
             {
@@ -220,8 +228,7 @@ def main() -> int:
                 "report_json": str(json_path),
                 "protocol_rules": str(protocol_rules_path),
                 "status": status,
-                "standard_mode": args.standard_mode,
-                "experimental_standard": args.standard_mode == 候选试验模式,
+                **standard_fields,
                 "exit_code": int(exit_code),
             },
             ensure_ascii=False,

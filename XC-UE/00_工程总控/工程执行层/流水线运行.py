@@ -19,9 +19,11 @@ from 原子写入 import 原子写文本
 from 退出码 import ExitCode
 from 工程异常 import 工程错误
 from 标准加载器 import 候选试验模式, 加载标准文本, 标准记录转字典
+from 生产资格 import 判定结果转标准字段, 要求生产资格
 from 结构校验 import 按结构文件校验
 from 安全路径 import resolve_inside_root, safe_id, safe_output_path
 from 项目加载器 import 项目上下文, 加载项目
+from 错误信封 import 错误信封
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -184,6 +186,7 @@ def _最终判定(codes: list[int]) -> tuple[int, str]:
         (int(ExitCode.RULE_PARSE_FAILED), "RULE_PARSE_FAILED"),
         (int(ExitCode.HASH_MISMATCH), "FAILED_HASH"),
         (int(ExitCode.LINEAGE_ERROR), "FAILED_LINEAGE"),
+        (int(ExitCode.PRODUCTION_MODE_NOT_ELIGIBLE), "PRODUCTION_MODE_NOT_ELIGIBLE"),
         (int(ExitCode.NO_PRODUCTION_RULESET), "NO_PRODUCTION_RULESET"),
         (int(ExitCode.BLOCKED), "BLOCKED"),
         (int(ExitCode.GATE_REJECTED), "GATE_REJECTED"),
@@ -224,7 +227,37 @@ def 运行流水线(chapter: Path, project: 项目上下文 | str, pipeline_run_
         print(json.dumps({"error": f"运行记录已存在，拒绝覆盖：{run_root}"}, ensure_ascii=False), file=sys.stderr)
         return int(ExitCode.INPUT_INVALID)
 
-    standard_records, standard_error_code, standard_error = _加载规则血缘(standard_mode)
+    try:
+        mode_decision = 要求生产资格(
+            requested_mode=standard_mode,
+            rule_source=[
+                ROOT / "00_工程总控" / "工程执行层" / "L1工程" / "gate_rules.json",
+                ROOT / "00_工程总控" / "工程执行层" / "L2工程" / "ability_rules.json",
+                ROOT / "00_工程总控" / "工程执行层" / "L2工程" / "routes.json",
+                ROOT / "00_工程总控" / "工程执行层" / "L3工程" / "protocol_rules.json",
+            ],
+            entrypoint="PIPELINE",
+            project_identity=project_context.project_id,
+        )
+    except 工程错误 as exc:
+        print(
+            json.dumps(
+                错误信封(
+                    exc,
+                    stage="PIPELINE",
+                    run_id=pipeline_id,
+                    path=chapter,
+                    details=getattr(exc, "details", {}),
+                )
+                | {"run_root_created": False},
+                ensure_ascii=False,
+                indent=2,
+            ),
+            file=sys.stderr,
+        )
+        return int(exc.exit_code)
+
+    standard_records, standard_error_code, standard_error = _加载规则血缘(mode_decision.effective_mode or standard_mode)
     if standard_error_code is not None:
         status = "NO_PRODUCTION_RULESET" if standard_error_code == int(ExitCode.NO_PRODUCTION_RULESET) else "STANDARD_PRECHECK_FAILED"
         print(
@@ -233,7 +266,7 @@ def 运行流水线(chapter: Path, project: 项目上下文 | str, pipeline_run_
                     "error": status,
                     "message": standard_error,
                     "exit_code": standard_error_code,
-                    "standard_mode": standard_mode,
+                    "standard_mode": mode_decision.effective_mode or standard_mode,
                     "run_root_created": False,
                 },
                 ensure_ascii=False,
@@ -268,8 +301,7 @@ def 运行流水线(chapter: Path, project: 项目上下文 | str, pipeline_run_
         "standards": {
             "source": "Markdown Front Matter",
             "combined_sha256": _标准哈希(standard_records),
-            "standard_mode": standard_mode,
-            "experimental_standard": standard_mode == "CANDIDATE_TEST",
+            **判定结果转标准字段(mode_decision),
             "records": standard_records,
             "error": standard_error,
         },
@@ -303,7 +335,7 @@ def 运行流水线(chapter: Path, project: 项目上下文 | str, pipeline_run_
         "--stage-run-id",
         l1_stage,
         "--standard-mode",
-        standard_mode,
+        mode_decision.effective_mode or standard_mode,
     ]
     l1_result = _运行阶段(l1_cmd, ROOT)
     l1_report = l1_dir / "检测报告.json"
@@ -353,7 +385,7 @@ def 运行流水线(chapter: Path, project: 项目上下文 | str, pipeline_run_
         "--expected-input-sha256",
         l1_outputs[1]["sha256"],
         "--standard-mode",
-        standard_mode,
+        mode_decision.effective_mode or standard_mode,
     ]
     l2_result = _运行阶段(l2_cmd, ROOT)
     l2_report = l2_dir / "修复报告.json"
@@ -410,7 +442,7 @@ def 运行流水线(chapter: Path, project: 项目上下文 | str, pipeline_run_
             "--expected-input-sha256",
             l2_outputs[0]["sha256"] if l2_outputs else "",
             "--standard-mode",
-            standard_mode,
+            mode_decision.effective_mode or standard_mode,
             "--project-harness",
             str(project_context.project_root),
         ]
