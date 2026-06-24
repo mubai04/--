@@ -243,7 +243,10 @@
         "回流位置",
         "是否需要其他L2辅助",
         "是否需要回L15重路由",
-        "最终状态"
+        "最终状态",
+        "rule_id",
+        "rule_version",
+        "rule_hash"
       ],
       "properties": {
         "修复单类型": {
@@ -312,6 +315,15 @@
         },
         "标准验收": {
           "$ref": "#/$defs/text_array"
+        },
+        "rule_id": {
+          "$ref": "#/$defs/short_text"
+        },
+        "rule_version": {
+          "$ref": "#/$defs/short_text"
+        },
+        "rule_hash": {
+          "$ref": "#/$defs/sha256"
         }
       }
     },

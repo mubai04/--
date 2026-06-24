@@ -65,6 +65,9 @@ class 修复单:
     规则依据: str = ""
     标准动作: list[str] = field(default_factory=list)
     标准验收: list[str] = field(default_factory=list)
+    rule_id: str = ""
+    rule_version: str = ""
+    rule_hash: str = ""
 
 
 @dataclass

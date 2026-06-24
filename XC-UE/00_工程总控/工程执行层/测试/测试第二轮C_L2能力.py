@@ -275,6 +275,9 @@ def 测试A3结构化能力规则改动会改变L2修复单(root_case, test_io_e
     assert marker in form["标准动作"]
     assert form["规则编号"]
     assert form["规则依据"]
+    assert form["rule_id"] == "L2-05:P1"
+    assert form["rule_version"] == "2026-06-24.a3-01"
+    assert len(form["rule_hash"]) == 64
 
 
 def 测试A3Markdown能力标准改动不改变L2运行行为(root_case, test_io_env):

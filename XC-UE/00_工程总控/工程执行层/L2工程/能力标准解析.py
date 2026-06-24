@@ -27,6 +27,8 @@ class 失败规则:
     修复规则: list[str] = field(default_factory=list)
     验收标准: list[str] = field(default_factory=list)
     匹配关键词: list[str] = field(default_factory=list)
+    规则版本: str = ""
+    规则哈希: str = ""
 
 
 @dataclass
@@ -41,6 +43,8 @@ class 能力规则:
     回流验收问题: list[str] = field(default_factory=list)
     禁止项: list[str] = field(default_factory=list)
     默认动作: dict[str, list[str]] = field(default_factory=dict)
+    规则版本: str = ""
+    规则哈希: str = ""
 
 
 @dataclass

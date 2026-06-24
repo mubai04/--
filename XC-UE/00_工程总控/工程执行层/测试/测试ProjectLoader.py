@@ -82,6 +82,9 @@ def _write_l2_report(path: Path) -> None:
                 "是否需要其他L2辅助": "否",
                 "是否需要回L15重路由": "否",
                 "最终状态": "回原闸门复验",
+                "rule_id": "L2-05:pytest-rule",
+                "rule_version": "pytest",
+                "rule_hash": "a" * 64,
             }
         ],
         "阻断项": [],

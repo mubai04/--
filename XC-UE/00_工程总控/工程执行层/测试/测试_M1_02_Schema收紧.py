@@ -111,6 +111,9 @@ def _fix_form() -> dict:
         "规则依据": "pytest",
         "标准动作": ["补强读者投入"],
         "标准验收": ["L1-02 复验"],
+        "rule_id": "L2-05:pytest-rule",
+        "rule_version": "pytest",
+        "rule_hash": "a" * 64,
     }
 
 

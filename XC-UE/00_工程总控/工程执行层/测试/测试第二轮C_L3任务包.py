@@ -51,6 +51,9 @@ def _修复单(module: str = "L2-05", problem: str = "入口弱") -> dict:
         "是否需要其他L2辅助": "否",
         "是否需要回L15重路由": "否",
         "最终状态": "回原闸门复验",
+        "rule_id": f"{module}:pytest-rule",
+        "rule_version": "pytest",
+        "rule_hash": "a" * 64,
     }
 
 

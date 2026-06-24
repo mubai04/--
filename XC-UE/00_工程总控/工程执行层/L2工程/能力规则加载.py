@@ -35,8 +35,9 @@ def 加载能力规则(path: Path) -> L2规则:
         raise 能力规则加载错误(f"L2 结构化能力规则解析失败：{path}") from exc
 
     _校验根结构(raw, digest)
+    version = raw["version"]
     abilities_raw = raw["abilities"]
-    abilities = {module: _解析能力(module, abilities_raw[module], digest) for module in sorted(REQUIRED_MODULES)}
+    abilities = {module: _解析能力(module, abilities_raw[module], version, digest) for module in sorted(REQUIRED_MODULES)}
     return L2规则(
         能力接口表={module: ability for module, ability in abilities.items()},
         能力规则=abilities,
@@ -67,7 +68,7 @@ def _校验根结构(raw: Any, digest: str) -> None:
         raise 能力规则加载错误("L2 结构化能力规则 hash 计算异常")
 
 
-def _解析能力(module: str, raw: Any, digest: str) -> 能力规则:
+def _解析能力(module: str, raw: Any, version: str, digest: str) -> 能力规则:
     if not isinstance(raw, dict):
         raise 能力规则加载错误(f"{module} 能力规则必须是对象")
     required = [
@@ -93,7 +94,7 @@ def _解析能力(module: str, raw: Any, digest: str) -> 能力规则:
         raise 能力规则加载错误(f"{module} status 必须为 active")
     source = _非空字符串(raw["source"], f"{module}.source")
     _非空字符串(raw["scope"], f"{module}.scope")
-    failure_types = [_解析失败规则(module, item) for item in _对象列表(raw["failure_types"], f"{module}.failure_types")]
+    failure_types = [_解析失败规则(module, item, version, digest) for item in _对象列表(raw["failure_types"], f"{module}.failure_types")]
     if not failure_types:
         raise 能力规则加载错误(f"{module} failure_types 不能为空")
     ability = 能力规则(
@@ -107,12 +108,14 @@ def _解析能力(module: str, raw: Any, digest: str) -> 能力规则:
         回流验收问题=_字符串列表(raw["acceptance_questions"], f"{module}.acceptance_questions"),
         禁止项=_字符串列表(raw["forbidden"], f"{module}.forbidden"),
         默认动作=_字符串列表字典(raw["default_actions"], f"{module}.default_actions"),
+        规则版本=version,
+        规则哈希=digest,
     )
     ability.标准来源 = f"{source}@{digest[:12]}"
     return ability
 
 
-def _解析失败规则(module: str, raw: dict[str, Any]) -> 失败规则:
+def _解析失败规则(module: str, raw: dict[str, Any], version: str, digest: str) -> 失败规则:
     for key in ["id", "name", "definition", "signals", "repair_rules", "acceptance"]:
         if key not in raw:
             raise 能力规则加载错误(f"{module}.failure_types 缺少字段：{key}")
@@ -124,6 +127,8 @@ def _解析失败规则(module: str, raw: dict[str, Any]) -> 失败规则:
         修复规则=_字符串列表(raw["repair_rules"], f"{module}.failure_types.repair_rules"),
         验收标准=_字符串列表(raw["acceptance"], f"{module}.failure_types.acceptance"),
         匹配关键词=_字符串列表(raw.get("match_keywords", []), f"{module}.failure_types.match_keywords"),
+        规则版本=version,
+        规则哈希=digest,
     )
 
 
