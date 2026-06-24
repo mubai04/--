@@ -1,0 +1,22 @@
+[33m6a2487f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m docs: repair XC-UE active navigation
+[33ma503529[m fix: remove B2 structured rule fallback
+[33mdb7fc2a[m docs: refresh XC-UE stage and source boundaries
+[33m42b85d7[m fix: validate B2 audit lineage and structured rules
+[33m2f86bb7[m fix: make B2 finalization recoverable and terminal
+[33md71b57d[m feat: complete B2 apply and rollback lifecycle
+[33m0753d0c[m docs: clarify approved runtime text application
+[33mf901945[m feat: add B2 deterministic patch execution
+[33m41f8da1[m test: include project context in pipeline manifest fixture
+[33m526b28d[m fix: align L1 runtime outputs with schemas
+[33me05a039[m test: align run-id regression with project semantics
+[33m8625a36[m fix: bind project identity content and entrypoint
+[33m9cbb211[m fix: enforce production eligibility across entrypoints
+[33m83f8f4e[m fix: validate and normalize L2 route rules
+[33m7dfd092[m fix: prefer specific L2 route keywords
+[33m58c6397[m fix: make L15 routing structured
+[33mdbd4c04[m fix: remove L1-00 markdown pseudo warning
+[33m3eb649c[m feat: add L2-01 diagnostic capability
+[33m3bd7c83[m refactor(L3): make structured protocol rules runtime source
+[33md1a347f[m refactor(L1): make structured gate rules runtime source
+[33mfae2546[m refactor(L2): make structured ability rules runtime source
+[33m6bfb7be[m fix(L2): reject duplicate run id outputs

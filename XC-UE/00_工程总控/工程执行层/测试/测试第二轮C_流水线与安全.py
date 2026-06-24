@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
 import uuid
@@ -115,6 +116,22 @@ def 测试当前没有生产规则FrontMatter():
     ]
     text = "\n".join(path.read_text(encoding="utf-8-sig") for path in rule_files)
     assert "允许作为真源: true" not in text
+
+
+def 测试根级README和INDEX引用的本地文件必须存在():
+    docs = [
+        ROOT / "README_XC-UE_当前结构与真源边界.md",
+        ROOT / "INDEX.md",
+    ]
+    missing: list[str] = []
+    for doc in docs:
+        text = doc.read_text(encoding="utf-8-sig")
+        for match in re.findall(r"`([^`]+?\.(?:md|json))`", text):
+            if "/" in match or "\\" in match or "*" in match:
+                continue
+            if not (ROOT / match).exists():
+                missing.append(f"{doc.name}:{match}")
+    assert missing == []
 
 
 @pytest.mark.security
