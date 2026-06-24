@@ -59,6 +59,26 @@ def 写报告(result: L2报告, out_dir: Path) -> tuple[Path, Path]:
     if result.回流校验问题:
         lines.extend(["", "### 回流校验问题"])
         lines.extend(f"- {item}" for item in result.回流校验问题)
+    l201_diagnostics = result.extensions.get("L2-01真实诊断", []) if result.extensions else []
+    if l201_diagnostics:
+        lines.extend(["", "## L2-01 真实诊断"])
+        for idx, diagnosis in enumerate(l201_diagnostics, start=1):
+            anchors = diagnosis.get("证据锚点", [])
+            anchor_text = "；".join(
+                f"P{anchor.get('段落')}：{anchor.get('摘句')}" for anchor in anchors
+            ) or "无"
+            lines.extend(
+                [
+                    "",
+                    f"### L2-01-DIAG-{idx:03d}",
+                    f"- 问题类型：{diagnosis.get('问题类型', '')}",
+                    f"- 证据锚点：{anchor_text}",
+                    f"- 修改目标：{diagnosis.get('修改目标', '')}",
+                    f"- 候选修改策略：{'、'.join(diagnosis.get('候选修改策略', [])) or '无'}",
+                    f"- 自动修复资格判定：{diagnosis.get('自动修复资格判定', '')}",
+                    f"- 置信度：{diagnosis.get('置信度', '')}",
+                ]
+            )
     lines.extend(
         [
         "",

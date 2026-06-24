@@ -252,6 +252,25 @@ def _valid_samples() -> dict[str, dict]:
             "复验目标": [],
             "input_artifacts": [_artifact("failure_packet", "L1", "pytest-pipeline-L1")],
             "output_artifacts": [_artifact("l2_report", "L2", "pytest-pipeline-L2")],
+            "extensions": {
+                "L2-01真实诊断": [
+                    {
+                        "问题类型": "主线发散",
+                        "证据锚点": [{"段落": 3, "摘句": "pytest 摘句"}],
+                        "涉及段落": [3],
+                        "原因诊断": "pytest",
+                        "修改目标": "pytest",
+                        "候选修改策略": ["主线锁定"],
+                        "风险": ["pytest"],
+                        "验收条件": ["pytest"],
+                        "置信度": "高",
+                        "自动修复资格判定": "可自动修复",
+                        "rule_id": "L2-01:F01",
+                        "rule_version": "pytest",
+                        "rule_hash": SHA256,
+                    }
+                ]
+            },
         },
         "第三层任务包结构.json": {
             "schema_version": "xcue.l3-task-bundle/1.0",

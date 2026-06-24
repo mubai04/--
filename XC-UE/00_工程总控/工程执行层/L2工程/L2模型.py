@@ -71,6 +71,23 @@ class 修复单:
 
 
 @dataclass
+class L201真实诊断:
+    问题类型: str
+    证据锚点: list[dict[str, Any]]
+    涉及段落: list[int]
+    原因诊断: str
+    修改目标: str
+    候选修改策略: list[str]
+    风险: list[str]
+    验收条件: list[str]
+    置信度: str
+    自动修复资格判定: str
+    rule_id: str = ""
+    rule_version: str = ""
+    rule_hash: str = ""
+
+
+@dataclass
 class L2报告:
     run_id: str
     输入文件: str
@@ -89,6 +106,7 @@ class L2报告:
     状态说明: str = ""
     input_artifacts: list[dict[str, Any]] = field(default_factory=list)
     output_artifacts: list[dict[str, Any]] = field(default_factory=list)
+    extensions: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

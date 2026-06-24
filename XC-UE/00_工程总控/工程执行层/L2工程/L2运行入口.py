@@ -6,6 +6,7 @@ import json
 import os
 import sys
 import tempfile
+from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
 
@@ -20,6 +21,7 @@ from L2模型 import L2报告
 from L2读取 import L2路由规则路径, 读失败包
 from L2_99_接口判断 import 判断
 from 修复单生成 import 生成
+import L2_01_叙事结构能力
 from L2禁止项检查 import 检查
 from 能力规则加载 import L2能力规则路径, 加载能力规则
 from 路由规则加载 import 加载路由规则
@@ -129,6 +131,12 @@ def main() -> int:
         return int(exc.exit_code)
     items = 读失败包(packet_path)
     judgements = [判断(item, rules) for item in items]
+    l201_diagnostics = []
+    l201_rules = rules.能力规则.get("L2-01")
+    if l201_rules:
+        for item, judgement in zip(items, judgements):
+            if judgement.主候选模块 == "L2-01" or judgement.次候选模块 == "L2-01":
+                l201_diagnostics.append(L2_01_叙事结构能力.生成真实诊断(item, l201_rules))
     forms = 生成(items, judgements, rules)
     blocked = 检查(judgements)
     recheck_targets = [item for item in judgements if item.最终状态 == "派生复验"]
@@ -159,6 +167,7 @@ def main() -> int:
         stage_run_id=stage_run_id or f"{pipeline_run_id}-L2" if pipeline_run_id else run_id,
         status=status,
         状态说明=状态说明[status],
+        extensions={"L2-01真实诊断": [asdict(diagnosis) for diagnosis in l201_diagnostics]} if l201_diagnostics else {},
     )
     md_path, json_path = 写报告(result, out_dir)
     print(
