@@ -11,7 +11,16 @@ from pathlib import Path
 import pytest
 
 from conftest import ROOT
+
+L2工程 = ROOT / "00_工程总控" / "工程执行层" / "L2工程"
+if str(L2工程) not in sys.path:
+    sys.path.insert(0, str(L2工程))
+
 from 退出码 import ExitCode
+from L2模型 import 失败输入
+from L2_99_接口判断 import 判断
+from 能力标准解析 import L2规则
+from 路由规则加载 import 加载路由规则
 
 
 pytestmark = pytest.mark.integration
@@ -220,6 +229,53 @@ def _改写L201规则为B1可读样本(path: Path) -> None:
 
 def _B1诊断(report: dict) -> list[dict]:
     return report["extensions"]["L2-01真实诊断"]
+
+
+def 测试A03_L2重叠关键词按最长专词路由(root_case):
+    routes_path = root_case / "routes.json"
+    routes_path.write_text(
+        json.dumps(
+            {
+                "schema_version": "xcue.l2-routes/1.0",
+                "version": "pytest-a03",
+                "routes": [
+                    {
+                        "rule_id": "GENERIC",
+                        "keywords": ["认知成本"],
+                        "target": "L2-02",
+                        "source": "pytest",
+                    },
+                    {
+                        "rule_id": "SPECIFIC",
+                        "keywords": ["认知成本过高"],
+                        "target": "L2-05",
+                        "source": "pytest",
+                    },
+                ],
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    rules = L2规则(路由规则集=加载路由规则(routes_path))
+    item = 失败输入(
+        来源闸门="L1-02",
+        名称="入口认知成本过高",
+        状态="风险",
+        说明="C高：认知成本过高导致弃读点明显。",
+        证据=[],
+        严重级别="warning",
+        失败类型="认知成本过高",
+        候选模块="",
+        回流验收位置="L1-02",
+        修复方向="降低认知成本",
+    )
+
+    judgement = 判断(item, rules)
+
+    assert judgement.主候选模块 == "L2-05"
+    assert judgement.route_rule_id == "SPECIFIC"
 
 
 def 测试L2普通失败生成修复单(root_case, test_io_env):

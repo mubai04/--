@@ -23,9 +23,14 @@ def _标准归属(item: 失败输入, rules: L2规则 | None) -> tuple[str, str,
     if not rules or not rules.路由规则集:
         return "", "", "", ""
     haystack = " ".join([item.失败类型, item.名称, item.说明, item.修复方向])
+    matched: list[tuple[int, str, str, str, str]] = []
     for rule in rules.路由规则集.rules:
-        if any(keyword and keyword in haystack for keyword in rule.keywords):
-            return rule.target, rule.rule_id, rule.version, rule.hash
+        for keyword in rule.keywords:
+            if keyword and keyword in haystack:
+                matched.append((len(keyword), rule.target, rule.rule_id, rule.version, rule.hash))
+    if matched:
+        _, target, rule_id, version, digest = max(matched, key=lambda item: item[0])
+        return target, rule_id, version, digest
     return "", "", "", ""
 
 
