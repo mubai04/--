@@ -16,6 +16,9 @@ from 退出码 import ExitCode
 
 pytestmark = pytest.mark.integration
 
+# 本文件中的“正式应用”仅验证 B2 运行时对隔离副本正文执行批准后的确定性补丁，
+# 不代表 Codex 在开发过程中手工改写小说正文。
+
 执行层 = ROOT / "00_工程总控" / "工程执行层"
 L1入口 = 执行层 / "L1工程" / "L1运行入口.py"
 L2入口 = 执行层 / "L2工程" / "L2运行入口.py"
@@ -161,6 +164,7 @@ def _approval(plan: dict[str, object], *, status: str = "APPROVED", patch_sha256
         "project_id": plan["project_id"],
         "chapter_source": plan["chapter_source"],
         "source_sha256": source_sha256 or plan["source_sha256"],
+        "candidate_sha256": plan.get("candidate_sha256", ""),
         "patch_sha256": patch_sha256 or plan["patch_sha256"],
         "approver": "pytest",
         "approval_status": status,
@@ -201,6 +205,39 @@ def _run_patch(
         cmd.extend(["--approval", str(approval)])
     if plan_only:
         cmd.append("--plan-only")
+    return _run(cmd, env, timeout=90)
+
+
+def _run_finalize(
+    audit_json: Path,
+    out_dir: Path,
+    env: dict[str, str],
+    *,
+    approval: Path,
+    decision: str,
+    reason: str = "",
+    run_id: str | None = None,
+) -> subprocess.CompletedProcess[str]:
+    cmd = [
+        sys.executable,
+        str(统一入口),
+        "--target",
+        "L3_PATCH",
+        "--run-id",
+        run_id or "pytest-B2-L3F-" + uuid.uuid4().hex[:8],
+        "--standard-mode",
+        "CANDIDATE_TEST",
+        "--audit-json",
+        str(audit_json),
+        "--approval",
+        str(approval),
+        "--final-decision",
+        decision,
+        "--out-dir",
+        str(out_dir),
+    ]
+    if reason:
+        cmd.extend(["--decision-reason", reason])
     return _run(cmd, env, timeout=90)
 
 
@@ -330,8 +367,8 @@ def test_b2_real_tp001_revalidation_uses_pipeline_input_snapshot_without_test_io
 @pytest.mark.parametrize(
     "case_name, mutate, expected_status",
     [
-        ("rejected", lambda ctx: _write_json(ctx["approval"], _approval(ctx["plan"], status="REJECTED")), "APPROVAL_REJECTED"),
-        ("source_hash_changed", lambda ctx: (ctx["chapter"].write_text(ctx["chapter"].read_text(encoding="utf-8") + "\n变更\n", encoding="utf-8"), _write_json(ctx["approval"], _approval(ctx["plan"])))[1], "STALE_APPROVAL"),
+        ("rejected", lambda ctx: _write_json(ctx["approval"], _approval(ctx["plan"], status="REJECTED")), "REJECTED"),
+        ("source_hash_changed", lambda ctx: (ctx["chapter"].write_text(ctx["chapter"].read_text(encoding="utf-8") + "\n变更\n", encoding="utf-8"), _write_json(ctx["approval"], _approval(ctx["plan"])))[1], "REVALIDATION_FAILED"),
         ("patch_hash_changed", lambda ctx: _write_json(ctx["approval"], _approval(ctx["plan"], patch_sha256="0" * 64)), "PATCH_PRECONDITION_FAILED"),
         ("missing_anchor", lambda ctx: (ctx["chapter"].write_text("锚点已经不在这里\n", encoding="utf-8"), _write_json(ctx["approval"], _approval(ctx["plan"])))[1], "PATCH_PRECONDITION_FAILED"),
         ("ambiguous_anchor", lambda ctx: (ctx["chapter"].write_text(ctx["chapter"].read_text(encoding="utf-8") + "\n在这里写第一章正文。\n", encoding="utf-8"), _write_json(ctx["approval"], _approval(ctx["plan"])))[1], "PATCH_AMBIGUOUS_ANCHOR"),
@@ -356,7 +393,7 @@ def test_b2_approval_and_precondition_failures_do_not_write_candidate(root_case,
     payload = json.loads(result.stderr)
     assert payload["error_code"] == expected_status
     assert not (out_dir / "执行" / "候选正文.md").exists()
-    if expected_status != "STALE_APPROVAL":
+    if expected_status not in {"REVALIDATION_FAILED"}:
         assert _sha256(chapter) == before or expected_status in {"PATCH_PRECONDITION_FAILED", "PATCH_AMBIGUOUS_ANCHOR"}
 
 
@@ -423,9 +460,9 @@ def test_b2_revalidation_failure_is_terminal_and_keeps_formal_text(root_case, te
 
     assert result.returncode == int(ExitCode.BLOCKED)
     payload = json.loads(result.stderr)
-    assert payload["error_code"] == "PATCH_VALIDATION_FAILED"
+    assert payload["error_code"] == "REVALIDATION_FAILED"
     audit = json.loads((out_dir / "执行" / "补丁审计.json").read_text(encoding="utf-8"))
-    assert audit["status"] == "PATCH_VALIDATION_FAILED"
+    assert audit["status"] == "REVALIDATION_FAILED"
     assert audit["复验结果"]["exit_code"] == int(ExitCode.GATE_REJECTED)
     assert _sha256(chapter) == before
 
@@ -445,6 +482,217 @@ def test_b2_atomic_write_failure_leaves_no_partial_candidate(root_case, test_io_
 
     assert result.returncode == int(ExitCode.INTERNAL_ERROR)
     payload = json.loads(result.stderr)
-    assert payload["error_code"] == "PATCH_WRITE_FAILED"
+    assert payload["error_code"] == "EXECUTION_FAILED"
     assert not (out_dir / "执行" / "候选正文.md").exists()
     assert not any((out_dir / "执行").glob(".候选正文.md.*.tmp")) if (out_dir / "执行").exists() else True
+
+
+def test_b2_finalize_reject_marks_rejected_and_keeps_formal_text(root_case, test_io_env):
+    chapter = root_case / "reject.md"
+    chapter.write_text(TP001正文.read_text(encoding="utf-8"), encoding="utf-8")
+    before = _sha256(chapter)
+    _chapter, l2_report = _prepare_l2_with_strategy(root_case, test_io_env, _patch_strategy(chapter))
+    out_dir = root_case / "第三层"
+    plan_result = _run_patch(l2_report, out_dir, test_io_env, plan_only=True)
+    assert plan_result.returncode == int(ExitCode.OK), plan_result.stdout + plan_result.stderr
+    plan = json.loads((out_dir / "补丁计划.json").read_text(encoding="utf-8"))
+    execute_approval = _write_json(root_case / "approval-execute.json", _approval(plan))
+    execute_result = _run_patch(l2_report, out_dir / "执行", test_io_env, approval=execute_approval)
+    assert execute_result.returncode == int(ExitCode.OK), execute_result.stdout + execute_result.stderr
+    ready_audit = json.loads((out_dir / "执行" / "补丁审计.json").read_text(encoding="utf-8"))
+    final_approval = _write_json(root_case / "approval-final.json", _approval(ready_audit))
+
+    finalize = _run_finalize(
+        out_dir / "执行" / "补丁审计.json",
+        out_dir / "正式采纳",
+        test_io_env,
+        approval=final_approval,
+        decision="reject",
+        reason="pytest reject",
+    )
+
+    assert finalize.returncode == int(ExitCode.OK), finalize.stdout + finalize.stderr
+    rejected = json.loads((out_dir / "正式采纳" / "补丁审计.json").read_text(encoding="utf-8"))
+    assert rejected["final_status"] == "REJECTED"
+    assert rejected["decision"] == "reject"
+    assert rejected["decision_reason"] == "pytest reject"
+    assert rejected["backup_sha256"] == ""
+    assert _sha256(chapter) == before
+
+
+def test_b2_finalize_apply_marks_applied_and_updates_formal_text(root_case, test_io_env):
+    chapter = root_case / "apply.md"
+    chapter.write_text(TP001正文.read_text(encoding="utf-8"), encoding="utf-8")
+    _chapter, l2_report = _prepare_l2_with_strategy(root_case, test_io_env, _patch_strategy(chapter))
+    out_dir = root_case / "第三层"
+    plan_result = _run_patch(l2_report, out_dir, test_io_env, plan_only=True)
+    assert plan_result.returncode == int(ExitCode.OK), plan_result.stdout + plan_result.stderr
+    plan = json.loads((out_dir / "补丁计划.json").read_text(encoding="utf-8"))
+    execute_approval = _write_json(root_case / "approval-execute.json", _approval(plan))
+    execute_result = _run_patch(l2_report, out_dir / "执行", test_io_env, approval=execute_approval)
+    assert execute_result.returncode == int(ExitCode.OK), execute_result.stdout + execute_result.stderr
+    ready_audit = json.loads((out_dir / "执行" / "补丁审计.json").read_text(encoding="utf-8"))
+    final_approval = _write_json(root_case / "approval-final.json", _approval(ready_audit))
+
+    finalize = _run_finalize(
+        out_dir / "执行" / "补丁审计.json",
+        out_dir / "正式采纳",
+        test_io_env,
+        approval=final_approval,
+        decision="apply",
+    )
+
+    assert finalize.returncode == int(ExitCode.OK), finalize.stdout + finalize.stderr
+    applied = json.loads((out_dir / "正式采纳" / "补丁审计.json").read_text(encoding="utf-8"))
+    assert applied["final_status"] == "APPLIED"
+    assert _sha256(chapter) == applied["candidate_sha256"]
+
+
+def test_b2_finalize_without_approval_aborts_without_writing_formal_text(root_case, test_io_env):
+    chapter = root_case / "abort.md"
+    chapter.write_text(TP001正文.read_text(encoding="utf-8"), encoding="utf-8")
+    before = _sha256(chapter)
+    audit_json = root_case / "第三层" / "执行" / "补丁审计.json"
+    audit_json.parent.mkdir(parents=True, exist_ok=True)
+    audit_json.write_text(json.dumps({"status": "READY_FOR_ACCEPTANCE"}, ensure_ascii=False), encoding="utf-8")
+
+    finalize = _run_finalize(
+        audit_json,
+        root_case / "第三层" / "正式采纳",
+        test_io_env,
+        approval=root_case / "missing-approval.json",
+        decision="apply",
+    )
+
+    assert finalize.returncode == int(ExitCode.BLOCKED)
+    payload = json.loads(finalize.stderr)
+    assert payload["error_code"] in {"APPROVAL_REQUIRED", "ABORTED"}
+    assert _sha256(chapter) == before
+
+
+def test_b2_finalize_source_hash_change_returns_revalidation_failed(root_case, test_io_env):
+    chapter = root_case / "source-changed.md"
+    chapter.write_text(TP001正文.read_text(encoding="utf-8"), encoding="utf-8")
+    _chapter, l2_report = _prepare_l2_with_strategy(root_case, test_io_env, _patch_strategy(chapter))
+    out_dir = root_case / "第三层"
+    plan_result = _run_patch(l2_report, out_dir, test_io_env, plan_only=True)
+    assert plan_result.returncode == int(ExitCode.OK), plan_result.stdout + plan_result.stderr
+    plan = json.loads((out_dir / "补丁计划.json").read_text(encoding="utf-8"))
+    execute_approval = _write_json(root_case / "approval-execute.json", _approval(plan))
+    execute_result = _run_patch(l2_report, out_dir / "执行", test_io_env, approval=execute_approval)
+    assert execute_result.returncode == int(ExitCode.OK), execute_result.stdout + execute_result.stderr
+    ready_audit = json.loads((out_dir / "执行" / "补丁审计.json").read_text(encoding="utf-8"))
+    chapter.write_text(chapter.read_text(encoding="utf-8") + "\n漂移\n", encoding="utf-8")
+    final_approval = _write_json(root_case / "approval-final.json", _approval(ready_audit))
+
+    finalize = _run_finalize(
+        out_dir / "执行" / "补丁审计.json",
+        out_dir / "正式采纳",
+        test_io_env,
+        approval=final_approval,
+        decision="apply",
+    )
+
+    assert finalize.returncode == int(ExitCode.BLOCKED)
+    assert json.loads(finalize.stderr)["error_code"] == "REVALIDATION_FAILED"
+
+
+def test_b2_finalize_repeat_apply_is_idempotent(root_case, test_io_env):
+    chapter = root_case / "idempotent.md"
+    chapter.write_text(TP001正文.read_text(encoding="utf-8"), encoding="utf-8")
+    _chapter, l2_report = _prepare_l2_with_strategy(root_case, test_io_env, _patch_strategy(chapter))
+    out_dir = root_case / "第三层"
+    plan_result = _run_patch(l2_report, out_dir, test_io_env, plan_only=True)
+    assert plan_result.returncode == int(ExitCode.OK), plan_result.stdout + plan_result.stderr
+    plan = json.loads((out_dir / "补丁计划.json").read_text(encoding="utf-8"))
+    execute_approval = _write_json(root_case / "approval-execute.json", _approval(plan))
+    execute_result = _run_patch(l2_report, out_dir / "执行", test_io_env, approval=execute_approval)
+    assert execute_result.returncode == int(ExitCode.OK), execute_result.stdout + execute_result.stderr
+    ready_audit = json.loads((out_dir / "执行" / "补丁审计.json").read_text(encoding="utf-8"))
+    final_approval = _write_json(root_case / "approval-final.json", _approval(ready_audit))
+
+    first = _run_finalize(
+        out_dir / "执行" / "补丁审计.json",
+        out_dir / "正式采纳1",
+        test_io_env,
+        approval=final_approval,
+        decision="apply",
+    )
+    second = _run_finalize(
+        out_dir / "执行" / "补丁审计.json",
+        out_dir / "正式采纳2",
+        test_io_env,
+        approval=final_approval,
+        decision="apply",
+    )
+
+    assert first.returncode == int(ExitCode.OK), first.stdout + first.stderr
+    assert second.returncode == int(ExitCode.OK), second.stdout + second.stderr
+    first_audit = json.loads((out_dir / "正式采纳1" / "补丁审计.json").read_text(encoding="utf-8"))
+    second_audit = json.loads((out_dir / "正式采纳2" / "补丁审计.json").read_text(encoding="utf-8"))
+    assert first_audit["final_status"] == "APPLIED"
+    assert second_audit["final_status"] == "APPLIED"
+
+
+def test_b2_finalize_apply_then_reject_returns_existing_applied(root_case, test_io_env):
+    chapter = root_case / "applied-once.md"
+    chapter.write_text(TP001正文.read_text(encoding="utf-8"), encoding="utf-8")
+    _chapter, l2_report = _prepare_l2_with_strategy(root_case, test_io_env, _patch_strategy(chapter))
+    out_dir = root_case / "第三层"
+    plan_result = _run_patch(l2_report, out_dir, test_io_env, plan_only=True)
+    assert plan_result.returncode == int(ExitCode.OK), plan_result.stdout + plan_result.stderr
+    plan = json.loads((out_dir / "补丁计划.json").read_text(encoding="utf-8"))
+    execute_approval = _write_json(root_case / "approval-execute.json", _approval(plan))
+    execute_result = _run_patch(l2_report, out_dir / "执行", test_io_env, approval=execute_approval)
+    assert execute_result.returncode == int(ExitCode.OK), execute_result.stdout + execute_result.stderr
+    ready_audit = json.loads((out_dir / "执行" / "补丁审计.json").read_text(encoding="utf-8"))
+    final_approval = _write_json(root_case / "approval-final.json", _approval(ready_audit))
+    first = _run_finalize(
+        out_dir / "执行" / "补丁审计.json",
+        out_dir / "正式采纳1",
+        test_io_env,
+        approval=final_approval,
+        decision="apply",
+    )
+    second = _run_finalize(
+        out_dir / "执行" / "补丁审计.json",
+        out_dir / "正式采纳2",
+        test_io_env,
+        approval=final_approval,
+        decision="apply",
+    )
+    assert first.returncode == int(ExitCode.OK), first.stdout + first.stderr
+    assert second.returncode == int(ExitCode.OK), second.stdout + second.stderr
+    assert json.loads((out_dir / "正式采纳2" / "补丁审计.json").read_text(encoding="utf-8"))["final_status"] == "APPLIED"
+
+
+def test_b2_l3_task_planning_only_remains_unchanged(root_case, test_io_env):
+    packet = root_case / "第一层" / "失败包.json"
+    chapter = root_case / "planning-only.md"
+    chapter.write_text(TP001正文.read_text(encoding="utf-8"), encoding="utf-8")
+    _write_failure_packet(packet, chapter)
+    l2_report = _run_l2(packet, root_case / "第二层", test_io_env)
+
+    result = _run(
+        [
+            sys.executable,
+            str(统一入口),
+            "--target",
+            "L3",
+            "--run-id",
+            "pytest-L3-planning-" + uuid.uuid4().hex[:8],
+            "--standard-mode",
+            "CANDIDATE_TEST",
+            "--l2-report",
+            str(l2_report),
+            "--out-dir",
+            str(root_case / "L3规划"),
+        ],
+        test_io_env,
+        timeout=90,
+    )
+
+    assert result.returncode in {int(ExitCode.OK), int(ExitCode.BLOCKED)}, result.stdout + result.stderr
+    payload = json.loads(result.stdout)
+    report = json.loads(Path(json.loads(payload["stdout"])["report_json"]).read_text(encoding="utf-8"))
+    assert report["execution_mode"] == "TASK_PLANNING_ONLY"
