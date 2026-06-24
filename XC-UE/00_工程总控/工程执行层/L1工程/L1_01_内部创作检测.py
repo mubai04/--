@@ -5,7 +5,7 @@ import re
 from 正文切分 import 找证据
 from L1模型 import 检测项, 段落, 闸门结果
 from L15交接 import 补路由
-from 闸门标准解析 import L101规则
+from 闸门标准解析 import L101规则, L15路由规则
 
 
 def _ordered_hits(paragraphs: list[段落], stages: list[tuple[str, list[str]]]) -> tuple[int, list]:
@@ -25,7 +25,7 @@ def _ordered_hits(paragraphs: list[段落], stages: list[tuple[str, list[str]]])
     return len(evidence), evidence
 
 
-def 检测(paragraphs: list[段落], rules: L101规则) -> 闸门结果:
+def 检测(paragraphs: list[段落], rules: L101规则, routes: dict[str, L15路由规则]) -> 闸门结果:
     items: list[检测项] = []
 
     stages = [
@@ -141,7 +141,7 @@ def 检测(paragraphs: list[段落], rules: L101规则) -> 闸门结果:
             )
         )
 
-    failures = [补路由(i) for i in items if i.严重级别 in {"error", "warning"}]
+    failures = [补路由(i, routes) for i in items if i.严重级别 in {"error", "warning"}]
     allowed_types = set(rules.失败类型)
     failures = [i for i in failures if not allowed_types or i.失败类型 in allowed_types]
     hard = [i for i in failures if i.严重级别 == "error"]

@@ -3,7 +3,7 @@
 from 正文切分 import 找证据
 from L1模型 import 检测项, 段落, 闸门结果
 from L15交接 import 补路由
-from 闸门标准解析 import L103规则
+from 闸门标准解析 import L103规则, L15路由规则
 
 
 BENEFIT_PATTERNS = [
@@ -16,7 +16,13 @@ BENEFIT_PATTERNS = [
 HOOK_PATTERNS = [r"下一|为什么|到底|真相|秘密|背后|门后|不是.*而是|竟然|没结束|第一次|最后|等着"]
 
 
-def 检测(paragraphs: list[段落], word_count: int, rules: L103规则, l102_passed: bool) -> 闸门结果:
+def 检测(
+    paragraphs: list[段落],
+    word_count: int,
+    rules: L103规则,
+    l102_passed: bool,
+    routes: dict[str, L15路由规则],
+) -> 闸门结果:
     items: list[检测项] = []
 
     if word_count < rules.功能稿下限:
@@ -88,7 +94,7 @@ def 检测(paragraphs: list[段落], word_count: int, rules: L103规则, l102_pa
             )
         )
 
-    failures = [补路由(i) for i in items if i.严重级别 in {"error", "warning"}]
+    failures = [补路由(i, routes) for i in items if i.严重级别 in {"error", "warning"}]
     hard = [i for i in failures if i.严重级别 == "error"]
     if hard:
         result = "SCREENING_REJECT"

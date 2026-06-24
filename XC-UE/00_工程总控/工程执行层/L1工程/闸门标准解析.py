@@ -40,10 +40,18 @@ class L103规则:
 
 
 @dataclass
+class L15路由规则:
+    目标模块: str
+    修复产物: str
+    回流闸门: str
+
+
+@dataclass
 class L1规则:
     L101: L101规则
     L102: L102规则
     L103: L103规则
+    L15路由: dict[str, L15路由规则] = field(default_factory=dict)
 
 
 class 规则解析错误(ValueError):

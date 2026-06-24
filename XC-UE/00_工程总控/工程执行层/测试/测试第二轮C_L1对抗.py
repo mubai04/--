@@ -193,6 +193,41 @@ def 测试A3L1结构化规则改动会改变发布锁字数判定(root_case, tes
     assert len(report["rule_hash"]) == 64
 
 
+def 测试A02_L15结构化路由规则改动会改变路由建议(root_case, test_io_env):
+    chapter = root_case / "chapter.md"
+    out_dir = root_case / "l15-structured"
+    rules_path = _复制L1闸门规则(root_case)
+    payload = json.loads(rules_path.read_text(encoding="utf-8"))
+    payload["l15_routes"] = {
+        "叙事失败": {
+            "target_module": "L2-06",
+            "repair_product": "pytest 结构化路由修复产物",
+            "return_gate": "L1-00",
+        }
+    }
+    rules_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    _写L1章节(chapter, _随机中文段落(12), "A02-L15-structured-route")
+
+    result, report = _运行L1(chapter, out_dir, test_io_env, rules_path)
+
+    assert report is not None, result.stderr
+    route = next(item for item in report["路由建议"] if item["主失败类型"] == "叙事失败")
+    assert route["接口候选模块"] == "L2-06"
+    assert route["建议修复方向"] == "pytest 结构化路由修复产物"
+    assert route["回流验收位置"] == "L1-00"
+    failure = next(item for item in report["失败包"] if item["失败类型"] == "叙事失败")
+    assert failure["候选模块"] == "L2-06"
+    assert failure["修复方向"] == "pytest 结构化路由修复产物"
+
+
+def 测试A02_L15交接不再保留Python路由表():
+    source = (ROOT / "00_工程总控" / "工程执行层" / "L1工程" / "L15交接.py").read_text(encoding="utf-8")
+    assert "ROUTE =" not in source
+    assert "文风失败" not in source
+    assert "叙事失败" not in source
+    assert "字数不足" not in source
+
+
 def 测试A3L1Markdown闸门标准改动不改变L1运行行为(root_case, test_io_env):
     chapter = root_case / "chapter.md"
     rules_path = _复制L1闸门规则(root_case)

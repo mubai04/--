@@ -1,41 +1,22 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from L1模型 import 检测项
+from 闸门标准解析 import L15路由规则
 
 
-ROUTE = {
-    "文风失败": ("L2-02", "文风语言修复单", "L1-01"),
-    "AI味失败": ("L2-02", "AI味问题清单 / 反胡优化稿", "L1-01"),
-    "叙事失败": ("L2-01", "事件链修正表 / 章节推进表", "L1-01"),
-    "角色失败": ("L2-03", "角色动机修正卡 / 场景反应修正稿", "L1-01"),
-    "创意设定失败": ("L2-04", "设定差异表 / 规则压力表", "L1-01"),
-    "E低：即时情绪反馈弱": ("L2-05", "即时情绪点重构表", "L1-02"),
-    "V低：未来价值预期弱": ("L2-05", "未来预期修正表 / 章末钩子稿", "L1-02"),
-    "C高：认知成本过高": ("L2-05", "认知成本删减表", "L1-02"),
-    "入口弱": ("L2-05", "开头入口修正稿", "L1-02"),
-    "章末弱": ("L2-01", "章末追读稿", "L1-02"),
-    "弃读点明显": ("L2-05", "弃读点诊断表", "L1-02"),
-    "字数不足": ("L2-01", "发布稿扩写版", "L1-03"),
-    "字数超出默认发布体量": ("L2-02", "压缩 / 拆章风险表", "L1-03"),
-    "当章收益不足": ("L2-05", "当章收益修正表", "L1-03"),
-    "章末追读弱": ("L2-01", "章末追读重写稿", "L1-03"),
-    "认知成本过高": ("L2-02", "降密度修正稿", "L1-03"),
-}
-
-
-def 补路由(item: 检测项) -> 检测项:
-    if item.失败类型 in ROUTE:
-        module, product, return_gate = ROUTE[item.失败类型]
-        item.候选模块 = module
-        item.修复方向 = product
-        item.回流验收位置 = return_gate
+def 补路由(item: 检测项, routes: dict[str, L15路由规则]) -> 检测项:
+    rule = routes.get(item.失败类型)
+    if rule:
+        item.候选模块 = rule.目标模块
+        item.修复方向 = rule.修复产物
+        item.回流验收位置 = rule.回流闸门
     return item
 
 
-def 生成路由建议(items: list[检测项]) -> list[dict[str, str]]:
+def 生成路由建议(items: list[检测项], routes: dict[str, L15路由规则]) -> list[dict[str, str]]:
     suggestions: list[dict[str, str]] = []
     for idx, item in enumerate(items, start=1):
-        补路由(item)
+        补路由(item, routes)
         suggestions.append(
             {
                 "路由编号": f"L15-{item.闸门.replace('-', '')}-{idx:03d}",

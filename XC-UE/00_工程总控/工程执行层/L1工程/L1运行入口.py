@@ -116,11 +116,11 @@ def main() -> int:
         raise SystemExit(ExitCode.INPUT_INVALID)
     word_count = 正文字数(paragraphs)
 
-    l101 = L1_01_内部创作检测.检测(paragraphs, rules.L101)
+    l101 = L1_01_内部创作检测.检测(paragraphs, rules.L101, rules.L15路由)
     l101_passed = l101.判断结果 == "STRUCTURE_SIGNAL_PRESENT"
-    l102 = L1_02_读者投入检测.检测(paragraphs, rules.L102, l101_passed)
+    l102 = L1_02_读者投入检测.检测(paragraphs, rules.L102, l101_passed, rules.L15路由)
     l102_passed = l102.判断结果 == "STRUCTURE_SIGNAL_PRESENT"
-    l103 = L1_03_发布锁检测.检测(paragraphs, word_count, rules.L103, l102_passed)
+    l103 = L1_03_发布锁检测.检测(paragraphs, word_count, rules.L103, l102_passed, rules.L15路由)
 
     gates = [l101, l102, l103]
     l100 = L1_00_闸门接口校验.检测(gates)
@@ -138,7 +138,7 @@ def main() -> int:
         l100.最终状态 = l100.判断结果
     gates = [l100, *gates]
     failure_packet = 生成失败包(gates)
-    routes = 生成路由建议(failure_packet)
+    routes = 生成路由建议(failure_packet, rules.L15路由)
     has_error = any(item.严重级别 == "error" for item in failure_packet)
     has_warning = any(item.严重级别 == "warning" for item in failure_packet)
     if has_error:
