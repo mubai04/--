@@ -26,17 +26,17 @@
       "type": "string",
       "enum": [
         "PENDING_APPROVAL",
-        "APPROVAL_REJECTED",
-        "APPROVED",
         "PRECONDITION_CHECKED",
-        "PATCH_EXECUTED",
-        "PATCH_VALIDATION_FAILED",
+        "EXECUTED_IN_SANDBOX",
         "READY_FOR_ACCEPTANCE",
-        "STALE_APPROVAL",
-        "PATCH_PRECONDITION_FAILED",
-        "PATCH_AMBIGUOUS_ANCHOR",
-        "PATCH_ALREADY_APPLIED",
-        "PATCH_WRITE_FAILED"
+        "REJECTED",
+        "APPLIED",
+        "ROLLED_BACK",
+        "EXECUTION_FAILED",
+        "REVALIDATION_FAILED",
+        "APPLY_FAILED",
+        "ROLLBACK_FAILED",
+        "ABORTED"
       ]
     },
     "run_id": {
@@ -67,6 +67,9 @@
     },
     "正式正文保持不变": {
       "type": "boolean"
+    },
+    "final_status": {
+      "type": "string"
     }
   },
   "$defs": {

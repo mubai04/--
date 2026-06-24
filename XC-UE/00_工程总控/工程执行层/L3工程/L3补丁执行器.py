@@ -55,6 +55,18 @@ class 补丁计划:
     risks: list[str]
 
 
+最终状态 = {
+    "REJECTED",
+    "APPLIED",
+    "ROLLED_BACK",
+    "EXECUTION_FAILED",
+    "REVALIDATION_FAILED",
+    "APPLY_FAILED",
+    "ROLLBACK_FAILED",
+    "ABORTED",
+}
+
+
 def _允许测试外部IO() -> bool:
     if os.environ.get("XCUE_TEST_ALLOW_EXTERNAL_IO") != "1":
         return False
@@ -239,6 +251,24 @@ def _plan_dict(plan: 补丁计划, run_id: str, status: str = "PENDING_APPROVAL"
         "候选正文": str(out_dir / "候选正文.md") if out_dir else "",
         "unified_diff": str(out_dir / "补丁.diff") if out_dir else "",
         "正式正文保持不变": True,
+        "started_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "finished_at": "",
+        "final_status": "",
+        "decision": "",
+        "decision_reason": "",
+        "approver": "",
+        "approval_time": "",
+        "candidate_sha256": "",
+        "backup_sha256": "",
+        "applied_sha256": "",
+        "rollback_sha256": "",
+        "final_source_sha256": "",
+        "last_complete_artifact_sha256": "",
+        "last_successful_stage": "",
+        "error_code": "",
+        "error_reason": "",
+        "是否尝试回滚": False,
+        "回滚是否成功": False,
     }
 
 
@@ -258,7 +288,7 @@ def _write_plan(out_dir: Path, plan: 补丁计划, run_id: str) -> dict[str, Any
     return payload
 
 
-def _load_approval(path: Path | None) -> dict[str, Any]:
+def _load_approval(path: Path | None, *, require_candidate_hash: bool) -> dict[str, Any]:
     if path is None:
         raise 补丁错误("APPROVAL_REQUIRED", "缺少审批记录")
     data = _read_json(path, "审批记录")
@@ -272,6 +302,8 @@ def _load_approval(path: Path | None) -> dict[str, Any]:
         "approval_status",
         "approval_time",
     ]
+    if require_candidate_hash:
+        required.append("candidate_sha256")
     for key in required:
         if not isinstance(data.get(key), str) or not data[key]:
             raise 补丁错误("PATCH_PRECONDITION_FAILED", f"审批记录缺少字段：{key}")
@@ -280,7 +312,7 @@ def _load_approval(path: Path | None) -> dict[str, Any]:
 
 def _check_approval(plan: 补丁计划, approval: dict[str, Any]) -> None:
     if approval["approval_status"] != "APPROVED":
-        raise 补丁错误("APPROVAL_REJECTED", "审批记录不是 APPROVED")
+        raise 补丁错误("REJECTED", "审批记录不是 APPROVED")
     expected = {
         "task_id": plan.task_id,
         "project_id": plan.project_id,
@@ -294,7 +326,7 @@ def _check_approval(plan: 补丁计划, approval: dict[str, Any]) -> None:
         if approval[key] != value:
             raise 补丁错误("PATCH_PRECONDITION_FAILED", f"审批记录字段不匹配：{key}")
     if approval["source_sha256"] != plan.source_sha256:
-        raise 补丁错误("STALE_APPROVAL", "审批绑定的正文哈希已过期")
+        raise 补丁错误("REVALIDATION_FAILED", "审批绑定的正文哈希已过期")
 
 
 def _apply_patch(plan: 补丁计划, source_text: str) -> str:
@@ -354,6 +386,226 @@ def _write_marker(plan: 补丁计划, audit: dict[str, Any]) -> None:
         "audit_json": str(Path(audit.get("候选正文", "")).parent / "补丁审计.json"),
     }
     原子写文本(marker, json.dumps(payload, ensure_ascii=False, indent=2))
+
+
+def _finalize_marker_path(task_id: str, final_status: str, chapter_source: str, patch_sha256: str, candidate_sha256: str) -> Path:
+    marker_id = _text_hash(f"{task_id}:{final_status}:{chapter_source}:{patch_sha256}:{candidate_sha256}")
+    return ROOT / "运行记录" / "B2_FINAL_MARKERS" / f"{marker_id}.json"
+
+
+def _load_ready_audit(path: Path) -> dict[str, Any]:
+    payload = _read_json(path, "补丁审计")
+    if payload.get("status") != "READY_FOR_ACCEPTANCE":
+        raise 补丁错误("ABORTED", "正式采纳只接受 READY_FOR_ACCEPTANCE 审计")
+    required = ["task_id", "project_id", "chapter_source", "source_sha256", "patch_sha256", "候选正文"]
+    for key in required:
+        if not isinstance(payload.get(key), str) or not payload.get(key):
+            raise 补丁错误("ABORTED", f"READY_FOR_ACCEPTANCE 审计缺少字段：{key}")
+    return payload
+
+
+def _record_terminal(
+    audit: dict[str, Any],
+    *,
+    final_status: str,
+    last_successful_stage: str,
+    last_complete_artifact_sha256: str = "",
+    error_code: str = "",
+    error_reason: str = "",
+    rollback_attempted: bool = False,
+    rollback_succeeded: bool = False,
+) -> dict[str, Any]:
+    audit["status"] = final_status
+    audit["final_status"] = final_status
+    audit["last_successful_stage"] = last_successful_stage
+    audit["last_complete_artifact_sha256"] = last_complete_artifact_sha256
+    audit["error_code"] = error_code
+    audit["error_reason"] = error_reason
+    audit["是否尝试回滚"] = rollback_attempted
+    audit["回滚是否成功"] = rollback_succeeded
+    audit["finished_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
+    return audit
+
+
+def _write_final_marker(audit: dict[str, Any]) -> None:
+    final_status = str(audit.get("final_status", ""))
+    if final_status not in {"REJECTED", "APPLIED"}:
+        return
+    marker = _finalize_marker_path(
+        str(audit.get("task_id", "")),
+        final_status,
+        str(audit.get("chapter_source", "")),
+        str(audit.get("patch_sha256", "")),
+        str(audit.get("candidate_sha256", "")),
+    )
+    原子写文本(marker, json.dumps(audit, ensure_ascii=False, indent=2))
+
+
+def _try_idempotent_final(audit: dict[str, Any], decision: str, target: Path) -> dict[str, Any] | None:
+    final_status = "APPLIED" if decision == "apply" else "REJECTED"
+    marker = _finalize_marker_path(
+        str(audit.get("task_id", "")),
+        final_status,
+        str(audit.get("chapter_source", "")),
+        str(audit.get("patch_sha256", "")),
+        str(audit.get("candidate_sha256", "")),
+    )
+    if not marker.exists():
+        return None
+    payload = _read_json(marker, "正式采纳标记")
+    if final_status == "APPLIED" and target.exists() and 计算文件哈希(target) != payload.get("candidate_sha256", ""):
+        return None
+    return payload
+
+
+def _formal_l1_passed(payload: dict[str, Any]) -> bool:
+    result = payload.get("复验结果", {})
+    return isinstance(result, dict) and _复验通过(result)
+
+
+def _run_apply_revalidation(target: Path, out_dir: Path, run_id: str) -> dict[str, Any]:
+    return _run_l1(target, out_dir, run_id)
+
+
+def _write_backup(path: Path, text: str) -> tuple[Path, str]:
+    backup = path.parent / "_b2_backups" / f"{path.stem}.{datetime.now().strftime('%Y%m%d-%H%M%S')}.bak.md"
+    原子写文本(backup, text)
+    return backup, 计算文件哈希(backup)
+
+
+def _atomic_replace_text(path: Path, text: str) -> None:
+    原子写文本(path, text)
+
+
+def _rollback_formal(target: Path, original_text: str, audit: dict[str, Any]) -> tuple[bool, str]:
+    try:
+        _atomic_replace_text(target, original_text)
+        rollback_sha = 计算文件哈希(target)
+        return rollback_sha == audit.get("source_sha256", ""), rollback_sha
+    except OSError:
+        return False, ""
+
+
+def _finalize_reject(ready: dict[str, Any], approval: dict[str, Any], out_dir: Path, reason: str) -> dict[str, Any]:
+    target = Path(str(ready["chapter_source"]))
+    existing = _try_idempotent_final(ready, "reject", target)
+    if existing is not None:
+        _write_audit(out_dir, existing)
+        return existing
+    ready["decision"] = "reject"
+    ready["decision_reason"] = reason
+    ready["approver"] = approval["approver"]
+    ready["approval_time"] = approval["approval_time"]
+    ready["candidate_sha256"] = approval.get("candidate_sha256", ready.get("candidate_sha256", ""))
+    ready["final_source_sha256"] = 计算文件哈希(target)
+    ready["正式正文保持不变"] = ready["final_source_sha256"] == ready["source_sha256"]
+    payload = _record_terminal(
+        ready,
+        final_status="REJECTED",
+        last_successful_stage="READY_FOR_ACCEPTANCE",
+        last_complete_artifact_sha256=str(ready.get("candidate_sha256", "")),
+    )
+    _write_audit(out_dir, payload)
+    _write_final_marker(payload)
+    return payload
+
+
+def _finalize_apply(ready: dict[str, Any], approval: dict[str, Any], out_dir: Path, reason: str, run_id: str) -> dict[str, Any]:
+    target = Path(str(ready["chapter_source"]))
+    candidate = Path(str(ready["候选正文"]))
+    existing = _try_idempotent_final(ready, "apply", target)
+    if existing is not None:
+        _write_audit(out_dir, existing)
+        return existing
+    if not candidate.exists():
+        raise 补丁错误("ABORTED", "候选正文不存在")
+    if not _formal_l1_passed(ready):
+        raise 补丁错误("REVALIDATION_FAILED", "候选正文未通过 L1 复验")
+    current_source = 计算文件哈希(target)
+    current_candidate = 计算文件哈希(candidate)
+    if current_source != ready["source_sha256"] or approval["source_sha256"] != ready["source_sha256"]:
+        raise 补丁错误("REVALIDATION_FAILED", "正式正文 source_sha256 已变化")
+    if current_candidate != ready.get("candidate_sha256", "") or approval["candidate_sha256"] != ready.get("candidate_sha256", ""):
+        raise 补丁错误("REVALIDATION_FAILED", "candidate_sha256 不匹配")
+    if approval["patch_sha256"] != ready["patch_sha256"]:
+        raise 补丁错误("REVALIDATION_FAILED", "patch_sha256 不匹配")
+    if approval["project_id"] != ready["project_id"] or approval["chapter_source"] != ready["chapter_source"]:
+        raise 补丁错误("REVALIDATION_FAILED", "审批绑定对象不匹配")
+
+    original_text = target.read_text(encoding="utf-8")
+    approved_text = candidate.read_text(encoding="utf-8")
+    ready["decision"] = "apply"
+    ready["decision_reason"] = reason
+    ready["approver"] = approval["approver"]
+    ready["approval_time"] = approval["approval_time"]
+    ready["candidate_sha256"] = current_candidate
+    backup_path, backup_sha = _write_backup(target, original_text)
+    ready["backup_path"] = str(backup_path)
+    ready["backup_sha256"] = backup_sha
+    try:
+        _atomic_replace_text(target, approved_text)
+    except OSError as exc:
+        ready["final_source_sha256"] = 计算文件哈希(target)
+        payload = _record_terminal(
+            ready,
+            final_status="APPLY_FAILED",
+            last_successful_stage="BACKUP_WRITTEN",
+            last_complete_artifact_sha256=backup_sha,
+            error_code="APPLY_FAILED",
+            error_reason=str(exc),
+            rollback_attempted=False,
+            rollback_succeeded=False,
+        )
+        _write_audit(out_dir, payload)
+        raise 补丁错误("APPLY_FAILED", f"正式正文原子替换失败：{exc}", ExitCode.BLOCKED)
+
+    try:
+        ready["applied_sha256"] = 计算文件哈希(target)
+        ready["final_source_sha256"] = ready["applied_sha256"]
+        if ready["applied_sha256"] != current_candidate:
+            raise 补丁错误("APPLY_FAILED", "正式正文哈希不等于 candidate_sha256")
+        formal_revalidation = _run_apply_revalidation(target, out_dir / "正式复验", f"{run_id}-APPLY")
+        ready["正式复验结果"] = formal_revalidation
+        if not _复验通过(formal_revalidation):
+            raise 补丁错误("APPLY_FAILED", "应用后正式正文 L1 复验失败")
+        payload = _record_terminal(
+            ready,
+            final_status="APPLIED",
+            last_successful_stage="FORMAL_REVALIDATED",
+            last_complete_artifact_sha256=ready["applied_sha256"],
+        )
+        _write_audit(out_dir, payload)
+        _write_final_marker(payload)
+        return payload
+    except 补丁错误 as exc:
+        rolled_back, rollback_sha = _rollback_formal(target, original_text, ready)
+        ready["rollback_sha256"] = rollback_sha
+        ready["final_source_sha256"] = 计算文件哈希(target) if target.exists() else ""
+        if rolled_back:
+            payload = _record_terminal(
+                ready,
+                final_status="ROLLED_BACK",
+                last_successful_stage="ROLLBACK_VERIFIED",
+                last_complete_artifact_sha256=rollback_sha,
+                error_code=exc.details.get("reason", "APPLY_FAILED"),
+                error_reason=str(exc),
+                rollback_attempted=True,
+                rollback_succeeded=True,
+            )
+            _write_audit(out_dir, payload)
+            return payload
+        payload = _record_terminal(
+            ready,
+            final_status="ROLLBACK_FAILED",
+            last_successful_stage="APPLY_ATTEMPTED",
+            last_complete_artifact_sha256=ready.get("applied_sha256", backup_sha),
+            error_code=exc.details.get("reason", "APPLY_FAILED"),
+            error_reason=str(exc),
+            rollback_attempted=True,
+            rollback_succeeded=False,
+        )
+        _write_audit(out_dir, payload)
+        raise 补丁错误("ROLLBACK_FAILED", str(exc), ExitCode.BLOCKED)
 
 
 def _run_l1(candidate: Path, out_dir: Path, run_id: str) -> dict[str, Any]:
@@ -422,23 +674,47 @@ def _复验通过(revalidation: dict[str, Any]) -> bool:
 
 def 执行补丁(
     *,
-    l2_report: Path,
+    l2_report: Path | None,
+    audit_json: Path | None,
     out_dir: Path,
     run_id: str,
     approval_path: Path | None = None,
     plan_only: bool = False,
+    final_decision: str | None = None,
+    decision_reason: str = "",
 ) -> dict[str, Any]:
+    if final_decision:
+        if audit_json is None:
+            raise 补丁错误("ABORTED", "正式采纳缺少审计文件")
+        ready = _load_ready_audit(audit_json)
+        target = _resolve_io_path(str(ready["chapter_source"]))
+        if str(ready.get("project_id", "")) != "TP-001":
+            raise 补丁错误("PROJECT_NOT_ALLOWED", "B2 首轮只允许 TP-001")
+        approval = _load_approval(approval_path, require_candidate_hash=True)
+        if approval.get("approval_status") != "APPROVED":
+            raise 补丁错误("ABORTED", "缺少最终批准记录")
+        if final_decision == "reject":
+            return _finalize_reject(ready, approval, out_dir, decision_reason)
+        if final_decision == "apply":
+            return _finalize_apply(ready, approval, out_dir, decision_reason, run_id)
+        raise 补丁错误("ABORTED", "不支持的最终决定")
+
+    if l2_report is None:
+        raise 补丁错误("ABORTED", "缺少 L2 报告")
     strategy = _load_strategy(l2_report)
     target = _validate_strategy(strategy)
     plan = _make_plan(strategy, target)
     if plan_only:
-        return _write_plan(out_dir, plan, run_id)
+        payload = _write_plan(out_dir, plan, run_id)
+        payload["finished_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
+        _write_audit(out_dir, payload)
+        return payload
 
-    approval = _load_approval(approval_path)
+    approval = _load_approval(approval_path, require_candidate_hash=False)
     before = target.read_text(encoding="utf-8")
     before_hash = 计算文件哈希(target)
     if approval["approval_status"] != "APPROVED":
-        raise 补丁错误("APPROVAL_REJECTED", "审批记录不是 APPROVED")
+        raise 补丁错误("REJECTED", "审批记录不是 APPROVED")
     if approval["patch_sha256"] != plan.patch_sha256:
         raise 补丁错误("PATCH_PRECONDITION_FAILED", "审批绑定的补丁哈希不一致")
     if approval["task_id"] != plan.task_id or approval["project_id"] != plan.project_id or approval["chapter_source"] != plan.chapter_source:
@@ -448,37 +724,57 @@ def 执行补丁(
     before.count(plan.anchor)
     after = _apply_patch(plan, before)
     if before_hash != plan.source_sha256 or approval["source_sha256"] != plan.source_sha256:
-        raise 补丁错误("STALE_APPROVAL", "执行前正文哈希与计划哈希不一致")
+        raise 补丁错误("REVALIDATION_FAILED", "执行前正文哈希与计划哈希不一致")
 
     candidate = out_dir / "候选正文.md"
     diff_path = out_dir / "补丁.diff"
     audit = _plan_dict(plan, run_id, "PRECONDITION_CHECKED", out_dir=out_dir)
     audit["approval"] = approval
+    audit["approver"] = approval["approver"]
+    audit["approval_time"] = approval["approval_time"]
     try:
         if os.environ.get("XCUE_B2_FAIL_BEFORE_REPLACE") == "1":
             raise OSError("pytest injected write failure")
         原子写文本(candidate, after)
         原子写文本(diff_path, _diff(before, after, str(target), str(candidate)))
     except OSError as exc:
-        audit["status"] = "PATCH_WRITE_FAILED"
+        audit["candidate_sha256"] = ""
         audit["候选正文"] = str(candidate)
         audit["unified_diff"] = str(diff_path)
-        _write_audit(out_dir, audit)
-        raise 补丁错误("PATCH_WRITE_FAILED", f"候选正文写入失败：{exc}", ExitCode.INTERNAL_ERROR) from exc
+        payload = _record_terminal(
+            audit,
+            final_status="EXECUTION_FAILED",
+            last_successful_stage="PRECONDITION_CHECKED",
+            error_code="EXECUTION_FAILED",
+            error_reason=str(exc),
+        )
+        _write_audit(out_dir, payload)
+        raise 补丁错误("EXECUTION_FAILED", f"候选正文写入失败：{exc}", ExitCode.INTERNAL_ERROR) from exc
 
-    audit["status"] = "PATCH_EXECUTED"
+    audit["status"] = "EXECUTED_IN_SANDBOX"
     audit["候选正文"] = str(candidate)
     audit["candidate_sha256"] = 计算文件哈希(candidate)
     audit["unified_diff"] = str(diff_path)
     audit["diff_sha256"] = 计算文件哈希(diff_path)
+    audit["last_successful_stage"] = "EXECUTED_IN_SANDBOX"
     audit["正式正文保持不变"] = 计算文件哈希(target) == before_hash
     revalidation = _run_l1(candidate, out_dir / "复验", f"{run_id}-REVAL")
     audit["复验结果"] = revalidation
     if not _复验通过(revalidation):
-        audit["status"] = "PATCH_VALIDATION_FAILED"
-        _write_audit(out_dir, audit)
-        raise 补丁错误("PATCH_VALIDATION_FAILED", "候选正文 L1 复验失败")
+        payload = _record_terminal(
+            audit,
+            final_status="REVALIDATION_FAILED",
+            last_successful_stage="EXECUTED_IN_SANDBOX",
+            last_complete_artifact_sha256=audit["candidate_sha256"],
+            error_code="REVALIDATION_FAILED",
+            error_reason="候选正文 L1 复验失败",
+        )
+        _write_audit(out_dir, payload)
+        raise 补丁错误("REVALIDATION_FAILED", "候选正文 L1 复验失败")
     audit["status"] = "READY_FOR_ACCEPTANCE"
+    audit["last_successful_stage"] = "READY_FOR_ACCEPTANCE"
+    audit["last_complete_artifact_sha256"] = audit["candidate_sha256"]
+    audit["finished_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
     _write_audit(out_dir, audit)
     _write_marker(plan, audit)
     return audit
