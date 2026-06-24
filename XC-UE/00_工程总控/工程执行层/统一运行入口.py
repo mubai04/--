@@ -22,6 +22,8 @@ from 流水线运行 import 运行流水线
 from 标准加载器 import 候选试验模式, 生产模式
 from 安全路径 import resolve_inside_root, safe_id
 from 工程异常 import 输入错误
+from 项目加载器 import 加载项目, 读取默认项目ID
+from 错误信封 import 打印错误信封
 
 
 TARGETS = {
@@ -36,12 +38,6 @@ TARGETS = {
         "entry": ROOT / "00_工程总控" / "工程执行层" / "正文检测" / "正文检测运行入口.py",
         "default_run_id": "正文检测_COMPAT-RUN-UNIFIED",
         "forward_args": {"chapter", "project", "standard_mode"},
-    },
-    "TP-001": {
-        "cwd": ROOT / "70_测试项目" / "TP-001_CleanHarness_IR_Runtime",
-        "entry": ROOT / "70_测试项目" / "TP-001_CleanHarness_IR_Runtime" / "engine" / "TP001运行入口.py",
-        "default_run_id": "ENGINE-RUN-UNIFIED-TP001",
-        "forward_args": set(),
     },
     "L2": {
         "cwd": ROOT,
@@ -59,11 +55,26 @@ TARGETS = {
 
 
 def main() -> int:
+    try:
+        default_project_id = 读取默认项目ID(ROOT)
+    except 输入错误 as exc:
+        打印错误信封(exc, stage="PROJECT_LOADER")
+        return int(exc.exit_code)
+    runtime_targets = {
+        **TARGETS,
+        default_project_id: {
+            "project_target": default_project_id,
+            "entry_relative": Path("engine") / "TP001运行入口.py",
+            "default_run_id": f"ENGINE-RUN-UNIFIED-{default_project_id}",
+            "forward_args": set(),
+        },
+    }
     parser = argparse.ArgumentParser(description="XC-UE 统一工程执行入口。")
-    parser.add_argument("--target", required=True, choices=sorted([*TARGETS, "PIPELINE"]), help="运行目标。")
+    parser.add_argument("--target", required=True, choices=sorted([*runtime_targets, "PIPELINE"]), help="运行目标。")
     parser.add_argument("--run-id", default=None, help="报告编号。")
     parser.add_argument("--chapter", default=None, help="PIPELINE 使用的章节正文路径。")
-    parser.add_argument("--project", default="未命名项目", help="PIPELINE 使用的项目名。")
+    parser.add_argument("--project", default=None, help="PIPELINE 使用的项目 ID；未指定时加载默认项目。")
+    parser.add_argument("--project-registry", default=None, help="项目注册表路径；默认使用工程执行层项目注册表。")
     parser.add_argument("--standard-mode", default=候选试验模式, choices=[生产模式, 候选试验模式], help="标准加载模式。")
     args, extra = parser.parse_known_args()
 
@@ -73,21 +84,34 @@ def main() -> int:
             chapter_arg = str(resolve_inside_root(ROOT, chapter_arg))
         run_id_arg = safe_id(args.run_id, "run_id") if args.run_id else None
     except 输入错误 as exc:
-        print(json.dumps({"error": str(exc), "exit_code": 20}, ensure_ascii=False), file=sys.stderr)
+        打印错误信封(exc, stage="ENTRY", run_id=args.run_id or "")
         return 20
 
     if args.target == "PIPELINE":
+        try:
+            project = 加载项目(ROOT, args.project, args.project_registry)
+        except 输入错误 as exc:
+            打印错误信封(exc, stage="PROJECT_LOADER", run_id=run_id_arg or "", details={"project": args.project or ""})
+            return int(exc.exit_code)
         if not chapter_arg:
             print(json.dumps({"error": "PIPELINE 需要 --chapter"}, ensure_ascii=False), file=sys.stderr)
             return 20
-        return 运行流水线(Path(chapter_arg), args.project, run_id_arg, args.standard_mode)
+        return 运行流水线(Path(chapter_arg), project, run_id_arg, args.standard_mode)
 
-    target = TARGETS[args.target]
+    target = dict(runtime_targets[args.target])
+    if "project_target" in target:
+        try:
+            project = 加载项目(ROOT, target["project_target"], args.project_registry)
+        except 输入错误 as exc:
+            打印错误信封(exc, stage="PROJECT_LOADER", run_id=run_id_arg or "", details={"project": target["project_target"]})
+            return int(exc.exit_code)
+        target["cwd"] = project.project_root
+        target["entry"] = project.project_root / target["entry_relative"]
     forward_args = target["forward_args"]
 
     if chapter_arg and "chapter" in forward_args:
         extra = ["--chapter", chapter_arg, *extra]
-    if args.project != "未命名项目" and "project" in forward_args:
+    if args.project and "project" in forward_args:
         extra = ["--project", args.project, *extra]
     if "standard_mode" in forward_args:
         extra = ["--standard-mode", args.standard_mode, *extra]

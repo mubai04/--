@@ -25,7 +25,7 @@ from 正文任务校验 import 校验 as 校验正文任务
 from 验收回填校验 import 校验 as 校验回填
 from 版本回滚校验 import 校验 as 校验版本
 from L3禁止项检查 import 检查 as 检查禁止项
-from L3报告 import 写报告
+from L3报告 import 写报告, 拒绝覆盖既有报告
 from L3模型 import L3报告, 追加状态
 from IR输入映射校验 import 校验IR存在
 from ProjectHarness运行校验 import 发现Harness, 确保Harness目录
@@ -75,7 +75,9 @@ def _解析输入输出路径(value: str | Path, label: str) -> Path:
 def main() -> int:
     parser = argparse.ArgumentParser(description="XC-UE L3工程：把 L2 修复单转成执行任务单，并按 L3 协议校验。")
     parser.add_argument("--l2-report", default=None, help="L2 报告 JSON 路径。")
-    parser.add_argument("--project-harness", default=None, help="Project Harness 根目录。必须显式指定。")
+    parser.add_argument("--project-harness", default=None, help="Project Harness 根目录；未指定时从项目注册表加载。")
+    parser.add_argument("--project", default=None, help="项目 ID；未指定时加载默认项目。")
+    parser.add_argument("--project-registry", default=None, help="项目注册表路径。")
     parser.add_argument("--run-id", default=None, help="报告编号。")
     parser.add_argument("--out-dir", default=None, help="输出目录。")
     parser.add_argument("--pipeline-run-id", default="", help="流水线编号。")
@@ -93,8 +95,9 @@ def main() -> int:
         stage_run_id = safe_id(args.stage_run_id, "stage_run_id") if args.stage_run_id else ""
         source = _解析输入输出路径(args.l2_report, "l2_report")
         out_dir = _解析输入输出路径(args.out_dir, "out_dir") if args.out_dir else Path(__file__).resolve().parent / "reports"
+        拒绝覆盖既有报告(run_id, out_dir)
     except 工程错误 as exc:
-        print(json.dumps({"error": str(exc), "exit_code": int(exc.exit_code)}, ensure_ascii=False), file=sys.stderr)
+        打印错误信封(exc, stage="L3", run_id=locals().get("run_id", ""), path=locals().get("out_dir", ""))
         return int(exc.exit_code)
     try:
         validated_l2 = 校验JSON输入(
@@ -134,8 +137,12 @@ def main() -> int:
         return int(exc.exit_code)
     standard_errors = 标准完整性(standards)
     forms = 读L2修复单(source)
-    harness = 发现Harness(ROOT, args.project_harness)
-    确保Harness目录(harness)
+    try:
+        harness = 发现Harness(ROOT, args.project_harness, args.project, args.project_registry)
+        确保Harness目录(harness)
+    except 工程错误 as exc:
+        打印错误信封(exc, stage="L3", run_id=run_id, path=args.project_harness or args.project or "")
+        return int(exc.exit_code)
     tasks = 生成任务(forms, str(source), run_id, ROOT, harness)
     for task in tasks:
         task.校验问题 = []

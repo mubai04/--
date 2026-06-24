@@ -11,16 +11,31 @@ if str(公共组件) not in sys.path:
     sys.path.insert(0, str(公共组件))
 
 from 原子写入 import 原子写文本
+from 工程异常 import 输入错误
+
+
+def 报告路径(result: L2报告, out_dir: Path) -> tuple[Path, Path]:
+    if out_dir.name == "第二层":
+        return out_dir / "修复报告.md", out_dir / "修复报告.json"
+    return out_dir / f"{result.run_id}.md", out_dir / f"{result.run_id}.json"
+
+
+def 预期报告路径(run_id: str, out_dir: Path) -> tuple[Path, Path]:
+    if out_dir.name == "第二层":
+        return out_dir / "修复报告.md", out_dir / "修复报告.json"
+    return out_dir / f"{run_id}.md", out_dir / f"{run_id}.json"
+
+
+def 拒绝覆盖既有报告(run_id: str, out_dir: Path) -> None:
+    md_path, json_path = 预期报告路径(run_id, out_dir)
+    existing = [path for path in [json_path, md_path] if path.exists()]
+    if existing:
+        raise 输入错误("L2 输出已存在，拒绝覆盖：" + "、".join(str(path) for path in existing))
 
 
 def 写报告(result: L2报告, out_dir: Path) -> tuple[Path, Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
-    if out_dir.name == "第二层":
-        json_path = out_dir / "修复报告.json"
-        md_path = out_dir / "修复报告.md"
-    else:
-        json_path = out_dir / f"{result.run_id}.json"
-        md_path = out_dir / f"{result.run_id}.md"
+    md_path, json_path = 报告路径(result, out_dir)
     原子写文本(json_path, json.dumps(result.to_dict(), ensure_ascii=False, indent=2))
 
     lines = [

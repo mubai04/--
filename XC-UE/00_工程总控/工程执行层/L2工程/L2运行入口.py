@@ -15,13 +15,13 @@ sys.dont_write_bytecode = True
 if str(公共组件) not in sys.path:
     sys.path.insert(0, str(公共组件))
 
-from L2报告 import 写报告
+from L2报告 import 写报告, 拒绝覆盖既有报告
 from L2模型 import L2报告
-from L2读取 import L2路由规则路径, 读L2标准, 读失败包
+from L2读取 import L2路由规则路径, 读失败包
 from L2_99_接口判断 import 判断
 from 修复单生成 import 生成
 from L2禁止项检查 import 检查
-from 能力标准解析 import 标准完整性, 解析规则
+from 能力规则加载 import L2能力规则路径, 加载能力规则
 from 路由规则加载 import 加载路由规则
 from 回流校验 import 校验
 from 退出码 import ExitCode
@@ -75,6 +75,7 @@ def main() -> int:
     parser.add_argument("--pipeline-run-id", default="", help="流水线编号。")
     parser.add_argument("--stage-run-id", default="", help="阶段运行编号。")
     parser.add_argument("--expected-input-sha256", default="", help="期望输入哈希。")
+    parser.add_argument("--ability-rules", default=None, help="L2 结构化能力规则 JSON 路径。")
     parser.add_argument("--standard-mode", default=候选试验模式, choices=[生产模式, 候选试验模式], help="标准加载模式。")
     args = parser.parse_args()
     if not args.failure_packet:
@@ -87,8 +88,9 @@ def main() -> int:
         stage_run_id = safe_id(args.stage_run_id, "stage_run_id") if args.stage_run_id else ""
         packet_path = _解析输入输出路径(args.failure_packet, "failure_packet")
         out_dir = _解析输入输出路径(args.out_dir, "out_dir") if args.out_dir else Path(__file__).resolve().parent / "reports"
+        拒绝覆盖既有报告(run_id, out_dir)
     except 工程错误 as exc:
-        print(json.dumps({"error": str(exc), "exit_code": int(exc.exit_code)}, ensure_ascii=False), file=sys.stderr)
+        打印错误信封(exc, stage="L2", run_id=locals().get("run_id", ""), path=locals().get("out_dir", ""))
         return int(exc.exit_code)
     try:
         validated_packet = 校验JSON输入(
@@ -117,19 +119,20 @@ def main() -> int:
             return int(exc.exit_code)
 
     try:
-        standards = 读L2标准(ROOT, args.standard_mode)
-        rules = 解析规则(standards)
+        ability_rules_path = Path(args.ability_rules) if args.ability_rules else L2能力规则路径(ROOT)
+        if not ability_rules_path.is_absolute():
+            ability_rules_path = (ROOT / ability_rules_path).resolve()
+        rules = 加载能力规则(ability_rules_path)
         rules.路由规则集 = 加载路由规则(L2路由规则路径(ROOT))
     except 工程错误 as exc:
-        print(json.dumps({"error": str(exc), "exit_code": int(exc.exit_code)}, ensure_ascii=False), file=sys.stderr)
+        打印错误信封(exc, stage="L2", run_id=run_id, path=locals().get("ability_rules_path", ""))
         return int(exc.exit_code)
     items = 读失败包(packet_path)
     judgements = [判断(item, rules) for item in items]
     forms = 生成(items, judgements, rules)
     blocked = 检查(judgements)
     recheck_targets = [item for item in judgements if item.最终状态 == "派生复验"]
-    missing = 标准完整性(standards)
-    standard_errors = [f"{name} 缺少：{'、'.join(sections)}" for name, sections in missing.items()]
+    standard_errors: list[str] = []
     return_errors = 校验(forms)
     if blocked and not forms:
         status = 已阻断
@@ -145,7 +148,7 @@ def main() -> int:
         run_id=run_id,
         输入文件=str(packet_path),
         输入数量=len(items),
-        方法声明="L2工程只做接口判断与修复单生成，不写正文、不替 L1.5 裁决、不覆盖 Markdown 真源。",
+        方法声明="L2工程只做接口判断与修复单生成，不写正文、不替 L1.5 裁决；运行真源为结构化能力规则 JSON 与结构化路由规则 JSON，Markdown 仅作解释材料。",
         标准校验问题=standard_errors,
         回流校验问题=return_errors,
         接口判断=judgements,
@@ -171,7 +174,7 @@ def main() -> int:
                 "return_error_count": len(return_errors),
                 "report_md": str(md_path),
                 "report_json": str(json_path),
-                "standards_loaded": sorted(standards),
+                "ability_rules": str(ability_rules_path),
                 "standard_mode": args.standard_mode,
                 "experimental_standard": args.standard_mode == 候选试验模式,
                 "status": status,

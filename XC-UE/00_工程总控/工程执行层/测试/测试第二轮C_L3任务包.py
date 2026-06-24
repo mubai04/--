@@ -4,6 +4,7 @@ import json
 import subprocess
 import sys
 import uuid
+import hashlib
 from pathlib import Path
 
 import pytest
@@ -54,6 +55,10 @@ def _修复单(module: str = "L2-05", problem: str = "入口弱") -> dict:
 
 
 def _运行L3(l2_report: Path, out_dir: Path, env: dict[str, str]) -> subprocess.CompletedProcess[str]:
+    return _运行L3固定编号(l2_report, out_dir, env, "pytest-L3-" + uuid.uuid4().hex[:8])
+
+
+def _运行L3固定编号(l2_report: Path, out_dir: Path, env: dict[str, str], run_id: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         [
             sys.executable,
@@ -61,7 +66,7 @@ def _运行L3(l2_report: Path, out_dir: Path, env: dict[str, str]) -> subprocess
             "--l2-report",
             str(l2_report),
             "--run-id",
-            "pytest-L3-" + uuid.uuid4().hex[:8],
+            run_id,
             "--out-dir",
             str(out_dir),
             "--pipeline-run-id",
@@ -81,6 +86,10 @@ def _运行L3(l2_report: Path, out_dir: Path, env: dict[str, str]) -> subprocess
         env=env,
         timeout=30,
     )
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def 测试L3非空修复报告生成任务包且无执行字段(root_case, test_io_env):
@@ -120,3 +129,53 @@ def 测试L3部分任务不可执行不默认全批报废(root_case, test_io_env
     assert report["status"] == "AWAITING_EXECUTOR"
     assert len(report["阻断任务"]) == 1
     assert any(output["task_package_created"] for output in report["执行输出"])
+
+
+def 测试L3同RunID任一既有产物存在时拒绝且不覆盖(root_case, test_io_env):
+    l2_report = root_case / "第二层" / "修复报告.json"
+    l2_report.parent.mkdir(parents=True)
+    out_dir = root_case / "第三层"
+    run_id = "pytest-L3-fixed-" + uuid.uuid4().hex[:8]
+    _写L2报告(l2_report, [_修复单()])
+
+    first = _运行L3固定编号(l2_report, out_dir, test_io_env, run_id)
+    assert first.returncode == int(ExitCode.OK), first.stderr
+    json_path = out_dir / "任务包.json"
+    md_path = out_dir / "任务包.md"
+    assert json_path.exists()
+    assert md_path.exists()
+    before_json = _sha256(json_path)
+    before_md = _sha256(md_path)
+    before_files = sorted(path.relative_to(out_dir).as_posix() for path in out_dir.rglob("*") if path.is_file())
+
+    second = _运行L3固定编号(l2_report, out_dir, test_io_env, run_id)
+
+    assert second.returncode == int(ExitCode.INPUT_INVALID)
+    payload = json.loads(second.stderr)
+    assert payload["error_code"] == "INPUT_INVALID"
+    assert _sha256(json_path) == before_json
+    assert _sha256(md_path) == before_md
+    after_files = sorted(path.relative_to(out_dir).as_posix() for path in out_dir.rglob("*") if path.is_file())
+    assert after_files == before_files
+
+
+@pytest.mark.parametrize("existing_name,forbidden_name", [("任务包.json", "任务包.md"), ("任务包.md", "任务包.json")])
+def 测试L3任一单独既有产物存在时拒绝且不生成部分新文件(root_case, test_io_env, existing_name, forbidden_name):
+    l2_report = root_case / "第二层" / "修复报告.json"
+    l2_report.parent.mkdir(parents=True)
+    out_dir = root_case / "第三层"
+    run_id = "pytest-L3-fixed-" + uuid.uuid4().hex[:8]
+    _写L2报告(l2_report, [_修复单()])
+    out_dir.mkdir(parents=True)
+    existing = out_dir / existing_name
+    forbidden = out_dir / forbidden_name
+    existing.write_text("历史产物\n", encoding="utf-8")
+    before_hash = _sha256(existing)
+
+    result = _运行L3固定编号(l2_report, out_dir, test_io_env, run_id)
+
+    assert result.returncode == int(ExitCode.INPUT_INVALID)
+    payload = json.loads(result.stderr)
+    assert payload["error_code"] == "INPUT_INVALID"
+    assert _sha256(existing) == before_hash
+    assert not forbidden.exists()

@@ -2,17 +2,17 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from 安全路径 import resolve_inside_root
+from 工程异常 import 输入错误
+from 项目加载器 import 加载项目
 
-def 发现Harness(root: Path, preferred: str | None = None) -> Path:
-    if not preferred:
-        raise FileNotFoundError("P0 后 L3 必须显式提供 --project-harness，不得按修改时间自动选择。")
-    candidate = Path(preferred)
-    if not candidate.is_absolute():
-        candidate = (root / candidate).resolve()
-    required = [candidate / "IR", candidate / "chapters", candidate / "logs"]
-    missing = [item for item in required if not item.exists()]
-    if missing:
-        raise FileNotFoundError(f"Project Harness 缺少必备目录：{', '.join(str(item) for item in missing)}")
+
+def 发现Harness(root: Path, preferred: str | None = None, project: str | None = None, registry_path: str | None = None) -> Path:
+    if preferred:
+        candidate = resolve_inside_root(root, preferred)
+    else:
+        candidate = 加载项目(root, project, registry_path).project_root
+    确保Harness目录(candidate)
     return candidate
 
 
@@ -24,7 +24,7 @@ def 确保Harness目录(harness: Path) -> list[Path]:
     required = [harness / "IR", harness / "chapters", harness / "logs"]
     missing = [item for item in required if not item.exists()]
     if missing:
-        raise FileNotFoundError(f"Project Harness 验证失败：{', '.join(str(item) for item in missing)}")
+        raise 输入错误(f"Project Harness 验证失败：{', '.join(str(item) for item in missing)}")
     return required
 
 

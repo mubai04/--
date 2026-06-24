@@ -21,6 +21,7 @@ from 工程异常 import 工程错误
 from 标准加载器 import 候选试验模式, 加载标准文本, 标准记录转字典
 from 结构校验 import 按结构文件校验
 from 安全路径 import resolve_inside_root, safe_id, safe_output_path
+from 项目加载器 import 项目上下文, 加载项目
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -196,8 +197,15 @@ def _最终判定(codes: list[int]) -> tuple[int, str]:
     return int(ExitCode.OK), "SCREENING_PASS"
 
 
-def 运行流水线(chapter: Path, project: str, pipeline_run_id: str | None = None, standard_mode: str = 候选试验模式) -> int:
+def _项目上下文(project: 项目上下文 | str) -> 项目上下文:
+    if isinstance(project, 项目上下文):
+        return project
+    return 加载项目(ROOT, project)
+
+
+def 运行流水线(chapter: Path, project: 项目上下文 | str, pipeline_run_id: str | None = None, standard_mode: str = 候选试验模式) -> int:
     try:
+        project_context = _项目上下文(project)
         chapter = resolve_inside_root(ROOT, chapter)
         pipeline_id = safe_id(pipeline_run_id, "pipeline_run_id") if pipeline_run_id else safe_id(新流水线编号(), "pipeline_run_id")
         input_stage = safe_id(f"{pipeline_id}-INPUT", "stage_run_id")
@@ -285,7 +293,7 @@ def 运行流水线(chapter: Path, project: str, pipeline_run_id: str | None = N
         "--chapter",
         str(snapshot),
         "--project",
-        project,
+        project_context.project_id,
         "--run-id",
         l1_stage,
         "--out-dir",
@@ -404,7 +412,7 @@ def 运行流水线(chapter: Path, project: str, pipeline_run_id: str | None = N
             "--standard-mode",
             standard_mode,
             "--project-harness",
-            str(ROOT / "70_测试项目" / "TP-001_CleanHarness_IR_Runtime"),
+            str(project_context.project_root),
         ]
         l3_result = _运行阶段(l3_cmd, ROOT)
         l3_report = l3_dir / "任务包.json"

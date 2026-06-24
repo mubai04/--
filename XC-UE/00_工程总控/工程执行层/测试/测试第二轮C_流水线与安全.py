@@ -187,9 +187,9 @@ def 测试L3任务规划禁止修改正式正文():
     assert 校验版本(task)
 
 
-def 测试Harness必须显式指定():
-    with pytest.raises(FileNotFoundError):
-        发现Harness(ROOT, None)
+def 测试Harness未显式指定时加载默认项目():
+    harness = 发现Harness(ROOT, None)
+    assert harness == ROOT / "70_测试项目" / "TP-001_CleanHarness_IR_Runtime"
 
 
 def 测试缺必备产物使用专门状态():
