@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 import sys
 import uuid
@@ -19,23 +20,26 @@ def _写L1章节(path: Path, paragraphs: list[str], title: str = "批次05对抗
     path.write_text("#" + title + "\n\n" + "\n\n".join(paragraphs) + "\n", encoding="utf-8")
 
 
-def _运行L1(chapter: Path, out_dir: Path, env: dict[str, str]) -> tuple[subprocess.CompletedProcess[str], dict]:
+def _运行L1(chapter: Path, out_dir: Path, env: dict[str, str], rules_path: Path | None = None) -> tuple[subprocess.CompletedProcess[str], dict | None]:
     run_id = "pytest-L1-" + uuid.uuid4().hex[:8]
+    cmd = [
+        sys.executable,
+        str(ROOT / "00_工程总控" / "工程执行层" / "L1工程" / "L1运行入口.py"),
+        "--chapter",
+        str(chapter),
+        "--run-id",
+        run_id,
+        "--out-dir",
+        str(out_dir),
+        "--project",
+        "pytest",
+        "--standard-mode",
+        "CANDIDATE_TEST",
+    ]
+    if rules_path:
+        cmd.extend(["--gate-rules", str(rules_path)])
     result = subprocess.run(
-        [
-            sys.executable,
-            str(ROOT / "00_工程总控" / "工程执行层" / "L1工程" / "L1运行入口.py"),
-            "--chapter",
-            str(chapter),
-            "--run-id",
-            run_id,
-            "--out-dir",
-            str(out_dir),
-            "--project",
-            "pytest",
-            "--standard-mode",
-            "CANDIDATE_TEST",
-        ],
+        cmd,
         cwd=str(ROOT),
         text=True,
         encoding="utf-8",
@@ -45,8 +49,16 @@ def _运行L1(chapter: Path, out_dir: Path, env: dict[str, str]) -> tuple[subpro
         timeout=30,
     )
     report_path = out_dir / f"{run_id}.json"
-    assert report_path.exists(), result.stderr
+    if not report_path.exists():
+        return result, None
     return result, json.loads(report_path.read_text(encoding="utf-8"))
+
+
+def _复制L1闸门规则(root_case: Path) -> Path:
+    source = ROOT / "00_工程总控" / "工程执行层" / "L1工程" / "gate_rules.json"
+    target = root_case / "gate_rules.json"
+    shutil.copyfile(source, target)
+    return target
 
 
 def _随机中文段落(count: int) -> list[str]:
@@ -157,3 +169,61 @@ def 测试L1高质量少目标词不因单一词表缺失硬退回(root_case, te
     _断言L1降级字段(report)
     hard_failures = [item for item in report["失败包"] if item["严重级别"] == "error"]
     assert not hard_failures or any(item["失败类型"] != "创意设定失败" for item in hard_failures)
+
+
+def 测试A3L1结构化规则改动会改变发布锁字数判定(root_case, test_io_env):
+    chapter = root_case / "chapter.md"
+    out_dir = root_case / "l1-structured"
+    rules_path = _复制L1闸门规则(root_case)
+    payload = json.loads(rules_path.read_text(encoding="utf-8"))
+    payload["gates"]["L1-03"]["word_count"]["function_floor"] = 9999
+    payload["gates"]["L1-03"]["word_count"]["lower"] = 10000
+    payload["gates"]["L1-03"]["word_count"]["upper"] = 12000
+    rules_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    _写L1章节(chapter, _关键词堆砌段落(120), "A3-L1-结构化规则")
+
+    result, report = _运行L1(chapter, out_dir, test_io_env, rules_path)
+
+    assert result.returncode in {int(ExitCode.GATE_REJECTED), int(ExitCode.REVIEW_REQUIRED)}, result.stderr
+    assert report is not None
+    l103 = next(gate for gate in report["闸门结果"] if gate["闸门"] == "L1-03")
+    assert l103["规则摘要"]["功能稿下限"] == 9999
+    assert any(item["失败类型"] == "字数不足" for item in l103["检测项"])
+    assert report["rule_version"] == payload["version"]
+    assert len(report["rule_hash"]) == 64
+
+
+def 测试A3L1Markdown闸门标准改动不改变L1运行行为(root_case, test_io_env):
+    chapter = root_case / "chapter.md"
+    rules_path = _复制L1闸门规则(root_case)
+    _写L1章节(chapter, _关键词堆砌段落(80), "A3-L1-Markdown")
+
+    first, first_report = _运行L1(chapter, root_case / "A", test_io_env, rules_path)
+    assert first_report is not None, first.stderr
+
+    markdown_source = ROOT / "20_L1_闸门层" / "L1-03_发布锁验收工程图.md"
+    before = markdown_source.read_text(encoding="utf-8")
+    try:
+        markdown_source.write_text(before + "\n\n<!-- A3-L1 pytest markdown mutation should not affect runtime rules -->\n", encoding="utf-8")
+        second, second_report = _运行L1(chapter, root_case / "B", test_io_env, rules_path)
+    finally:
+        markdown_source.write_text(before, encoding="utf-8")
+
+    assert second_report is not None, second.stderr
+    assert first_report["闸门结果"] == second_report["闸门结果"]
+
+
+def 测试A3L1坏结构化规则在写报告前失败(root_case, test_io_env):
+    chapter = root_case / "chapter.md"
+    out_dir = root_case / "bad-rules"
+    bad_rules = root_case / "bad_gate_rules.json"
+    bad_rules.write_text('{"schema_version":"xcue.l1-gate-rules/1.0","gates":{}}', encoding="utf-8")
+    _写L1章节(chapter, _关键词堆砌段落(20), "A3-L1-bad")
+
+    result, report = _运行L1(chapter, out_dir, test_io_env, bad_rules)
+
+    assert result.returncode == int(ExitCode.RULE_PARSE_FAILED)
+    payload = json.loads(result.stderr)
+    assert payload["error_code"] == "RULE_PARSE_FAILED"
+    assert report is None
+    assert not list(out_dir.glob("*.json"))

@@ -18,8 +18,8 @@ if str(公共组件) not in sys.path:
 from 正文切分 import 切段, 正文字数, 清理正文
 from L1报告 import 写报告, 拒绝覆盖既有报告
 from L1模型 import 正文检测结果
-from L1读取 import 读文本, 读标准
-from 闸门标准解析 import 解析规则
+from L1读取 import 读文本
+from 闸门规则加载 import L1闸门规则路径, 加载闸门规则
 from L15交接 import 生成路由建议
 from 失败包生成 import 生成失败包
 import L1_前置质量护栏
@@ -34,6 +34,7 @@ from 标准加载器 import 候选试验模式, 生产模式
 from 安全路径 import resolve_inside_root, safe_id
 from 错误信封 import 打印错误信封
 from 项目加载器 import 加载项目
+from 文件哈希 import 计算文件哈希
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -70,13 +71,14 @@ def _解析输入输出路径(value: str | Path, label: str) -> Path:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="XC-UE L1工程：把 L1 Markdown 闸门标准转成对章节正文的检测报告。")
+    parser = argparse.ArgumentParser(description="XC-UE L1工程：按结构化 L1 闸门规则生成章节正文检测报告。")
     parser.add_argument("--chapter", default=None, help="待检测正文 Markdown 路径；未指定时使用默认项目候选正文。")
     parser.add_argument("--run-id", default=None, help="报告编号。")
     parser.add_argument("--project", default="未命名项目", help="项目名。")
     parser.add_argument("--out-dir", default=None, help="输出目录。")
     parser.add_argument("--pipeline-run-id", default="", help="流水线编号。")
     parser.add_argument("--stage-run-id", default="", help="阶段运行编号。")
+    parser.add_argument("--gate-rules", default=None, help="L1 结构化闸门规则 JSON 路径。")
     parser.add_argument("--standard-mode", default=候选试验模式, choices=[生产模式, 候选试验模式], help="标准加载模式。")
     args = parser.parse_args()
 
@@ -98,10 +100,15 @@ def main() -> int:
     if not raw.strip():
         raise SystemExit(ExitCode.INPUT_INVALID)
     try:
-        standards = 读标准(ROOT, args.standard_mode)
-        rules = 解析规则(standards)
+        gate_rules_path = Path(args.gate_rules) if args.gate_rules else L1闸门规则路径(ROOT)
+        if not gate_rules_path.is_absolute():
+            gate_rules_path = (ROOT / gate_rules_path).resolve()
+        rules = 加载闸门规则(gate_rules_path)
+        gate_rules_raw = json.loads(gate_rules_path.read_text(encoding="utf-8-sig"))
+        gate_rule_version = gate_rules_raw["version"]
+        gate_rule_hash = 计算文件哈希(gate_rules_path)
     except 工程错误 as exc:
-        print(json.dumps({"error": str(exc), "exit_code": int(exc.exit_code)}, ensure_ascii=False), file=sys.stderr)
+        打印错误信封(exc, stage="L1", run_id=run_id, path=locals().get("gate_rules_path", ""))
         return int(exc.exit_code)
     title, body = 清理正文(raw)
     paragraphs = 切段(body)
@@ -116,7 +123,7 @@ def main() -> int:
     l103 = L1_03_发布锁检测.检测(paragraphs, word_count, rules.L103, l102_passed)
 
     gates = [l101, l102, l103]
-    l100 = L1_00_闸门接口校验.检测(gates, standards)
+    l100 = L1_00_闸门接口校验.检测(gates, {})
     guard_items = L1_前置质量护栏.检测(paragraphs)
     l100.检测项.extend(guard_items)
     if guard_items:
@@ -151,7 +158,7 @@ def main() -> int:
         章节标题=title,
         当前字数=word_count,
         段落数=len(paragraphs),
-        方法声明="自动检测只做未验证的启发式风险筛查：按 L1/L1.5/L2 Markdown 标准提取可证据化的正文风险；不能冒充最终文学判断、读者投入判断或发布授权。",
+        方法声明="自动检测只做未验证的启发式风险筛查：按结构化 L1 闸门规则提取可证据化的正文风险；Markdown 仅作解释材料，不能冒充最终文学判断、读者投入判断或发布授权。",
         闸门结果=gates,
         失败包=failure_packet,
         路由建议=routes,
@@ -159,6 +166,8 @@ def main() -> int:
         stage_run_id=stage_run_id or f"{pipeline_run_id}-L1" if pipeline_run_id else run_id,
         status=status,
         状态说明=状态说明[status],
+        rule_version=gate_rule_version,
+        rule_hash=gate_rule_hash,
     )
 
     try:

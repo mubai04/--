@@ -94,6 +94,10 @@
     "rule_version": {
       "$ref": "#/$defs/short_text"
     },
+    "rule_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
     "signal_strength": {
       "$ref": "#/$defs/short_text"
     },

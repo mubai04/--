@@ -72,6 +72,7 @@ class 正文检测结果:
     validation_status: str = "UNVALIDATED"
     decision_scope: str = "HEURISTIC_SCREENING"
     rule_version: str = "L1-CANDIDATE-UNVALIDATED"
+    rule_hash: str = ""
     signal_strength: str = "HEURISTIC_ONLY"
     confidence: str = "LOW_UNCALIBRATED"
     known_limitations: list[str] = field(

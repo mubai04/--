@@ -211,6 +211,7 @@ def _valid_samples() -> dict[str, dict]:
             "方法声明": "pytest",
             "heuristic": True,
             "rule_version": "L1-CANDIDATE-UNVALIDATED",
+            "rule_hash": "a" * 64,
             "signal_strength": "HEURISTIC_ONLY",
             "confidence": "LOW_UNCALIBRATED",
             "known_limitations": ["pytest"],
