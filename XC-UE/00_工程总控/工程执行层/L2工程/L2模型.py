@@ -80,6 +80,7 @@ class L201真实诊断:
     候选修改策略: list[str]
     风险: list[str]
     验收条件: list[str]
+    确定性候选策略: list[dict[str, Any]]
     置信度: str
     自动修复资格判定: str
     rule_id: str = ""

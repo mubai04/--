@@ -59,6 +59,13 @@ TARGETS = {
         "forward_args": {"standard_mode"},
         "rule_source": ROOT / "00_工程总控" / "工程执行层" / "L3工程" / "protocol_rules.json",
     },
+    "L3_PATCH": {
+        "cwd": ROOT,
+        "entry": ROOT / "00_工程总控" / "工程执行层" / "L3工程" / "L3补丁执行入口.py",
+        "default_run_id": "L3_PATCH-UNIFIED",
+        "forward_args": {"standard_mode"},
+        "rule_source": ROOT / "00_工程总控" / "工程执行层" / "L3工程" / "protocol_rules.json",
+    },
 }
 
 
@@ -182,15 +189,18 @@ def main() -> int:
     env = os.environ.copy()
     env["PYTHONDONTWRITEBYTECODE"] = "1"
     cmd = [sys.executable, str(entry), "--run-id", run_id, *extra]
-    result = subprocess.run(cmd, cwd=str(cwd), text=True, capture_output=True, env=env)
+    result = subprocess.run(cmd, cwd=str(cwd), text=True, encoding="utf-8", errors="replace", capture_output=True, env=env)
+    if result.returncode != 0 and (result.stderr or "").strip().startswith("{"):
+        print((result.stderr or "").strip(), file=sys.stderr)
+        return result.returncode
 
     payload = {
         "target": target.get("payload_target", args.target),
         "entry": str(entry.relative_to(ROOT)) if entry.is_relative_to(ROOT) else str(entry),
         "cwd": str(cwd.relative_to(ROOT)) if cwd.is_relative_to(ROOT) else str(cwd),
         "returncode": result.returncode,
-        "stdout": result.stdout.strip(),
-        "stderr": result.stderr.strip(),
+        "stdout": (result.stdout or "").strip(),
+        "stderr": (result.stderr or "").strip(),
     }
     print(json.dumps(payload, ensure_ascii=False, indent=2))
     return result.returncode

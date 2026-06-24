@@ -21,6 +21,21 @@ from 退出码 import ExitCode
     ExitCode.INTERNAL_ERROR: "INTERNAL_ERROR",
 }
 
+B2错误原因 = {
+    "APPROVAL_REQUIRED",
+    "APPROVAL_REJECTED",
+    "STALE_APPROVAL",
+    "PATCH_PRECONDITION_FAILED",
+    "PATCH_AMBIGUOUS_ANCHOR",
+    "PATCH_VALIDATION_FAILED",
+    "PATCH_ALREADY_APPLIED",
+    "PATCH_WRITE_FAILED",
+    "PATCH_STRATEGY_NOT_L201",
+    "PATCH_NOT_ELIGIBLE",
+    "GENERATIVE_PATCH_FORBIDDEN",
+    "PROJECT_NOT_ALLOWED",
+}
+
 
 def 错误信封(
     exc: 工程错误,
@@ -35,6 +50,8 @@ def 错误信封(
     payload_details = {**(getattr(exc, "details", {}) or {}), **(details or {})}
     if exc.exit_code == ExitCode.PROJECT_ERROR and isinstance(payload_details.get("reason"), str):
         code = payload_details["reason"]
+    if exc.exit_code in {ExitCode.BLOCKED, ExitCode.INTERNAL_ERROR} and payload_details.get("reason") in B2错误原因:
+        code = str(payload_details["reason"])
     envelope = {
         "ok": False,
         "error_code": code,

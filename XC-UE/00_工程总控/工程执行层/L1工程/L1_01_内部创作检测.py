@@ -3,7 +3,7 @@
 import re
 
 from 正文切分 import 找证据
-from L1模型 import 检测项, 段落, 闸门结果
+from L1模型 import 检测项, 段落, 证据, 闸门结果
 from L15交接 import 补路由
 from 闸门标准解析 import L101规则, L15路由规则
 
@@ -25,6 +25,10 @@ def _ordered_hits(paragraphs: list[段落], stages: list[tuple[str, list[str]]])
     return len(evidence), evidence
 
 
+def _首个正文锚点(paragraphs: list[段落]) -> list[证据]:
+    return 找证据([p for p in paragraphs if not p.文本.lstrip().startswith("#")], [r".*"], 1)
+
+
 def 检测(paragraphs: list[段落], rules: L101规则, routes: dict[str, L15路由规则]) -> 闸门结果:
     items: list[检测项] = []
 
@@ -44,7 +48,7 @@ def 检测(paragraphs: list[段落], rules: L101规则, routes: dict[str, L15路
                 "有序叙事信号",
                 "失败",
                 f"入口异常、规则压力、外部压力、升级、主动选择、章末新问题只识别到 {hit_count}/{len(stages)} 类有序信号；本项不证明真实因果关系。",
-                ev,
+                ev or _首个正文锚点(paragraphs),
                 "error",
                 "叙事失败",
             )
