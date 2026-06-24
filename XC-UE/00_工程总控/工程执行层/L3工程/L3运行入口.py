@@ -15,8 +15,7 @@ sys.dont_write_bytecode = True
 if str(公共组件) not in sys.path:
     sys.path.insert(0, str(公共组件))
 
-from 协议解析 import 标准完整性, 解析规则
-from L3读取 import 读L2修复单, 读L3标准
+from L3读取 import 读L2修复单
 from 执行任务生成 import 生成 as 生成任务
 from 输出生成 import 生成输出
 from 任务单校验 import 校验 as 校验任务单
@@ -26,9 +25,10 @@ from 验收回填校验 import 校验 as 校验回填
 from 版本回滚校验 import 校验 as 校验版本
 from L3禁止项检查 import 检查 as 检查禁止项
 from L3报告 import 写报告, 拒绝覆盖既有报告
-from L3模型 import L3报告, 追加状态
+from L3模型 import L3报告, 追加状态, 允许状态跳转
 from IR输入映射校验 import 校验IR存在
 from ProjectHarness运行校验 import 发现Harness, 确保Harness目录
+from 协议规则加载 import L3协议规则路径, 加载协议规则
 from 退出码 import ExitCode
 from 运行状态 import 状态说明, 已完成, 已阻断, 结构无效, 等待执行器
 from 文件哈希 import 计算文件哈希
@@ -83,6 +83,7 @@ def main() -> int:
     parser.add_argument("--pipeline-run-id", default="", help="流水线编号。")
     parser.add_argument("--stage-run-id", default="", help="阶段运行编号。")
     parser.add_argument("--expected-input-sha256", default="", help="期望输入哈希。")
+    parser.add_argument("--protocol-rules", default=None, help="L3 结构化协议规则 JSON 路径。")
     parser.add_argument("--standard-mode", default=候选试验模式, choices=[生产模式, 候选试验模式], help="标准加载模式。")
     args = parser.parse_args()
     if not args.l2_report:
@@ -130,12 +131,16 @@ def main() -> int:
         return int(ExitCode.BLOCKED)
 
     try:
-        standards = 读L3标准(ROOT, args.standard_mode)
-        rules = 解析规则(standards)
+        protocol_rules_path = Path(args.protocol_rules) if args.protocol_rules else L3协议规则路径(ROOT)
+        if not protocol_rules_path.is_absolute():
+            protocol_rules_path = (ROOT / protocol_rules_path).resolve()
+        rules = 加载协议规则(protocol_rules_path)
+        允许状态跳转.clear()
+        允许状态跳转.update(rules.状态跳转)
     except 工程错误 as exc:
-        print(json.dumps({"error": str(exc), "exit_code": int(exc.exit_code)}, ensure_ascii=False), file=sys.stderr)
+        打印错误信封(exc, stage="L3", run_id=run_id, path=locals().get("protocol_rules_path", ""))
         return int(exc.exit_code)
-    standard_errors = 标准完整性(standards)
+    standard_errors: list[str] = []
     forms = 读L2修复单(source)
     try:
         harness = 发现Harness(ROOT, args.project_harness, args.project, args.project_registry)
@@ -143,7 +148,7 @@ def main() -> int:
     except 工程错误 as exc:
         打印错误信封(exc, stage="L3", run_id=run_id, path=args.project_harness or args.project or "")
         return int(exc.exit_code)
-    tasks = 生成任务(forms, str(source), run_id, ROOT, harness)
+    tasks = 生成任务(forms, str(source), run_id, ROOT, harness, rules)
     for task in tasks:
         task.校验问题 = []
         task.状态历史 = []
@@ -151,7 +156,7 @@ def main() -> int:
         task.校验问题.extend(校验IR存在(task, ROOT))
         task.校验问题.extend(校验文件操作(task))
         task.校验问题.extend(校验正文任务(task))
-        task.校验问题.extend(校验回填(task))
+        task.校验问题.extend(校验回填(task, rules))
         task.校验问题.extend(校验版本(task))
         task.校验问题.extend(检查禁止项(task))
         if task.校验问题:
@@ -192,6 +197,8 @@ def main() -> int:
         任务单=tasks,
         执行输出=outputs,
         阻断任务=blocked,
+        protocol_rule_version=rules.规则版本,
+        protocol_rule_hash=rules.规则哈希,
         pipeline_run_id=pipeline_run_id,
         stage_run_id=stage_run_id or f"{pipeline_run_id}-L3" if pipeline_run_id else run_id,
         status=status,
@@ -211,6 +218,7 @@ def main() -> int:
                 "standard_error_count": len(standard_errors),
                 "report_md": str(md_path),
                 "report_json": str(json_path),
+                "protocol_rules": str(protocol_rules_path),
                 "status": status,
                 "standard_mode": args.standard_mode,
                 "experimental_standard": args.standard_mode == 候选试验模式,

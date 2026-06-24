@@ -14,6 +14,8 @@
     "方法声明",
     "标准校验问题",
     "协议规则摘要",
+    "protocol_rule_version",
+    "protocol_rule_hash",
     "任务单",
     "执行输出",
     "阻断任务",
@@ -65,6 +67,13 @@
       "type": "object",
       "additionalProperties": true,
       "maxProperties": 100
+    },
+    "protocol_rule_version": {
+      "$ref": "#/$defs/short_text"
+    },
+    "protocol_rule_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
     },
     "任务单": {
       "type": "array",

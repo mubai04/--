@@ -5,6 +5,7 @@ import subprocess
 import sys
 import uuid
 import hashlib
+import shutil
 from pathlib import Path
 
 import pytest
@@ -61,9 +62,14 @@ def _运行L3(l2_report: Path, out_dir: Path, env: dict[str, str]) -> subprocess
     return _运行L3固定编号(l2_report, out_dir, env, "pytest-L3-" + uuid.uuid4().hex[:8])
 
 
-def _运行L3固定编号(l2_report: Path, out_dir: Path, env: dict[str, str], run_id: str) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
-        [
+def _运行L3固定编号(
+    l2_report: Path,
+    out_dir: Path,
+    env: dict[str, str],
+    run_id: str,
+    protocol_rules: Path | None = None,
+) -> subprocess.CompletedProcess[str]:
+    cmd = [
             sys.executable,
             str(ROOT / "00_工程总控" / "工程执行层" / "L3工程" / "L3运行入口.py"),
             "--l2-report",
@@ -80,7 +86,11 @@ def _运行L3固定编号(l2_report: Path, out_dir: Path, env: dict[str, str], r
             "CANDIDATE_TEST",
             "--project-harness",
             str(ROOT / "70_测试项目" / "TP-001_CleanHarness_IR_Runtime"),
-        ],
+    ]
+    if protocol_rules is not None:
+        cmd.extend(["--protocol-rules", str(protocol_rules)])
+    return subprocess.run(
+        cmd,
         cwd=str(ROOT),
         text=True,
         encoding="utf-8",
@@ -93,6 +103,13 @@ def _运行L3固定编号(l2_report: Path, out_dir: Path, env: dict[str, str], r
 
 def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _复制L3协议规则(root_case: Path) -> Path:
+    source = ROOT / "00_工程总控" / "工程执行层" / "L3工程" / "protocol_rules.json"
+    target = root_case / "protocol_rules.json"
+    shutil.copyfile(source, target)
+    return target
 
 
 def 测试L3非空修复报告生成任务包且无执行字段(root_case, test_io_env):
@@ -182,3 +199,90 @@ def 测试L3任一单独既有产物存在时拒绝且不生成部分新文件(r
     assert payload["error_code"] == "INPUT_INVALID"
     assert _sha256(existing) == before_hash
     assert not forbidden.exists()
+
+
+def 测试A3L3结构化协议规则改动会改变IR输入映射(root_case, test_io_env):
+    l2_report = root_case / "第二层" / "修复报告.json"
+    l2_report.parent.mkdir(parents=True)
+    out_dir = root_case / "第三层"
+    rules_path = _复制L3协议规则(root_case)
+    payload = json.loads(rules_path.read_text(encoding="utf-8"))
+    payload["ir_mapping"]["L2-05"] = ["IR-01_立项卡.md"]
+    rules_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    _写L2报告(l2_report, [_修复单("L2-05", "入口弱")])
+
+    result = _运行L3固定编号(
+        l2_report,
+        out_dir,
+        test_io_env,
+        "pytest-L3-a3-" + uuid.uuid4().hex[:8],
+        rules_path,
+    )
+
+    assert result.returncode == int(ExitCode.OK), result.stderr
+    report = json.loads((out_dir / "任务包.json").read_text(encoding="utf-8"))
+    task = report["任务单"][0]
+    assert task["IR输入"] == ["70_测试项目/TP-001_CleanHarness_IR_Runtime/IR/IR-01_立项卡.md"]
+    assert report["protocol_rule_version"] == payload["version"]
+    assert len(report["protocol_rule_hash"]) == 64
+
+
+def 测试A3L3Markdown协议改动不改变L3运行行为(root_case, test_io_env):
+    l2_report = root_case / "第二层" / "修复报告.json"
+    l2_report.parent.mkdir(parents=True)
+    out_dir_a = root_case / "A" / "第三层"
+    out_dir_b = root_case / "B" / "第三层"
+    rules_path = _复制L3协议规则(root_case)
+    _写L2报告(l2_report, [_修复单("L2-05", "入口弱")])
+
+    first = _运行L3固定编号(
+        l2_report,
+        out_dir_a,
+        test_io_env,
+        "pytest-L3-a3-" + uuid.uuid4().hex[:8],
+        rules_path,
+    )
+    assert first.returncode == int(ExitCode.OK), first.stderr
+
+    markdown_source = ROOT / "50_L3_执行协议层" / "L3-06_IR输入映射协议_v0.1.2.md"
+    before = markdown_source.read_text(encoding="utf-8")
+    try:
+        markdown_source.write_text(before + "\n\n<!-- A3-L3 pytest markdown mutation should not affect runtime rules -->\n", encoding="utf-8")
+        second = _运行L3固定编号(
+            l2_report,
+            out_dir_b,
+            test_io_env,
+            "pytest-L3-a3-" + uuid.uuid4().hex[:8],
+            rules_path,
+        )
+    finally:
+        markdown_source.write_text(before, encoding="utf-8")
+
+    assert second.returncode == int(ExitCode.OK), second.stderr
+    report_a = json.loads((out_dir_a / "任务包.json").read_text(encoding="utf-8"))
+    report_b = json.loads((out_dir_b / "任务包.json").read_text(encoding="utf-8"))
+    assert report_a["任务单"][0]["IR输入"] == report_b["任务单"][0]["IR输入"]
+    assert report_a["协议规则摘要"] == report_b["协议规则摘要"]
+
+
+def 测试A3L3坏结构化协议规则在写报告前失败(root_case, test_io_env):
+    l2_report = root_case / "第二层" / "修复报告.json"
+    l2_report.parent.mkdir(parents=True)
+    out_dir = root_case / "第三层"
+    bad_rules = root_case / "bad_protocol_rules.json"
+    bad_rules.write_text('{"schema_version":"xcue.l3-protocol-rules/1.0","protocol":{}}', encoding="utf-8")
+    _写L2报告(l2_report, [_修复单("L2-05", "入口弱")])
+
+    result = _运行L3固定编号(
+        l2_report,
+        out_dir,
+        test_io_env,
+        "pytest-L3-a3-" + uuid.uuid4().hex[:8],
+        bad_rules,
+    )
+
+    assert result.returncode == int(ExitCode.RULE_PARSE_FAILED)
+    payload = json.loads(result.stderr)
+    assert payload["error_code"] == "RULE_PARSE_FAILED"
+    assert not (out_dir / "任务包.json").exists()
+    assert not (out_dir / "任务包.md").exists()

@@ -265,6 +265,8 @@ def _valid_samples() -> dict[str, dict]:
             "方法声明": "pytest",
             "标准校验问题": [],
             "协议规则摘要": {"状态机步骤数": 1},
+            "protocol_rule_version": "pytest",
+            "protocol_rule_hash": SHA256,
             "任务单": [_l3_task()],
             "执行输出": [_l3_output()],
             "阻断任务": [],

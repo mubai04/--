@@ -4,6 +4,7 @@ from pathlib import Path
 
 from 安全路径 import resolve_inside_root
 from 工程异常 import 输入错误
+from L3模型 import L3协议规则
 from 项目加载器 import 加载项目
 
 
@@ -28,6 +29,7 @@ def 确保Harness目录(harness: Path) -> list[Path]:
     return required
 
 
-def 默认候选目标(root: Path, harness: Path, run_id: str, index: int) -> str:
-    target = harness / "chapters" / "_candidates" / f"{run_id}_TASK-{index:03d}.md"
+def 默认候选目标(root: Path, harness: Path, run_id: str, index: int, rules: L3协议规则) -> str:
+    relative = rules.候选目标模板.format(run_id=run_id, index=index)
+    target = harness / relative
     return 相对(root, target)

@@ -8,7 +8,7 @@ from 工程异常 import 工程错误
 from 退出码 import ExitCode
 
 
-允许状态跳转 = {
+默认允许状态跳转 = {
     "RECEIVED": {"INPUT_VALIDATED", "VALIDATION_FAILED"},
     "INPUT_VALIDATED": {"TASK_PLANNED"},
     "TASK_PLANNED": {"TASK_PACKAGE_CREATED", "BLOCKED"},
@@ -23,6 +23,32 @@ from 退出码 import ExitCode
     "ACCEPTED": set(),
     "ROLLED_BACK": set(),
 }
+
+允许状态跳转 = 默认允许状态跳转
+
+
+@dataclass
+class L3协议规则:
+    规则版本: str
+    规则哈希: str
+    状态机: list[str] = field(default_factory=list)
+    异常状态: list[str] = field(default_factory=list)
+    状态跳转: dict[str, set[str]] = field(default_factory=dict)
+    权限矩阵: dict[str, dict[str, str]] = field(default_factory=dict)
+    任务字段: list[str] = field(default_factory=list)
+    输出字段: list[str] = field(default_factory=list)
+    执行顺序: list[str] = field(default_factory=list)
+    IR推荐文件: list[str] = field(default_factory=list)
+    候选必备目录: list[str] = field(default_factory=list)
+    IR映射: dict[str, list[str]] = field(default_factory=dict)
+    任务类型规则: list[dict[str, Any]] = field(default_factory=list)
+    正文章节Glob: str = "ch*.md"
+    候选目标模板: str = "chapters/_candidates/{run_id}_TASK-{index:03d}.md"
+    默认禁止目标: list[str] = field(default_factory=list)
+    是否允许改正式正文: str = "否"
+    是否需要备份: str = "不适用"
+    合法回流位置: set[str] = field(default_factory=set)
+    禁止项: list[str] = field(default_factory=list)
 
 
 def 状态变更(前状态: str, 后状态: str, 触发事件: str, 执行组件: str, 证据文件: str = "") -> dict[str, str]:
@@ -116,6 +142,8 @@ class L3报告:
     任务单: list[L3执行任务]
     执行输出: list[L3执行输出]
     阻断任务: list[L3执行任务]
+    protocol_rule_version: str
+    protocol_rule_hash: str
     schema_version: str = "xcue.l3-task-bundle/1.0"
     pipeline_run_id: str = ""
     stage_run_id: str = ""
