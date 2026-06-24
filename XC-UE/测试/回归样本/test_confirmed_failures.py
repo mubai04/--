@@ -255,7 +255,7 @@ def test_reusing_same_l1_run_id_should_preserve_previous_report_attempt(tmp_path
         候选试验模式,
     ]
     first = subprocess.run(
-        [*base_cmd, "--project", "first-project"],
+        [*base_cmd, "--project", "TP-001"],
         cwd=str(ROOT),
         text=True,
         encoding="utf-8",
@@ -266,7 +266,7 @@ def test_reusing_same_l1_run_id_should_preserve_previous_report_attempt(tmp_path
     )
     assert (out_dir / f"{run_id}.json").exists(), first.stderr
     second = subprocess.run(
-        [*base_cmd, "--project", "second-project"],
+        [*base_cmd, "--project", "TP-001"],
         cwd=str(ROOT),
         text=True,
         encoding="utf-8",
@@ -277,7 +277,7 @@ def test_reusing_same_l1_run_id_should_preserve_previous_report_attempt(tmp_path
     )
     assert second.returncode == int(ExitCode.INPUT_INVALID)
     retained = json.loads((out_dir / f"{run_id}.json").read_text(encoding="utf-8"))
-    assert retained["项目"] == "first-project"
+    assert retained["项目"] == "TP-001"
 
 
 def test_mixed_valid_and_out_of_scope_l2_items_should_still_emit_valid_fix(tmp_path: Path):
