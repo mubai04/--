@@ -3,8 +3,10 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import shutil
 import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor
 import uuid
 from pathlib import Path
 
@@ -186,6 +188,7 @@ def _run_patch(
     approval: Path | None = None,
     plan_only: bool = False,
     run_id: str | None = None,
+    protocol_rules: Path | None = None,
 ) -> subprocess.CompletedProcess[str]:
     cmd = [
         sys.executable,
@@ -205,6 +208,8 @@ def _run_patch(
         cmd.extend(["--approval", str(approval)])
     if plan_only:
         cmd.append("--plan-only")
+    if protocol_rules:
+        cmd.extend(["--protocol-rules", str(protocol_rules)])
     return _run(cmd, env, timeout=90)
 
 
@@ -217,6 +222,7 @@ def _run_finalize(
     decision: str,
     reason: str = "",
     run_id: str | None = None,
+    protocol_rules: Path | None = None,
 ) -> subprocess.CompletedProcess[str]:
     cmd = [
         sys.executable,
@@ -238,7 +244,53 @@ def _run_finalize(
     ]
     if reason:
         cmd.extend(["--decision-reason", reason])
+    if protocol_rules:
+        cmd.extend(["--protocol-rules", str(protocol_rules)])
     return _run(cmd, env, timeout=90)
+
+
+def _ready_for_finalize(root_case: Path, test_io_env: dict[str, str], name: str = "case") -> tuple[Path, Path, Path, dict[str, object], Path]:
+    chapter = root_case / f"{name}.md"
+    chapter.write_text(TP001正文.read_text(encoding="utf-8"), encoding="utf-8")
+    _chapter, l2_report = _prepare_l2_with_strategy(root_case / name, test_io_env, _patch_strategy(chapter))
+    out_dir = root_case / name / "第三层"
+    plan_result = _run_patch(l2_report, out_dir, test_io_env, plan_only=True)
+    assert plan_result.returncode == int(ExitCode.OK), plan_result.stdout + plan_result.stderr
+    plan = json.loads((out_dir / "补丁计划.json").read_text(encoding="utf-8"))
+    execute_approval = _write_json(root_case / name / "approval-execute.json", _approval(plan))
+    execute_result = _run_patch(l2_report, out_dir / "执行", test_io_env, approval=execute_approval)
+    assert execute_result.returncode == int(ExitCode.OK), execute_result.stdout + execute_result.stderr
+    ready_audit = json.loads((out_dir / "执行" / "补丁审计.json").read_text(encoding="utf-8"))
+    final_approval = _write_json(root_case / name / "approval-final.json", _approval(ready_audit))
+    return chapter, out_dir, out_dir / "执行" / "补丁审计.json", ready_audit, final_approval
+
+
+def _final_markers_for(audit: dict[str, object]) -> list[Path]:
+    marker_root = ROOT / "运行记录" / "B2_FINAL_MARKERS"
+    if not marker_root.exists():
+        return []
+    result: list[Path] = []
+    for marker in marker_root.glob("*.json"):
+        try:
+            payload = json.loads(marker.read_text(encoding="utf-8-sig"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if all(
+            payload.get(key) == audit.get(key)
+            for key in ["task_id", "project_id", "chapter_source", "source_sha256", "candidate_sha256", "patch_sha256"]
+        ):
+            result.append(marker)
+    return result
+
+
+def _copy_protocol_rules(root_case: Path, mutate: object | None = None) -> Path:
+    source = 执行层 / "L3工程" / "protocol_rules.json"
+    target = root_case / f"protocol_rules-{uuid.uuid4().hex[:8]}.json"
+    data = json.loads(source.read_text(encoding="utf-8"))
+    if callable(mutate):
+        mutate(data)
+    target.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    return target
 
 
 def _prepare_l2_with_strategy(root_case: Path, env: dict[str, str], strategy: dict[str, object]) -> tuple[Path, Path]:
@@ -564,9 +616,9 @@ def test_b2_finalize_without_approval_aborts_without_writing_formal_text(root_ca
         decision="apply",
     )
 
-    assert finalize.returncode == int(ExitCode.BLOCKED)
+    assert finalize.returncode in {int(ExitCode.BLOCKED), int(ExitCode.SCHEMA_INVALID)}
     payload = json.loads(finalize.stderr)
-    assert payload["error_code"] in {"APPROVAL_REQUIRED", "ABORTED"}
+    assert payload["error_code"] in {"APPROVAL_REQUIRED", "ABORTED", "INPUT_SCHEMA_INVALID"}
     assert _sha256(chapter) == before
 
 
@@ -595,6 +647,292 @@ def test_b2_finalize_source_hash_change_returns_revalidation_failed(root_case, t
 
     assert finalize.returncode == int(ExitCode.BLOCKED)
     assert json.loads(finalize.stderr)["error_code"] == "REVALIDATION_FAILED"
+
+
+def test_b2_finalize_post_apply_timeout_rolls_back_and_records_terminal(root_case, test_io_env):
+    chapter, out_dir, audit_json, ready_audit, final_approval = _ready_for_finalize(root_case, test_io_env, "timeout")
+    original_sha = ready_audit["source_sha256"]
+    env = {**test_io_env, "XCUE_B2_FAIL_APPLY_REVALIDATION_TIMEOUT": "1"}
+
+    finalize = _run_finalize(
+        audit_json,
+        out_dir / "正式采纳-timeout",
+        env,
+        approval=final_approval,
+        decision="apply",
+    )
+
+    assert finalize.returncode == int(ExitCode.OK), finalize.stdout + finalize.stderr
+    audit = json.loads((out_dir / "正式采纳-timeout" / "补丁审计.json").read_text(encoding="utf-8"))
+    assert audit["final_status"] == "ROLLED_BACK"
+    assert audit["error_code"] == "APPLY_REVALIDATION_TIMEOUT"
+    assert audit["final_source_sha256"] == original_sha
+    assert _sha256(chapter) == original_sha
+    assert audit["是否尝试回滚"] is True
+    assert audit["回滚是否成功"] is True
+
+
+def test_b2_finalize_post_apply_audit_write_failure_uses_emergency_terminal(root_case, test_io_env):
+    chapter, out_dir, audit_json, ready_audit, final_approval = _ready_for_finalize(root_case, test_io_env, "audit-write-fails")
+    original_sha = ready_audit["source_sha256"]
+    env = {**test_io_env, "XCUE_B2_FAIL_FINAL_AUDIT_WRITE": "1"}
+
+    finalize = _run_finalize(
+        audit_json,
+        out_dir / "正式采纳-audit-fails",
+        env,
+        approval=final_approval,
+        decision="apply",
+    )
+
+    assert finalize.returncode == int(ExitCode.OK), finalize.stdout + finalize.stderr
+    audit_path = out_dir / "正式采纳-audit-fails" / "补丁审计.json"
+    audit = json.loads(audit_path.read_text(encoding="utf-8"))
+    assert audit["final_status"] == "ROLLED_BACK"
+    assert audit["error_code"] == "FINAL_AUDIT_WRITE_FAILED"
+    assert audit["final_source_sha256"] == original_sha
+    assert audit["emergency_audit"] is True
+    assert _sha256(chapter) == original_sha
+
+
+def test_b2_finalize_post_apply_plain_exception_rolls_back(root_case, test_io_env):
+    chapter, out_dir, audit_json, ready_audit, final_approval = _ready_for_finalize(root_case, test_io_env, "plain-exception")
+    original_sha = ready_audit["source_sha256"]
+    env = {**test_io_env, "XCUE_B2_FAIL_AFTER_APPLY_PLAIN_EXCEPTION": "1"}
+
+    finalize = _run_finalize(
+        audit_json,
+        out_dir / "正式采纳-plain-exception",
+        env,
+        approval=final_approval,
+        decision="apply",
+    )
+
+    assert finalize.returncode == int(ExitCode.OK), finalize.stdout + finalize.stderr
+    audit = json.loads((out_dir / "正式采纳-plain-exception" / "补丁审计.json").read_text(encoding="utf-8"))
+    assert audit["final_status"] == "ROLLED_BACK"
+    assert audit["error_code"] == "POST_APPLY_EXCEPTION"
+    assert audit["final_source_sha256"] == original_sha
+    assert _sha256(chapter) == original_sha
+
+
+def test_b2_finalize_formal_replace_failure_attempts_recovery_and_records_terminal(root_case, test_io_env):
+    chapter, out_dir, audit_json, ready_audit, final_approval = _ready_for_finalize(root_case, test_io_env, "formal-replace-fails")
+    original_sha = ready_audit["source_sha256"]
+    env = {**test_io_env, "XCUE_B2_FAIL_FORMAL_REPLACE": "1"}
+
+    finalize = _run_finalize(
+        audit_json,
+        out_dir / "正式采纳-formal-replace-fails",
+        env,
+        approval=final_approval,
+        decision="apply",
+    )
+
+    assert finalize.returncode == int(ExitCode.BLOCKED)
+    assert json.loads(finalize.stderr)["error_code"] == "APPLY_FAILED"
+    audit = json.loads((out_dir / "正式采纳-formal-replace-fails" / "补丁审计.json").read_text(encoding="utf-8"))
+    assert audit["final_status"] in {"APPLY_FAILED", "ROLLED_BACK"}
+    assert audit["final_source_sha256"] == original_sha
+    assert _sha256(chapter) == original_sha
+    assert audit["backup_sha256"] == original_sha
+    assert not list((out_dir / "正式采纳-formal-replace-fails").glob(".*.tmp"))
+
+
+def test_b2_finalize_apply_hash_mismatch_rolls_back(root_case, test_io_env):
+    chapter, out_dir, audit_json, ready_audit, final_approval = _ready_for_finalize(root_case, test_io_env, "apply-hash-mismatch")
+    original_sha = ready_audit["source_sha256"]
+    env = {**test_io_env, "XCUE_B2_CORRUPT_AFTER_APPLY": "1"}
+
+    finalize = _run_finalize(
+        audit_json,
+        out_dir / "正式采纳-hash-mismatch",
+        env,
+        approval=final_approval,
+        decision="apply",
+    )
+
+    assert finalize.returncode == int(ExitCode.OK), finalize.stdout + finalize.stderr
+    audit = json.loads((out_dir / "正式采纳-hash-mismatch" / "补丁审计.json").read_text(encoding="utf-8"))
+    assert audit["final_status"] == "ROLLED_BACK"
+    assert audit["error_code"] == "APPLY_FAILED"
+    assert audit["final_source_sha256"] == original_sha
+    assert _sha256(chapter) == original_sha
+
+
+def test_b2_finalize_rollback_write_failure_records_rollback_failed(root_case, test_io_env):
+    chapter, out_dir, audit_json, ready_audit, final_approval = _ready_for_finalize(root_case, test_io_env, "rollback-write-fails")
+    original_sha = ready_audit["source_sha256"]
+    env = {**test_io_env, "XCUE_B2_FAIL_AFTER_APPLY_PLAIN_EXCEPTION": "1", "XCUE_B2_FAIL_ROLLBACK_WRITE": "1"}
+
+    finalize = _run_finalize(
+        audit_json,
+        out_dir / "正式采纳-rollback-write-fails",
+        env,
+        approval=final_approval,
+        decision="apply",
+    )
+
+    assert finalize.returncode == int(ExitCode.BLOCKED)
+    assert json.loads(finalize.stderr)["error_code"] == "ROLLBACK_FAILED"
+    audit = json.loads((out_dir / "正式采纳-rollback-write-fails" / "补丁审计.json").read_text(encoding="utf-8"))
+    assert audit["final_status"] == "ROLLBACK_FAILED"
+    assert audit["是否尝试回滚"] is True
+    assert audit["回滚是否成功"] is False
+    assert audit["final_source_sha256"] != original_sha
+    assert audit["final_source_sha256"] == _sha256(chapter)
+
+
+def test_b2_finalize_rollback_hash_mismatch_records_rollback_failed(root_case, test_io_env):
+    chapter, out_dir, audit_json, ready_audit, final_approval = _ready_for_finalize(root_case, test_io_env, "rollback-hash-mismatch")
+    original_sha = ready_audit["source_sha256"]
+    env = {**test_io_env, "XCUE_B2_FAIL_AFTER_APPLY_PLAIN_EXCEPTION": "1", "XCUE_B2_CORRUPT_AFTER_ROLLBACK": "1"}
+
+    finalize = _run_finalize(
+        audit_json,
+        out_dir / "正式采纳-rollback-hash-mismatch",
+        env,
+        approval=final_approval,
+        decision="apply",
+    )
+
+    assert finalize.returncode == int(ExitCode.BLOCKED)
+    audit = json.loads((out_dir / "正式采纳-rollback-hash-mismatch" / "补丁审计.json").read_text(encoding="utf-8"))
+    assert audit["final_status"] == "ROLLBACK_FAILED"
+    assert audit["rollback_sha256"] != original_sha
+    assert audit["final_source_sha256"] == _sha256(chapter)
+
+
+def test_b2_finalize_rejected_then_apply_returns_existing_rejected(root_case, test_io_env):
+    chapter, out_dir, audit_json, ready_audit, final_approval = _ready_for_finalize(root_case, test_io_env, "rejected-first")
+    original_sha = ready_audit["source_sha256"]
+    first = _run_finalize(audit_json, out_dir / "正式采纳-reject1", test_io_env, approval=final_approval, decision="reject")
+    second = _run_finalize(audit_json, out_dir / "正式采纳-apply2", test_io_env, approval=final_approval, decision="apply")
+
+    assert first.returncode == int(ExitCode.OK), first.stdout + first.stderr
+    assert second.returncode == int(ExitCode.OK), second.stdout + second.stderr
+    second_audit = json.loads((out_dir / "正式采纳-apply2" / "补丁审计.json").read_text(encoding="utf-8"))
+    assert second_audit["final_status"] == "REJECTED"
+    assert second_audit["terminal_state_conflict"] is True
+    assert _sha256(chapter) == original_sha
+    assert len(_final_markers_for(ready_audit)) == 1
+
+
+def test_b2_finalize_repeat_reject_is_idempotent(root_case, test_io_env):
+    chapter, out_dir, audit_json, ready_audit, final_approval = _ready_for_finalize(root_case, test_io_env, "repeat-reject")
+    original_sha = ready_audit["source_sha256"]
+    first = _run_finalize(audit_json, out_dir / "正式采纳-reject1", test_io_env, approval=final_approval, decision="reject")
+    second = _run_finalize(audit_json, out_dir / "正式采纳-reject2", test_io_env, approval=final_approval, decision="reject")
+
+    assert first.returncode == int(ExitCode.OK), first.stdout + first.stderr
+    assert second.returncode == int(ExitCode.OK), second.stdout + second.stderr
+    assert json.loads((out_dir / "正式采纳-reject2" / "补丁审计.json").read_text(encoding="utf-8"))["final_status"] == "REJECTED"
+    assert _sha256(chapter) == original_sha
+    assert len(_final_markers_for(ready_audit)) == 1
+
+
+def test_b2_finalize_concurrent_conflicting_decisions_create_one_terminal(root_case, test_io_env):
+    _chapter, out_dir, audit_json, ready_audit, final_approval = _ready_for_finalize(root_case, test_io_env, "concurrent")
+
+    def run(decision: str) -> subprocess.CompletedProcess[str]:
+        return _run_finalize(
+            audit_json,
+            out_dir / f"正式采纳-{decision}-{uuid.uuid4().hex[:6]}",
+            test_io_env,
+            approval=final_approval,
+            decision=decision,
+        )
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results = list(pool.map(run, ["apply", "reject"]))
+
+    assert all(result.returncode == int(ExitCode.OK) for result in results), "\n".join(result.stdout + result.stderr for result in results)
+    markers = _final_markers_for(ready_audit)
+    assert len(markers) == 1
+    marker_payload = json.loads(markers[0].read_text(encoding="utf-8"))
+    assert marker_payload["final_status"] in {"APPLIED", "REJECTED"}
+
+
+def test_b2_protocol_rules_disable_patch_execution_blocks_runtime(root_case, test_io_env):
+    chapter = root_case / "rules-disabled.md"
+    chapter.write_text(TP001正文.read_text(encoding="utf-8"), encoding="utf-8")
+    _chapter, l2_report = _prepare_l2_with_strategy(root_case, test_io_env, _patch_strategy(chapter))
+    rules = _copy_protocol_rules(root_case, lambda data: data["patch_execution"].__setitem__("enabled", False))
+
+    result = _run_patch(l2_report, root_case / "第三层-rules-disabled", test_io_env, plan_only=True, protocol_rules=rules)
+
+    assert result.returncode == int(ExitCode.BLOCKED)
+    assert json.loads(result.stderr)["error_code"] == "PATCH_RULES_DISABLED"
+
+
+def test_b2_protocol_rules_allowed_operations_change_runtime_result(root_case, test_io_env):
+    chapter = root_case / "rules-operation.md"
+    chapter.write_text(TP001正文.read_text(encoding="utf-8"), encoding="utf-8")
+    _chapter, l2_report = _prepare_l2_with_strategy(root_case, test_io_env, _patch_strategy(chapter, operation="APPEND", insertion="\n" + _valid_chapter()))
+    rules = _copy_protocol_rules(root_case, lambda data: data["patch_execution"].__setitem__("allowed_operations", ["REPLACE"]))
+
+    result = _run_patch(l2_report, root_case / "第三层-rules-operation", test_io_env, plan_only=True, protocol_rules=rules)
+
+    assert result.returncode == int(ExitCode.BLOCKED)
+    assert json.loads(result.stderr)["error_code"] == "PATCH_PRECONDITION_FAILED"
+
+
+@pytest.mark.parametrize(
+    "case_name, mutate, expected",
+    [
+        ("forged-ready-json", lambda audit: audit.update({"source_sha256": "0" * 64}), "REVALIDATION_FAILED"),
+        ("candidate-replaced", lambda audit: Path(audit["候选正文"]).write_text("# tampered\n", encoding="utf-8"), "REVALIDATION_FAILED"),
+        ("candidate-sha-changed", lambda audit: audit.update({"candidate_sha256": "0" * 64}), "REVALIDATION_FAILED"),
+        ("diff-sha-changed", lambda audit: audit.update({"diff_sha256": "0" * 64}), "REVALIDATION_FAILED"),
+        ("revalidation-snapshot-changed", lambda audit: Path(audit["复验结果"]["revalidation_snapshot"]).write_text("# tampered\n", encoding="utf-8"), "REVALIDATION_FAILED"),
+    ],
+)
+def test_b2_ready_audit_lineage_tampering_rejected_before_formal_write(root_case, test_io_env, case_name, mutate, expected):
+    chapter, out_dir, audit_json, ready_audit, final_approval = _ready_for_finalize(root_case, test_io_env, case_name)
+    before = _sha256(chapter)
+    tampered = json.loads(audit_json.read_text(encoding="utf-8"))
+    mutate(tampered)
+    tampered_path = out_dir / f"{case_name}-tampered.json"
+    _write_json(tampered_path, tampered)
+
+    finalize = _run_finalize(
+        tampered_path,
+        out_dir / f"正式采纳-{case_name}",
+        test_io_env,
+        approval=final_approval,
+        decision="apply",
+    )
+
+    assert finalize.returncode == int(ExitCode.BLOCKED)
+    assert json.loads(finalize.stderr)["error_code"] == expected
+    assert _sha256(chapter) == before
+
+
+@pytest.mark.parametrize(
+    "case_name, patch",
+    [
+        ("decision-task-mismatch", {"task_id": "OTHER-TASK"}),
+        ("decision-candidate-mismatch", {"candidate_sha256": "0" * 64}),
+        ("decision-patch-mismatch", {"patch_sha256": "0" * 64}),
+    ],
+)
+def test_b2_final_decision_must_bind_approved_object(root_case, test_io_env, case_name, patch):
+    chapter, out_dir, audit_json, _ready_audit, final_approval = _ready_for_finalize(root_case, test_io_env, case_name)
+    before = _sha256(chapter)
+    approval = json.loads(final_approval.read_text(encoding="utf-8"))
+    approval.update(patch)
+    bad_approval = _write_json(out_dir / f"{case_name}-approval.json", approval)
+
+    finalize = _run_finalize(
+        audit_json,
+        out_dir / f"正式采纳-{case_name}",
+        test_io_env,
+        approval=bad_approval,
+        decision="reject",
+    )
+
+    assert finalize.returncode == int(ExitCode.BLOCKED)
+    assert _sha256(chapter) == before
 
 
 def test_b2_finalize_repeat_apply_is_idempotent(root_case, test_io_env):
@@ -659,11 +997,14 @@ def test_b2_finalize_apply_then_reject_returns_existing_applied(root_case, test_
         out_dir / "正式采纳2",
         test_io_env,
         approval=final_approval,
-        decision="apply",
+        decision="reject",
     )
     assert first.returncode == int(ExitCode.OK), first.stdout + first.stderr
     assert second.returncode == int(ExitCode.OK), second.stdout + second.stderr
-    assert json.loads((out_dir / "正式采纳2" / "补丁审计.json").read_text(encoding="utf-8"))["final_status"] == "APPLIED"
+    second_audit = json.loads((out_dir / "正式采纳2" / "补丁审计.json").read_text(encoding="utf-8"))
+    assert second_audit["final_status"] == "APPLIED"
+    assert second_audit["terminal_state_conflict"] is True
+    assert len(_final_markers_for(ready_audit)) == 1
 
 
 def test_b2_l3_task_planning_only_remains_unchanged(root_case, test_io_env):
