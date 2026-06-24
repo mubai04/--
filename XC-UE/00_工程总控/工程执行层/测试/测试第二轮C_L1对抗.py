@@ -213,6 +213,20 @@ def 测试A3L1Markdown闸门标准改动不改变L1运行行为(root_case, test_
     assert first_report["闸门结果"] == second_report["闸门结果"]
 
 
+def 测试L100正常输入不产生Markdown标准缺章节伪告警(root_case, test_io_env):
+    chapter = root_case / "normal.md"
+    _写L1章节(chapter, _高质量少目标词段落(), "L1-00-normal")
+
+    result, report = _运行L1(chapter, root_case / "l1-normal", test_io_env)
+
+    assert report is not None, result.stderr
+    l100 = next(gate for gate in report["闸门结果"] if gate["闸门"] == "L1-00")
+    l100_items = l100["检测项"]
+    assert not any(item["名称"] == "闸门标准完整性" for item in l100_items)
+    assert not any("Markdown 标准缺少工程需要的章节" in item["说明"] for item in report["失败包"])
+    assert not any(item["失败类型"] == "输入不足" and item["候选模块"] == "回L1-00" for item in report["失败包"])
+
+
 def 测试A3L1坏结构化规则在写报告前失败(root_case, test_io_env):
     chapter = root_case / "chapter.md"
     out_dir = root_case / "bad-rules"

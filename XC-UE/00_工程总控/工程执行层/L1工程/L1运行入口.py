@@ -123,7 +123,7 @@ def main() -> int:
     l103 = L1_03_发布锁检测.检测(paragraphs, word_count, rules.L103, l102_passed)
 
     gates = [l101, l102, l103]
-    l100 = L1_00_闸门接口校验.检测(gates, {})
+    l100 = L1_00_闸门接口校验.检测(gates)
     guard_items = L1_前置质量护栏.检测(paragraphs)
     l100.检测项.extend(guard_items)
     if guard_items:

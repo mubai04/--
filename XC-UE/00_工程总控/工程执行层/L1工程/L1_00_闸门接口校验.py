@@ -1,7 +1,6 @@
 ﻿from __future__ import annotations
 
 from L1模型 import 检测项, 闸门结果
-from 闸门标准解析 import 标准完整性
 
 
 REQUIRED_FIELDS = [
@@ -17,27 +16,8 @@ REQUIRED_FIELDS = [
 ]
 
 
-def 检测(gates: list[闸门结果], standards: dict[str, str]) -> 闸门结果:
+def 检测(gates: list[闸门结果]) -> 闸门结果:
     items: list[检测项] = []
-
-    missing_sections = 标准完整性(standards)
-    if missing_sections:
-        items.append(
-            检测项(
-                "L1-00",
-                "闸门标准完整性",
-                "风险",
-                "部分 L1 Markdown 标准缺少工程需要的章节：" + str(missing_sections),
-                [],
-                "warning",
-                "输入不足",
-                候选模块="回L1-00",
-                回流验收位置="L1-00",
-                修复方向="补齐 L1 闸门接口标准",
-            )
-        )
-    else:
-        items.append(检测项("L1-00", "闸门标准完整性", "检测到接口信号", "L1-00 到 L1-03 的关键工程章节存在。"))
 
     bad_fields = []
     for gate in gates:
@@ -93,7 +73,7 @@ def 检测(gates: list[闸门结果], standards: dict[str, str]) -> 闸门结果
     return 闸门结果(
         闸门="L1-00",
         判断结果=result,
-        输入材料=["L1-00 Markdown标准", "L1-01/L1-02/L1-03闸门输出", "L1标准完整性检查结果"],
+        输入材料=["L1-01/L1-02/L1-03闸门输出", "结构化 gate_rules.json 校验结果"],
         失败类型=[item.失败类型 for item in failures if item.失败类型],
         失败位置=[],
         是否进入L15="是" if failures else "否",
