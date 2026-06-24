@@ -30,7 +30,8 @@ def 错误信封(
 ) -> dict[str, Any]:
     code = 错误码.get(exc.exit_code, "INTERNAL_ERROR")
     message = str(exc)
-    return {
+    payload_details = details or getattr(exc, "details", {}) or {}
+    envelope = {
         "ok": False,
         "error_code": code,
         "message": message,
@@ -41,11 +42,15 @@ def 错误信封(
             "stage": stage,
             "run_id": run_id,
             "path": str(path) if path else "",
-            "details": details or {},
+            "details": payload_details,
             "retryable": False,
         },
         "exit_code": int(exc.exit_code),
     }
+    for key in ["rule_source", "reason", "location", "detail"]:
+        if key in payload_details:
+            envelope[key] = payload_details[key]
+    return envelope
 
 
 def 打印错误信封(

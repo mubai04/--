@@ -1,6 +1,7 @@
 {
   "schema_version": "xcue.l2-routes/1.0",
   "version": "2026-06-23.m3-01",
+  "status": "active",
   "routes": [
     {
       "rule_id": "L2-ROUTE-001",

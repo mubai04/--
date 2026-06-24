@@ -178,6 +178,10 @@ def _复制L2能力规则(root_case: Path) -> Path:
     return target
 
 
+def _L2路由规则文件() -> Path:
+    return ROOT / "00_工程总控" / "工程执行层" / "L2工程" / "routes.json"
+
+
 def _改写L205首条修复规则(path: Path, marker: str) -> None:
     payload = json.loads(path.read_text(encoding="utf-8"))
     first = payload["abilities"]["L2-05"]["failure_types"][0]
@@ -238,6 +242,7 @@ def 测试A03_L2重叠关键词按最长专词路由(root_case):
             {
                 "schema_version": "xcue.l2-routes/1.0",
                 "version": "pytest-a03",
+                "status": "active",
                 "routes": [
                     {
                         "rule_id": "GENERIC",
@@ -276,6 +281,41 @@ def 测试A03_L2重叠关键词按最长专词路由(root_case):
 
     assert judgement.主候选模块 == "L2-05"
     assert judgement.route_rule_id == "SPECIFIC"
+
+
+def 测试A04_L2路由规则加载失败不生成修复单且不回退(root_case, test_io_env):
+    packet = root_case / "失败包.json"
+    out_dir = root_case / "第二层"
+    routes_path = _L2路由规则文件()
+    before = routes_path.read_text(encoding="utf-8")
+    _写失败包(packet, [_失败项("入口弱", "入口弱", "L2-05")])
+    try:
+        routes_path.write_text(
+            json.dumps(
+                {
+                    "schema_version": "xcue.l2-routes/1.0",
+                    "version": "pytest-a04-bad",
+                    "status": "active",
+                    "routes": [{"rule_id": "BROKEN", "keywords": ["入口弱"], "target": "L2-99"}],
+                },
+                ensure_ascii=False,
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+        result = _运行L2(packet, out_dir, test_io_env)
+    finally:
+        routes_path.write_text(before, encoding="utf-8")
+
+    assert result.returncode == int(ExitCode.RULE_PARSE_FAILED)
+    payload = json.loads(result.stderr)
+    assert payload["error_code"] == "RULE_PARSE_FAILED"
+    assert payload["reason"] == "RULE_TARGET_INVALID"
+    assert payload["location"] == "routes[0].target"
+    assert payload["error"]["details"]["reason"] == "RULE_TARGET_INVALID"
+    assert payload["error"]["details"]["location"] == "routes[0].target"
+    assert not (out_dir / "修复报告.json").exists()
+    assert not (out_dir / "修复报告.md").exists()
 
 
 def 测试L2普通失败生成修复单(root_case, test_io_env):
