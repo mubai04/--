@@ -65,6 +65,16 @@ def 测试流水线专用错误终态清单符合Schema(root_case):
             "snapshot_path": "运行记录/pytest-pipeline/输入快照/章节正文.md",
             "sha256": "a" * 64,
         },
+        "project": {
+            "project_id": "TP-001",
+            "project_root": "70_测试项目/TP-001_CleanHarness_IR_Runtime",
+            "project_manifest": "70_测试项目/TP-001_CleanHarness_IR_Runtime/project.json",
+            "content_root": "70_测试项目/TP-001_CleanHarness_IR_Runtime/chapters",
+            "chapter_source": "70_测试项目/TP-001_CleanHarness_IR_Runtime/chapters/ch01.md",
+            "entrypoint": "70_测试项目/TP-001_CleanHarness_IR_Runtime/engine/TP001运行入口.py",
+            "entrypoint_type": "project",
+            "source_scope": "repository",
+        },
         "standards": {
             "source": "Markdown Front Matter",
             "combined_sha256": "b" * 64,
