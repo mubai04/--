@@ -68,22 +68,6 @@ class 补丁计划:
 }
 
 
-DEFAULT_PATCH_RULES = {
-    "enabled": True,
-    "allowed_projects": ["TP-001"],
-    "allowed_sources": ["L2-01"],
-    "allowed_operations": ["REPLACE", "APPEND"],
-    "requires_candidate_approval": True,
-    "requires_final_decision": True,
-    "requires_backup": True,
-    "requires_atomic_write": True,
-    "requires_post_apply_revalidation": True,
-    "rollback_on_any_post_apply_failure": True,
-    "formal_text_write": "approved_runtime_only",
-    "terminal_states": list(最终状态),
-}
-
-
 def _允许测试外部IO() -> bool:
     if os.environ.get("XCUE_TEST_ALLOW_EXTERNAL_IO") != "1":
         return False
@@ -186,10 +170,27 @@ def _load_strategy(l2_report: Path) -> dict[str, Any]:
 
 def _patch_rules(protocol_rules: Any | None) -> dict[str, Any]:
     if protocol_rules is None:
-        return DEFAULT_PATCH_RULES
+        raise 补丁错误("PATCH_RULES_INVALID", "L3_PATCH 必须接收已校验的结构化 patch_execution 规则")
     rules = getattr(protocol_rules, "补丁执行规则", None)
     if not isinstance(rules, dict) or not rules:
         raise 补丁错误("PATCH_RULES_INVALID", "L3_PATCH 缺少结构化 patch_execution 规则")
+    required = {
+        "enabled",
+        "allowed_projects",
+        "allowed_sources",
+        "allowed_operations",
+        "requires_candidate_approval",
+        "requires_final_decision",
+        "requires_backup",
+        "requires_atomic_write",
+        "requires_post_apply_revalidation",
+        "rollback_on_any_post_apply_failure",
+        "formal_text_write",
+        "terminal_states",
+    }
+    missing = sorted(required - set(rules))
+    if missing:
+        raise 补丁错误("PATCH_RULES_INVALID", f"patch_execution 缺少字段：{'、'.join(missing)}")
     return rules
 
 

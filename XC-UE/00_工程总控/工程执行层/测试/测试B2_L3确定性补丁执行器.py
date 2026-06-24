@@ -14,6 +14,7 @@ import pytest
 
 from conftest import ROOT
 from 退出码 import ExitCode
+from L3补丁执行器 import 执行补丁, 补丁错误
 
 
 pytestmark = pytest.mark.integration
@@ -863,6 +864,84 @@ def test_b2_protocol_rules_disable_patch_execution_blocks_runtime(root_case, tes
 
     assert result.returncode == int(ExitCode.BLOCKED)
     assert json.loads(result.stderr)["error_code"] == "PATCH_RULES_DISABLED"
+
+
+@pytest.mark.parametrize(
+    "case_name, mutate",
+    [
+        ("missing-patch-execution", lambda data: data.pop("patch_execution")),
+        ("missing-requires-backup", lambda data: data["patch_execution"].pop("requires_backup")),
+        ("missing-requires-atomic-write", lambda data: data["patch_execution"].pop("requires_atomic_write")),
+        (
+            "missing-rollback-on-post-apply-failure",
+            lambda data: data["patch_execution"].pop("rollback_on_any_post_apply_failure"),
+        ),
+    ],
+)
+def test_b2_protocol_rules_missing_required_patch_execution_fields_fail_at_load(root_case, test_io_env, case_name, mutate):
+    chapter = root_case / f"{case_name}.md"
+    chapter.write_text(TP001正文.read_text(encoding="utf-8"), encoding="utf-8")
+    before = _sha256(chapter)
+    _chapter, l2_report = _prepare_l2_with_strategy(root_case, test_io_env, _patch_strategy(chapter))
+    rules = _copy_protocol_rules(root_case, mutate)
+
+    result = _run_patch(l2_report, root_case / f"第三层-{case_name}", test_io_env, plan_only=True, protocol_rules=rules)
+
+    assert result.returncode == int(ExitCode.RULE_PARSE_FAILED)
+    assert json.loads(result.stderr)["error_code"] == "RULE_PARSE_FAILED"
+    assert not (root_case / f"第三层-{case_name}" / "候选正文.md").exists()
+    assert _sha256(chapter) == before
+
+
+def test_b2_direct_executor_requires_structured_patch_rules(root_case, test_io_env):
+    chapter = root_case / "direct-no-rules.md"
+    chapter.write_text(TP001正文.read_text(encoding="utf-8"), encoding="utf-8")
+    before = _sha256(chapter)
+    _chapter, l2_report = _prepare_l2_with_strategy(root_case, test_io_env, _patch_strategy(chapter))
+
+    with pytest.raises(补丁错误) as exc_info:
+        执行补丁(
+            l2_report=l2_report,
+            audit_json=None,
+            out_dir=root_case / "direct-no-rules-out",
+            run_id="pytest-direct-no-rules",
+            plan_only=True,
+            protocol_rules=None,
+        )
+
+    assert exc_info.value.details["reason"] == "PATCH_RULES_INVALID"
+    assert not (root_case / "direct-no-rules-out" / "候选正文.md").exists()
+    assert _sha256(chapter) == before
+
+
+def test_b2_protocol_rules_allowed_projects_change_runtime_result(root_case, test_io_env):
+    chapter = root_case / "rules-project.md"
+    chapter.write_text(TP001正文.read_text(encoding="utf-8"), encoding="utf-8")
+    before = _sha256(chapter)
+    _chapter, l2_report = _prepare_l2_with_strategy(root_case, test_io_env, _patch_strategy(chapter))
+    rules = _copy_protocol_rules(root_case, lambda data: data["patch_execution"].__setitem__("allowed_projects", ["OTHER"]))
+
+    result = _run_patch(l2_report, root_case / "第三层-rules-project", test_io_env, plan_only=True, protocol_rules=rules)
+
+    assert result.returncode == int(ExitCode.BLOCKED)
+    assert json.loads(result.stderr)["error_code"] == "PROJECT_NOT_ALLOWED"
+    assert not (root_case / "第三层-rules-project" / "候选正文.md").exists()
+    assert _sha256(chapter) == before
+
+
+def test_b2_protocol_rules_allowed_sources_change_runtime_result(root_case, test_io_env):
+    chapter = root_case / "rules-source.md"
+    chapter.write_text(TP001正文.read_text(encoding="utf-8"), encoding="utf-8")
+    before = _sha256(chapter)
+    _chapter, l2_report = _prepare_l2_with_strategy(root_case, test_io_env, _patch_strategy(chapter))
+    rules = _copy_protocol_rules(root_case, lambda data: data["patch_execution"].__setitem__("allowed_sources", ["L2-02"]))
+
+    result = _run_patch(l2_report, root_case / "第三层-rules-source", test_io_env, plan_only=True, protocol_rules=rules)
+
+    assert result.returncode == int(ExitCode.BLOCKED)
+    assert json.loads(result.stderr)["error_code"] == "PATCH_STRATEGY_NOT_L201"
+    assert not (root_case / "第三层-rules-source" / "候选正文.md").exists()
+    assert _sha256(chapter) == before
 
 
 def test_b2_protocol_rules_allowed_operations_change_runtime_result(root_case, test_io_env):
