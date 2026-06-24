@@ -1,6 +1,6 @@
 {
   "schema_version": "xcue.l3-protocol-rules/1.0",
-  "version": "2026-06-24.a3-l3-01",
+  "version": "2026-06-24.b2-finalization-01",
   "status": "active",
   "scope": "L3协议运行规则",
   "state_machine": [
@@ -68,8 +68,8 @@
       "说明": "作为正文修复任务输入"
     },
     "正式正文 chapters/ch*.md": {
-      "默认权限": "只读",
-      "说明": "A3-L3 阶段只生成任务包，不修改正文"
+      "默认权限": "TASK_PLANNING_ONLY 只读；L3_PATCH approved_runtime_only 可写",
+      "说明": "默认 L3 任务规划不得修改正文；B2 L3_PATCH 仅在结构化规则、审批、哈希、备份、原子写、复验和回滚要求全部满足时可正式应用"
     },
     "任务包输出目录": {
       "默认权限": "可新增",
@@ -188,6 +188,36 @@
   ],
   "formal_prose_modification": "否",
   "backup_requirement": "不适用",
+  "patch_execution": {
+    "enabled": true,
+    "allowed_projects": [
+      "TP-001"
+    ],
+    "allowed_sources": [
+      "L2-01"
+    ],
+    "allowed_operations": [
+      "REPLACE",
+      "APPEND"
+    ],
+    "requires_candidate_approval": true,
+    "requires_final_decision": true,
+    "requires_backup": true,
+    "requires_atomic_write": true,
+    "requires_post_apply_revalidation": true,
+    "rollback_on_any_post_apply_failure": true,
+    "formal_text_write": "approved_runtime_only",
+    "terminal_states": [
+      "APPLIED",
+      "REJECTED",
+      "ROLLED_BACK",
+      "APPLY_FAILED",
+      "ROLLBACK_FAILED",
+      "ABORTED",
+      "EXECUTION_FAILED",
+      "REVALIDATION_FAILED"
+    ]
+  },
   "valid_return_positions": [
     "L1-00",
     "L1-01",

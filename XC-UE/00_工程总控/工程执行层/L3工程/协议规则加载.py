@@ -95,6 +95,7 @@ def 加载协议规则(path: Path) -> L3协议规则:
         是否需要备份=_备份值(raw["backup_requirement"], "backup_requirement"),
         合法回流位置=set(_字符串列表(raw["valid_return_positions"], "valid_return_positions")),
         禁止项=_字符串列表(raw["forbidden"], "forbidden"),
+        补丁执行规则=_补丁执行规则(raw["patch_execution"]),
     )
 
 
@@ -122,6 +123,7 @@ def _校验根结构(raw: Any, digest: str) -> None:
         "default_forbidden_targets",
         "formal_prose_modification",
         "backup_requirement",
+        "patch_execution",
         "valid_return_positions",
         "forbidden",
     ]
@@ -161,6 +163,7 @@ def _校验根结构(raw: Any, digest: str) -> None:
         raise 协议规则加载错误("L3 结构化协议规则 execution_order 不能为空")
     if not _字符串列表(raw["forbidden"], "forbidden"):
         raise 协议规则加载错误("L3 结构化协议规则 forbidden 不能为空")
+    _补丁执行规则(raw["patch_execution"])
     if len(digest) != 64:
         raise 协议规则加载错误("L3 结构化协议规则 hash 计算异常")
 
@@ -230,3 +233,63 @@ def _备份值(value: Any, label: str) -> str:
     if text not in {"是", "否", "不适用"}:
         raise 协议规则加载错误(f"{label} 必须为 是、否 或 不适用")
     return text
+
+
+def _布尔值(value: Any, label: str) -> bool:
+    if not isinstance(value, bool):
+        raise 协议规则加载错误(f"{label} 必须是布尔值")
+    return value
+
+
+def _补丁执行规则(value: Any) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        raise 协议规则加载错误("patch_execution 必须是对象")
+    required = {
+        "enabled",
+        "allowed_projects",
+        "allowed_sources",
+        "allowed_operations",
+        "requires_candidate_approval",
+        "requires_final_decision",
+        "requires_backup",
+        "requires_atomic_write",
+        "requires_post_apply_revalidation",
+        "rollback_on_any_post_apply_failure",
+        "formal_text_write",
+        "terminal_states",
+    }
+    missing = sorted(required - set(value))
+    if missing:
+        raise 协议规则加载错误(f"patch_execution 缺少字段：{'、'.join(missing)}")
+    rules = {
+        "enabled": _布尔值(value["enabled"], "patch_execution.enabled"),
+        "allowed_projects": _字符串列表(value["allowed_projects"], "patch_execution.allowed_projects"),
+        "allowed_sources": _字符串列表(value["allowed_sources"], "patch_execution.allowed_sources"),
+        "allowed_operations": _字符串列表(value["allowed_operations"], "patch_execution.allowed_operations"),
+        "requires_candidate_approval": _布尔值(value["requires_candidate_approval"], "patch_execution.requires_candidate_approval"),
+        "requires_final_decision": _布尔值(value["requires_final_decision"], "patch_execution.requires_final_decision"),
+        "requires_backup": _布尔值(value["requires_backup"], "patch_execution.requires_backup"),
+        "requires_atomic_write": _布尔值(value["requires_atomic_write"], "patch_execution.requires_atomic_write"),
+        "requires_post_apply_revalidation": _布尔值(value["requires_post_apply_revalidation"], "patch_execution.requires_post_apply_revalidation"),
+        "rollback_on_any_post_apply_failure": _布尔值(value["rollback_on_any_post_apply_failure"], "patch_execution.rollback_on_any_post_apply_failure"),
+        "formal_text_write": _非空字符串(value["formal_text_write"], "patch_execution.formal_text_write"),
+        "terminal_states": _字符串列表(value["terminal_states"], "patch_execution.terminal_states"),
+    }
+    if not rules["allowed_projects"] or not rules["allowed_sources"] or not rules["allowed_operations"]:
+        raise 协议规则加载错误("patch_execution 的允许列表不能为空")
+    if rules["formal_text_write"] != "approved_runtime_only":
+        raise 协议规则加载错误("patch_execution.formal_text_write 必须为 approved_runtime_only")
+    required_terminal = {
+        "APPLIED",
+        "REJECTED",
+        "ROLLED_BACK",
+        "APPLY_FAILED",
+        "ROLLBACK_FAILED",
+        "ABORTED",
+        "EXECUTION_FAILED",
+        "REVALIDATION_FAILED",
+    }
+    missing_terminal = sorted(required_terminal - set(rules["terminal_states"]))
+    if missing_terminal:
+        raise 协议规则加载错误(f"patch_execution.terminal_states 缺少：{'、'.join(missing_terminal)}")
+    return rules

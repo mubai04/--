@@ -65,6 +65,7 @@ def main() -> int:
             plan_only=args.plan_only,
             final_decision=args.final_decision,
             decision_reason=args.decision_reason,
+            protocol_rules=rules,
         )
         print(
             json.dumps(

@@ -49,6 +49,7 @@ class L3协议规则:
     是否需要备份: str = "不适用"
     合法回流位置: set[str] = field(default_factory=set)
     禁止项: list[str] = field(default_factory=list)
+    补丁执行规则: dict[str, Any] = field(default_factory=dict)
 
 
 def 状态变更(前状态: str, 后状态: str, 触发事件: str, 执行组件: str, 证据文件: str = "") -> dict[str, str]:
