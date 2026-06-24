@@ -13,7 +13,7 @@ class 段落:
 
 @dataclass
 class 证据:
-    段落: int
+    段落: int | None
     摘句: str
 
 

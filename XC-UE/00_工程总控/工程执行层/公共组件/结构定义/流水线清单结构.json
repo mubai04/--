@@ -9,6 +9,7 @@
     "created_at",
     "status",
     "input",
+    "project",
     "standards",
     "stages",
     "final_status",
@@ -48,6 +49,9 @@
           "$ref": "#/$defs/sha256"
         }
       }
+    },
+    "project": {
+      "$ref": "#/$defs/project_context"
     },
     "standards": {
       "type": "object",
@@ -322,6 +326,57 @@
         "project_identity": {
           "type": "string",
           "maxLength": 128
+        }
+      }
+    },
+    "project_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "project_id",
+        "project_root",
+        "project_manifest",
+        "content_root",
+        "chapter_source",
+        "entrypoint",
+        "entrypoint_type",
+        "source_scope"
+      ],
+      "properties": {
+        "project_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "project_root": {
+          "$ref": "#/$defs/path_text"
+        },
+        "project_manifest": {
+          "$ref": "#/$defs/path_text"
+        },
+        "content_root": {
+          "$ref": "#/$defs/path_text"
+        },
+        "chapter_source": {
+          "$ref": "#/$defs/path_text"
+        },
+        "entrypoint": {
+          "$ref": "#/$defs/path_text"
+        },
+        "entrypoint_type": {
+          "type": "string",
+          "enum": [
+            "project",
+            "shared"
+          ]
+        },
+        "source_scope": {
+          "type": "string",
+          "enum": [
+            "repository",
+            "external",
+            "explicit_path"
+          ]
         }
       }
     },

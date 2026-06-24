@@ -88,6 +88,19 @@ def _产物(kind: str, path: Path, stage: str, stage_run_id: str) -> dict[str, A
     }
 
 
+def _项目清单(project: 项目上下文, chapter: Path) -> dict[str, str]:
+    return {
+        "project_id": project.project_id,
+        "project_root": str(project.project_root),
+        "project_manifest": str(project.project_manifest),
+        "content_root": str(project.content_root),
+        "chapter_source": str(chapter),
+        "entrypoint": str(project.entrypoint),
+        "entrypoint_type": project.entrypoint_type,
+        "source_scope": project.source_scope,
+    }
+
+
 def _标准哈希(records: list[dict[str, str]]) -> str:
     joined = "\n".join(
         f"{record.get('名称', '')}:{record.get('路径', '')}:{record.get('版本', '')}:{record.get('状态', '')}:{record.get('sha256', '')}:{record.get('模式', '')}"
@@ -309,6 +322,7 @@ def 运行流水线(chapter: Path, project: 项目上下文 | str, pipeline_run_
             "snapshot_path": _相对(snapshot),
             "sha256": input_artifact["sha256"],
         },
+        "project": _项目清单(project_context, chapter),
         "standards": {
             "source": "Markdown Front Matter",
             "combined_sha256": _标准哈希(standard_records),

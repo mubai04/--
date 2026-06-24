@@ -111,7 +111,7 @@ def main() -> int:
 
     try:
         run_id = safe_id(args.run_id or "L1_RUN-" + datetime.now().strftime("%Y%m%d-%H%M%S"), "run_id")
-        pipeline_run_id = safe_id(args.pipeline_run_id, "pipeline_run_id") if args.pipeline_run_id else ""
+        pipeline_run_id = safe_id(args.pipeline_run_id, "pipeline_run_id") if args.pipeline_run_id else run_id
         stage_run_id = safe_id(args.stage_run_id, "stage_run_id") if args.stage_run_id else ""
         project_context = 加载项目(
             ROOT,
@@ -208,7 +208,7 @@ def main() -> int:
         失败包=failure_packet,
         路由建议=routes,
         pipeline_run_id=pipeline_run_id,
-        stage_run_id=stage_run_id or f"{pipeline_run_id}-L1" if pipeline_run_id else run_id,
+        stage_run_id=stage_run_id or f"{pipeline_run_id}-L1",
         status=status,
         状态说明=状态说明[status],
         rule_version=gate_rule_version,

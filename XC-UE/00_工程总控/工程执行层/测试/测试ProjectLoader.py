@@ -426,6 +426,130 @@ def 测试A06直接L1未传章节时使用当前项目默认正文而不是TP001
             shutil.rmtree(project_root)
 
 
+def 测试P11外部项目默认章节PIPELINE不读取TP001(tmp_path: Path):
+    external = _write_project(tmp_path / "external-default", "EXT-PIPE")
+    run_id = "pytest-p11-ext-default-" + uuid.uuid4().hex[:8]
+
+    result = _run(
+        [
+            "--target",
+            "PIPELINE",
+            "--project-root",
+            str(external),
+            "--run-id",
+            run_id,
+        ]
+    )
+
+    assert result.returncode != PROJECT_ERROR, result.stdout + result.stderr
+    manifest = json.loads((ROOT / "运行记录" / run_id / "流水线清单.json").read_text(encoding="utf-8"))
+    assert manifest["input"]["original_path"] == str((external / "chapters" / "ch01.md").resolve())
+    assert "TP-001_CleanHarness_IR_Runtime" not in manifest["input"]["original_path"]
+
+
+def 测试P12_TP001流水线清单记录完整ProjectContext():
+    run_id = "pytest-p12-tp001-" + uuid.uuid4().hex[:8]
+
+    result = _run(
+        [
+            "--target",
+            "PIPELINE",
+            "--project",
+            "TP-001",
+            "--run-id",
+            run_id,
+        ]
+    )
+
+    assert (ROOT / "运行记录" / run_id / "流水线清单.json").exists(), result.stdout + result.stderr
+    manifest = json.loads((ROOT / "运行记录" / run_id / "流水线清单.json").read_text(encoding="utf-8"))
+    project = manifest["project"]
+    assert project["project_id"] == "TP-001"
+    assert Path(project["content_root"]).resolve() == (ROOT / "70_测试项目" / "TP-001_CleanHarness_IR_Runtime" / "chapters").resolve()
+    assert Path(project["chapter_source"]).resolve() == Path(manifest["input"]["original_path"]).resolve()
+    assert Path(project["entrypoint"]).name == "TP001运行入口.py"
+
+
+def 测试P12外部项目流水线清单记录外部ProjectContext(tmp_path: Path):
+    external = _write_project(tmp_path / "external-manifest", "EXT-MANIFEST")
+    run_id = "pytest-p12-ext-" + uuid.uuid4().hex[:8]
+
+    result = _run(
+        [
+            "--target",
+            "PIPELINE",
+            "--project-root",
+            str(external),
+            "--run-id",
+            run_id,
+        ]
+    )
+
+    assert (ROOT / "运行记录" / run_id / "流水线清单.json").exists(), result.stdout + result.stderr
+    manifest = json.loads((ROOT / "运行记录" / run_id / "流水线清单.json").read_text(encoding="utf-8"))
+    project = manifest["project"]
+    assert project["project_id"] == "EXT-MANIFEST"
+    assert project["source_scope"] == "external"
+    assert Path(project["chapter_source"]).resolve() == (external / "chapters" / "ch01.md").resolve()
+    assert "TP-001_CleanHarness_IR_Runtime" not in project["chapter_source"]
+
+
+def 测试P11外部项目显式绝对章节PIPELINE先按ProjectContext解析(tmp_path: Path):
+    external = _write_project(tmp_path / "external-explicit", "EXT-PIPE")
+    chapter = (external / "chapters" / "ch01.md").resolve()
+    run_id = "pytest-p11-ext-explicit-" + uuid.uuid4().hex[:8]
+
+    result = _run(
+        [
+            "--target",
+            "PIPELINE",
+            "--project-root",
+            str(external),
+            "--chapter",
+            str(chapter),
+            "--run-id",
+            run_id,
+        ]
+    )
+
+    assert result.returncode != int(ExitCode.INPUT_INVALID), result.stdout + result.stderr
+    assert result.returncode != PROJECT_ERROR, result.stdout + result.stderr
+    manifest = json.loads((ROOT / "运行记录" / run_id / "流水线清单.json").read_text(encoding="utf-8"))
+    assert manifest["input"]["original_path"] == str(chapter)
+
+
+def 测试P11外部项目显式越界章节返回PROJECT_PATH_OUT_OF_SCOPE(tmp_path: Path):
+    external = _write_project(tmp_path / "external-scope", "EXT-PIPE")
+    outside = tmp_path / "outside.md"
+    outside.write_text("# outside\n\n越界正文\n", encoding="utf-8")
+    run_id = "pytest-p11-ext-scope-" + uuid.uuid4().hex[:8]
+
+    result = _run(
+        [
+            "--target",
+            "PIPELINE",
+            "--project-root",
+            str(external),
+            "--chapter",
+            str(outside.resolve()),
+            "--run-id",
+            run_id,
+        ]
+    )
+
+    _assert_project_error(result, "PROJECT_PATH_OUT_OF_SCOPE")
+    assert not (ROOT / "运行记录" / run_id).exists()
+
+
+def 测试P11项目Root与显式Project不一致返回PROJECT_ID_MISMATCH(tmp_path: Path):
+    external = _write_project(tmp_path / "external-mismatch", "EXT-PIPE")
+
+    with pytest.raises(Exception) as excinfo:
+        加载项目(ROOT, "OTHER", project_root=external)
+
+    assert getattr(excinfo.value, "details", {})["reason"] == "PROJECT_ID_MISMATCH"
+
+
 def 测试未知项目返回结构化PROJECT_RESOLUTION_FAILED且不创建运行记录():
     run_id = "pytest-loader-unknown-" + uuid.uuid4().hex[:8]
     result = _run(

@@ -109,7 +109,7 @@ def _证据(名称: str, value: float, severity: str, failure_type: str, descrip
         名称,
         "风险" if severity == "warning" else "失败",
         f"{description} 当前值：{value:.3f}。",
-        [证据(0, f"{名称}={value:.3f}")],
+        [证据(None, f"{名称}={value:.3f}")],
         severity,
         failure_type,
         候选模块="人工复核" if severity == "warning" else "回L1",

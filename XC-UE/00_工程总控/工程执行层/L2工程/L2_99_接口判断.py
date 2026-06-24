@@ -10,6 +10,8 @@ NON_L2 = {
 }
 
 DERIVED_RECHECK = {
+    "回L1": "L1",
+    "回 L1": "L1",
     "回L1-01": "L1-01",
     "回 L1-01": "L1-01",
     "回L1-02": "L1-02",
@@ -34,6 +36,12 @@ def _标准归属(item: 失败输入, rules: L2规则 | None) -> tuple[str, str,
     return "", "", "", ""
 
 
+def _规则集版本(rules: L2规则 | None) -> tuple[str, str]:
+    if not rules or not rules.路由规则集:
+        return "", ""
+    return rules.路由规则集.version, rules.路由规则集.hash
+
+
 def _命中禁止项(item: 失败输入, rules: L2规则 | None, module: str) -> str:
     if not rules:
         return ""
@@ -48,6 +56,7 @@ def _命中禁止项(item: 失败输入, rules: L2规则 | None, module: str) ->
 
 
 def 判断(item: 失败输入, rules: L2规则 | None = None) -> 接口判断:
+    route_set_version, route_set_hash = _规则集版本(rules)
     candidate = item.候选模块
     if candidate in DERIVED_RECHECK:
         target = DERIVED_RECHECK[candidate]
@@ -64,6 +73,9 @@ def 判断(item: 失败输入, rules: L2规则 | None = None) -> 接口判断:
             回流验收位置=item.回流验收位置 or target,
             最终状态="派生复验",
             备注="不转换为回 L1.5，不阻断同批其他 L2 修复单。",
+            route_rule_id="DERIVED_RECHECK",
+            route_rule_version=route_set_version,
+            route_rule_hash=route_set_hash,
         )
     if candidate in NON_L2:
         target = NON_L2[candidate]
@@ -79,6 +91,9 @@ def 判断(item: 失败输入, rules: L2规则 | None = None) -> 接口判断:
             建议动作=["回 L1.5 重路由"] if target == "回L1.5" else ["进入 L3"],
             回流验收位置=item.回流验收位置 or item.来源闸门,
             最终状态="回L1.5" if target == "回L1.5" else "进入L3",
+            route_rule_id="NON_L2_TARGET",
+            route_rule_version=route_set_version,
+            route_rule_hash=route_set_hash,
         )
 
     expected, route_rule_id, route_rule_version, route_rule_hash = _标准归属(item, rules)
@@ -95,6 +110,9 @@ def 判断(item: 失败输入, rules: L2规则 | None = None) -> 接口判断:
             建议动作=["回 L1.5 重路由"],
             回流验收位置=item.来源闸门,
             最终状态="回L1.5",
+            route_rule_id="ROUTE_NOT_FOUND",
+            route_rule_version=route_set_version,
+            route_rule_hash=route_set_hash,
         )
 
     module = candidate or expected
@@ -112,9 +130,9 @@ def 判断(item: 失败输入, rules: L2规则 | None = None) -> 接口判断:
             建议动作=["回 L1.5 重路由"],
             回流验收位置=item.回流验收位置 or item.来源闸门,
             最终状态="回L1.5",
-            route_rule_id=route_rule_id,
-            route_rule_version=route_rule_version,
-            route_rule_hash=route_rule_hash,
+            route_rule_id=route_rule_id or "CANDIDATE_MODULE",
+            route_rule_version=route_rule_version or route_set_version,
+            route_rule_hash=route_rule_hash or route_set_hash,
         )
 
     forbidden = _命中禁止项(item, rules, module)
@@ -143,11 +161,11 @@ def 判断(item: 失败输入, rules: L2规则 | None = None) -> 接口判断:
         输入问题=item.说明,
         初步归属=module,
         主候选模块=module,
-        判断依据=f"结构化路由规则 {route_rule_id} 将“{item.失败类型}”匹配到 {module}。",
+        判断依据=f"结构化路由规则 {route_rule_id or 'CANDIDATE_MODULE'} 将“{item.失败类型}”匹配到 {module}。",
         建议动作=["进入对应 L2"],
         回流验收位置=item.回流验收位置 or item.来源闸门,
         最终状态="接口明确",
-        route_rule_id=route_rule_id,
-        route_rule_version=route_rule_version,
-        route_rule_hash=route_rule_hash,
+        route_rule_id=route_rule_id or "CANDIDATE_MODULE",
+        route_rule_version=route_rule_version or route_set_version,
+        route_rule_hash=route_rule_hash or route_set_hash,
     )

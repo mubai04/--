@@ -91,7 +91,7 @@ def main() -> int:
 
     try:
         chapter_arg = args.chapter
-        if chapter_arg:
+        if chapter_arg and args.target != "PIPELINE":
             chapter_arg = str(resolve_inside_root(ROOT, chapter_arg))
         run_id_arg = safe_id(args.run_id, "run_id") if args.run_id else None
     except 输入错误 as exc:
